@@ -86,7 +86,7 @@ Software
 	    } );
 
 	 	$("div.toolbar").html(`
- 			<button id="new" class="btn btn-primary btn-flat" style="margin-right:5px;padding: 5px 10px;" data-target="#createSoftwareModal" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>  Create</button>
+ 			<button id="new" class="btn btn-primary btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-plus"></span>  Create</button>
  			<button id="edit" class="btn btn-default btn-flat" style="margin-right:5px;padding: 6px 10px;"><span class="glyphicon glyphicon-pencil"></span>  Update</button>
  			<button id="delete" class="btn btn-danger btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-trash"></span> Remove</button>
  			<button id="assign" class="btn btn-warning btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon"></span> Assign to a room</button>
@@ -125,6 +125,10 @@ Software
 				swal('Oops..','You must choose atleast 1 row','error');
 			}
 		});
+
+		$('#new').on('click',function(){
+			window.location.href = "{{ url('software/create') }}"
+		})
 
 		$('#assign').on('click',function(){
 			try{
@@ -198,7 +202,7 @@ Software
 	    		url: '{{ url("software/room/remove") }}' + '/' + $(this).data('id') + '/' + $(this).data('room'),
 	    		dataType: 'json',
 	    		success: function(response){
-	    			if(response == 'success') swal('Operation Success','Software unlink from room','success')
+	    			if(response == 'success') swal('Operation Success','Software unlinked from room','success')
 	    			else swal('Operation Failed','Problem occurred while processing data. Please reload the page','error')
 	    			table.ajax.reload()
 	    		}

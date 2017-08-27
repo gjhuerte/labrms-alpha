@@ -2,9 +2,10 @@
  
 namespace App;
 
-// use Illuminate\Database\Eloquent\SoftDeletes;
-use App\ItemProfile;
 use Carbon\Carbon;
+use DB;
+use App\Ticket;
+use App\ItemProfile;
 use Illuminate\Database\Eloquent\Model;
 
 class Inventory extends \Eloquent{
@@ -219,7 +220,7 @@ class Inventory extends \Eloquent{
     */
     public static function condemn($id)
     {
-      DB::transaction(function(){
+      DB::transaction(function() use($id){
     		$itemprofile = ItemProfile::findOrFail($id);
 
         /*
@@ -231,8 +232,7 @@ class Inventory extends \Eloquent{
         |
         */
     		Inventory::removeProfiled($itemprofile->inventory_id);
-    		$itemprofile->status = "condemn";
-    		$itemprofile->save();
+        Ticket::condemnTicket($itemprofile->propertynumber);
     		$itemprofile->delete();
       });
     }

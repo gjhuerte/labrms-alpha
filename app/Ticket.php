@@ -10,6 +10,7 @@ use App\ItemProfile;
 use App\PcTicket;
 use App\RoomTicket;
 use App\Room;
+use Carbon\Carbon;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,6 +38,10 @@ class Ticket extends \Eloquent{
 	);
 
 	public static $maintenanceRules = array(
+		'Details' => 'required|min:2|max:500',
+	);
+
+	public static $resolveRules = array(
 		'Details' => 'required|min:2|max:500',
 	);
 
@@ -329,6 +334,7 @@ class Ticket extends \Eloquent{
 		*/
 		$author = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
 		$staffassigned = Auth::user()->id;
+		$ticket = Ticket::find($id);
 
 		/*
 		|--------------------------------------------------------------------------
@@ -351,37 +357,9 @@ class Ticket extends \Eloquent{
 		|--------------------------------------------------------------------------
 		|
 		*/
-		if($underrepair == true)
+		if($underrepair == 'undermaintenance' || $underrepair == 'working')
 		{
-			$tag = Ticket::find($id);
-
-			/*
-			|--------------------------------------------------------------------------
-			|
-			| 	Check if the equipment is connected to pc
-			|
-			|--------------------------------------------------------------------------
-			|
-			*/
-			$pc = PcTicket::ticket($tag)->first();
-			if(count($pc) > 0)
-			{
-				Pc::setItemStatus($pc->id,'undermaintenance');
-			} 
-			
-			/*
-			|--------------------------------------------------------------------------
-			|
-			| 	Check if the tag is equipment
-			|
-			|--------------------------------------------------------------------------
-			|
-			*/
-			$itemticket = ItemTicket::ticket($tag)->first();
-			if( count($itemticket) > 0)
-			{
-				ItemProfile::setItemStatus($itemticket->item_id,'undermaintenance');
-			} 
+			Ticket::changeStatus($ticket->id,$underrepair);
 		}
 
 		/*
@@ -546,6 +524,64 @@ class Ticket extends \Eloquent{
 				*/
 				Ticket::generateTicket('maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
 			}
+		}
+	}
+
+	public static function changeStatus($tag,$status)
+	{
+
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Check if the equipment is connected to pc
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$pc = PcTicket::ticket($id)->first();
+		if(count($pc) > 0)
+		{
+			Pc::setItemStatus($pc->pc_id,$status);
+		} 
+		
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Check if the tag is equipment
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$itemticket = ItemTicket::ticket($id)->first();
+		if( count($itemticket) > 0)
+		{
+			ItemProfile::setItemStatus($itemticket->item_id,$status);
+		} 
+	}
+
+	public static function condemnTicket($tag)
+	{
+		$author = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
+		$details = 'Item Condemned on ' . Carbon::now() . 'by ' . $author;
+		$staffassigned = Auth::user()->id;
+		$ticket_id = null;
+		$status = 'Closed';
+		$tickettype = 'condemn';
+		$ticketname = 'Item Condemn';
+
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Check if the tag is equipment
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$itemprofile = ItemProfile::propertyNumber($tag)->first();
+		if(isset($itemprofile->id))
+		{
+			Ticket::generateEquipmentTicket($itemprofile->id,$tickettype,$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+		
 		}
 	}
 }

@@ -12,6 +12,11 @@ class ItemTicket extends \Eloquent{
 	public $timestamps = true;
 	public $fillable = ['item_id','ticket_id'];
 
+	public function scopeTicket($query,$value)
+	{
+		return $query->where('ticket_id','=',$value);
+	}
+
 	public function ticket()
 	{
 		return $this->belongsTo('App\Ticket','ticket_id','id');
@@ -20,11 +25,6 @@ class ItemTicket extends \Eloquent{
 	public function itemprofile()
 	{
 		return $this->belongsTo('App\ItemProfile','item_id','id');
-	}
-
-	public function scopeTicket($query,$value)
-	{
-		$query->where('ticket_id','=',$value);
 	}
 
 }

@@ -7,6 +7,7 @@ Create
 @include('layouts.navbar')
 @stop
 @section('style')
+{{ HTML::style(asset('css/bootstrap-select.min.css')) }}
 <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 <style>
   #page-body{
@@ -19,6 +20,7 @@ Create
   <div class="row">
     <div class="col-sm-offset-3 col-sm-6">
       <div class="col-md-12 panel panel-body " style="padding: 25px;padding-top: 10px;">
+        <legend><h3 class="text-muted">Room Creation</h3></legend>
         <ol class="breadcrumb">
           <li>
             <a href="{{ url('room') }}">Room</a>
@@ -35,7 +37,7 @@ Create
                 </ul>
             </div>
         @endif
-        {{ Form::open(array('method'=>'post','route'=>'room.store','class' => 'form-horizontal')) }}
+        {{ Form::open(array('method'=>'post','route'=>'room.store','class' => 'form-horizontal','id'=>'roomForm')) }}
         <div class="form-group">
           <div class="col-md-12">
             {{ Form::label('name','Room Name') }}
@@ -43,6 +45,16 @@ Create
               'required',
               'class'=>'form-control',
               'placeholder'=>'Room Name'
+            ]) }}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12">
+            {{ Form::label('category','Room Category') }}
+            {{ Form::select('category[]',['Empty list'=>'Empty list'],Input::old('category'),[
+              'id' => 'category',
+              'class'=>'form-control',
+              'multiple' => 'multiple'
             ]) }}
           </div>
         </div>
@@ -60,7 +72,8 @@ Create
           <div class="col-md-12">
             {{ Form::submit('Create',[
               'class'=>'btn btn-lg btn-primary btn-block',
-              'name' => 'create'
+              'name' => 'create',
+              'id' => 'create'
             ]) }}
           </div>
         </div>
@@ -71,8 +84,47 @@ Create
 </div><!-- Container -->
 @stop
 @section('script')
+{{ HTML::script(asset('js/bootstrap-select.min.js')) }}
+{{ HTML::script(asset('js/dataTables.select.min.js')) }}
 <script>
   $(document).ready(function(){
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+      type: 'get',
+      url: '{{ url("room/category") }}',
+      dataType: 'json',
+      success: function(response){
+        option = "";
+
+        for( ctr = 0 ; ctr < response.data.length ; ctr++ ){
+            option += `<option val=` + response.data[ctr].category + `>` + response.data[ctr].category + `</option>`;
+        }
+
+        $('#category').html("");
+        $('#category').append(option);
+      },
+      complete: function(){
+        $('#category').selectpicker('refresh');
+        $('#category').selectpicker();
+      }
+    })
+
+    function isIncluded(arr,id)
+    {
+      ret_val = false;
+      arr.forEach(function(obj){
+        if(obj == id)
+        {
+          ret_val = true;
+        }
+      })
+
+      return ret_val;
+    }
+
     @if( Session::has("success-message") )
         swal("Success!","{{ Session::pull('success-message') }}","success");
     @endif

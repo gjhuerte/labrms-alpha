@@ -42,13 +42,14 @@ Workstation Profile
 	<div class="col-sm-12">
 		<div class="panel panel-default" style="padding:0px 20px">
 			<div class="panel-body">
-				<legend><h3 class="text-muted">Workstation</h3></legend>
+				<legend><h3 class="text-muted">Workstation {{ $workstation->name }}</h3></legend>
 				<ul class="breadcrumb">
 					<li><a href="{{ url('workstation') }}">Workstation</a></li>
 					<li class="active">{{ $workstation->id }}</li>
 				</ul>
 				<table class="table table-bordered">
 					<thead>
+						<th>Name</th>
 						<th>OS License Key</th>
 						<th>System Unit</th>
 						<th>Monitor</th>
@@ -58,6 +59,7 @@ Workstation Profile
 					</thead>
 					<tbody>
 						<tr>
+							<td>{{ $workstation->name }}</td>
 							<td>{{ $workstation->oskey }}</td>
 							<td>{{ ($workstation->systemunit) ? $workstation->systemunit->propertynumber : "" }}</td>
 							<td>{{ ($workstation->monitor) ? $workstation->monitor->propertynumber : "" }}</td>

@@ -11,16 +11,22 @@ class Purpose extends \Eloquent{
 
 	public $timestamps = true;
 
-	protected $fillable = ['title','description'];
+	protected $fillable = ['title','description','points'];
 
   public static $rules = [
     'title' => 'required|max:50',
-    'description' => 'required'
+    'description' => 'required',
+    'points' => 'required' 
   ];
 
   public static $updateRules = [
     'title' => '',
     'description' => ''
   ];
+
+  public function scopeTitle($query,$value)
+  {
+      return $query->where('title','=',$value);
+  }
 
 }

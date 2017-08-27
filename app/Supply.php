@@ -23,6 +23,7 @@ class Supply extends \Eloquent{
 	//Validation rules!
 	protected $primaryKey = 'id';
 	public static $rules = array(
+		'Requisition and Issue Slip' => 'required',
 		'Item Type' => 'required|exists:Itemtype,id',
 		'Brand' => 'min:2|max:100',
 		'Unit' => 'required|alpha',

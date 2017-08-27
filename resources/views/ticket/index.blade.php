@@ -27,8 +27,10 @@ Tickets
 @section('content')
 <div class="container-fluid" id="page-body">
 @include('modal.ticket.create')
+@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
 @include('modal.ticket.transfer')
 @include('modal.ticket.resolve')
+@endif
 	<div class="col-md-12" id="workstation-info">
 		<div class="panel panel-body table-responsive" style="padding: 25px 30px;">
 			<legend class="text-muted">Tickets</legend>
@@ -139,24 +141,27 @@ Tickets
 
 	 	$("div.toolbar").html(`
 			<button id="add" class="btn btn-primary btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-plus"></span>  Create</button>	
+			@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
 			<button id="maintenance" class="btn btn-warning btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-wrench"></span>  Maintenance</button>	
 			<button id="assign" class="btn btn-success btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-share-alt"></span> Assign </button>
 			<button id="resolve" class="btn btn-default btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-check"></span> Create an Action</button>
+			@endif
 			@if(Auth::user()->accesslevel == 0)
 			<button id="close" class="btn btn-danger btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-off"></span> Close</button>
 			<button id="reopen" class="btn btn-info btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-off"></span> Reopen</button>
 			@endif
 		`);
 
+		@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
 		$('div.filter').html(`
 			<span class='text-muted'>Type:</span><div class="btn-group">
 			  <button type="button" class="btn btn-default btn-flat dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="tickettype-filter" style="padding: 7px 7px"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span id="tickettype-button"></span> <span class="caret"></span>
 			  </button>
 			  <ul class="dropdown-menu" id="tickettype-button">
-			      @foreach($tickettype as $tickettype)
-					<li role="presentation">
-						<a class="tickettype"  data-name='{{ $tickettype->type }}'>{{ $tickettype->type }}</a>
-					</li>
+		   		@foreach($tickettype as $tickettype)
+				<li role="presentation">
+					<a class="tickettype"  data-name='{{ $tickettype->type }}'>{{ $tickettype->type }}</a>
+				</li>
 			    @endforeach
 			  </ul>
 			</div>
@@ -189,11 +194,13 @@ Tickets
 			url = "{{ url('ticket') }}" + '?status=' + $('#ticketstatus-button').text() + '&type=' + $('#tickettype-button').text()
 			table.ajax.url(url).load();
 		})
+		@endif
 
 		$('#add').on('click',function(){
 			window.location.href = '{{ url('ticket/create') }}';
 		});
 
+		@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
 		$('#maintenance').on('click',function(){
 			window.location.href = '{{ url('ticket/maintenance') }}';
 		});
@@ -227,6 +234,27 @@ Tickets
 					if(table.row('.selected').data().tickettype == 'Complaint')
 					{
 						$('#resolve-id').val(table.row('.selected').data().id);
+	    				tag = table.row('.selected').data().tag
+						if(tag.indexOf('PC') !== -1 || tag.indexOf('Item') !== -1)
+						{
+							if(tag.indexOf('PC') !== -1)
+							{
+								$('#item-tag').val(tag.substr(4))
+							}
+
+							if(tag.indexOf('Item') !== -1)
+							{
+								$('#item-tag').val(tag.substr(6))
+							}
+
+							$('#resolve-equipment').show()
+						}
+						else
+						{
+							$('#item-tag').val("")
+							$('#resolve-equipment').hide()
+						}
+
 						$('#resolveTicketModal').modal('show')
 					} 
 					else 
@@ -238,7 +266,9 @@ Tickets
 				swal('Oops..','You must choose atleast 1 row','error');
 			}
 	    } );
+	    @endif
 
+		@if(Auth::user()->accesslevel == 0)
 	    $('#close').click( function () {
 			try{
 				if(table.row('.selected').data().id != null && table.row('.selected').data().id  && table.row('.selected').data().id >= 0)
@@ -303,6 +333,7 @@ Tickets
 				swal('Oops..','You must choose atleast 1 row','error');
 			}
 	    } );
+	    @endif
 
 		$('#page-body').show();
     });

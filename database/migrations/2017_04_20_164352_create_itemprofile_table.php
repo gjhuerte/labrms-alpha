@@ -17,10 +17,12 @@ class CreateItemprofileTable extends Migration {
 			$table->increments('id');
 			$table->integer('inventory_id')->unsigned();
 			$table->foreign('inventory_id')->references('id')->on('inventory')
-										->onDelete('cascade');;
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->integer('receipt_id')->unsigned();
 			$table->foreign('receipt_id')->references('id')->on('receipt')
-										->onDelete('cascade');;
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->string('propertynumber',100)->nullable();
 			$table->string('serialnumber',100)->nullable();
 			$table->string('location',100);

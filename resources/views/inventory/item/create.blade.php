@@ -47,7 +47,7 @@ Inventory | Create
 				<!-- item name -->
 				<div class="form-group">
 					<div class="col-sm-12">
-					{{ Form::label('number','Receipt') }}
+					{{ Form::label('number','Property Acknowledgement Receipt') }}
 					{{ Form::text('number',Input::old('number'),[
 						'class' => 'form-control',
 						'placeholder' => 'Receipt',
@@ -215,7 +215,9 @@ Inventory | Create
 {{ HTML::script(asset('js/moment.min.js')) }}
 <script type="text/javascript">
 	$(document).ready(function(){
+
 		$('#brand').on('change',function(){
+			console.log('triggered');
 			url = "{{ url('get') }}" + '/' + $('#itemtype').val() + '/' + $('#brand').val() + '/' + $('#model').val()
 			setValue(url)
 		});
@@ -227,6 +229,16 @@ Inventory | Create
 			url = "{{ url('get') }}" + '/' + $('#itemtype').val() + '/' + $('#brand').val() + '/' + $('#model').val()
 			setValue(url)
 		});
+
+		@if(isset($brand))
+		$('#brand').val('{{ $brand }}')
+		$('#brand').trigger("change");
+		@endif
+
+		@if(isset($model))
+		$('#model').val('{{ $model }}')
+		$('#model').trigger("change");
+		@endif
 
 		function setValue(_url)
 		{
@@ -326,6 +338,14 @@ Inventory | Create
 					@if(Input::old('itemtype'))
 					$('#itemtype').val("{{ Input::old('itemtype') }}")
 					@endif
+
+					@if(isset($itemtype))
+					$('#itemtype').val('{{ $itemtype }}')
+					@endif
+				},
+				complete: function(){
+
+					$('#itemtype').trigger("change");
 				}
 			})
 		}

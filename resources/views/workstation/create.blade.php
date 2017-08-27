@@ -6,13 +6,9 @@ Workstation | Assemble
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @include('layouts.navbar')
 @stop
-@section('script-include')
-<script type="text/javascript" src="{{ asset('js/standalone/selectize.js') }}"></script>
-@stop
 @section('style')
 {{ HTML::style(asset('css/jquery-ui.min.css')) }}
 {{ HTML::style(asset('css/animate.css')) }}
-<link rel="stylesheet" href="{{ asset('css/selectize.bootstrap3.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('css/style.min.css') }}" />
 <style>
   {
@@ -57,6 +53,18 @@ Workstation | Assemble
                 'placeholder'=>'Operating System Key',
                 'required'
               ]) }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              {{ Form::label('name','Workstation Name') }}
+              {{ Form::text('name',Input::old('name'),[
+                'id'=>'name',
+                'class'=>'form-control',
+                'placeholder' => 'Workstation Name'
+              ]) }}
+              <p class="text-muted">For Identifying the workstation. Convention: WS-[Room Name]-[Number]</p>
             </div>
           </div>
 

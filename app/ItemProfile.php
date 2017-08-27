@@ -357,10 +357,10 @@ class ItemProfile extends \Eloquent{
 	*/
 	public function scopeUnassembled($query)
 	{
-		return $query->whereNotIn('id',Pc::pluck('systemunit_id'))
-					->whereNotIn('id',Pc::pluck('monitor_id'))
-					->whereNotIn('id',Pc::pluck('keyboard_id'))
-					->whereNotIn('id',Pc::pluck('avr_id'));
+		return $query->whereNotIn('id',Pc::whereNotNull('systemunit_id')->pluck('systemunit_id'))
+					->whereNotIn('id',Pc::whereNotNull('monitor_id')->pluck('monitor_id'))
+					->whereNotIn('id',Pc::whereNotNull('keyboard_id')->pluck('keyboard_id'))
+					->whereNotIn('id',Pc::whereNotNull('avr_id')->pluck('avr_id'));
 	}
 
 	/**
@@ -437,6 +437,11 @@ class ItemProfile extends \Eloquent{
 			*/
 			RoomInventory::createRecord($room,$item->id);
 		}
+	}
+
+	public function getIDFromPropertyNumber($propertynumber)
+	{
+		return ItemProfile::propertyNumber($propertynumber)->pluck('id');
 	}
 
 }

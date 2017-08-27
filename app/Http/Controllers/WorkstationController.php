@@ -7,6 +7,8 @@ use Validator;
 use Session;
 use App\Pc;
 use App\Software;
+use App\Supply;
+use App\Ticket;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -52,9 +54,11 @@ class WorkstationController extends Controller {
 		$keyboard = $this->sanitizeString(Input::get('keyboard'));
 		$oskey = $this->sanitizeString(Input::get('os'));
 		$mouse = $this->sanitizeString(Input::get('mouse'));
+		$name = $this->sanitizeString(Input::get('name'));
 
 		$validator = Validator::make([
 			'Operating System Key' => $oskey,
+			'Workstation Name' => $name,
 			'avr' => $avr,
 			'Keyboard' => $keyboard,
 			'Monitor' => $monitor,
@@ -69,7 +73,7 @@ class WorkstationController extends Controller {
 					->withErrors($validator);
 		}
 
-		Pc::assemble($systemunit,$monitor,$avr,$keyboard,$oskey,$mouse);
+		Pc::assemble($name,$systemunit,$monitor,$avr,$keyboard,$oskey,$mouse);
 		Session::flash('success-message','Workstation assembled');
 		return redirect('workstation');
 	}
@@ -183,7 +187,6 @@ class WorkstationController extends Controller {
 	{
 		$avr = $this->sanitizeString(Input::get('avr'));
 		$monitor = $this->sanitizeString(Input::get('monitor'));
-		$systemunit = $this->sanitizeString(Input::get('systemunit'));
 		$os = $this->sanitizeString(Input::get('os'));
 		$keyboard = $this->sanitizeString(Input::get('keyboard'));
 		$mouse = $this->sanitizeString(Input::get('mouse'));
@@ -201,11 +204,85 @@ class WorkstationController extends Controller {
 
 		$pc = Pc::find($id);
 		$pc->oskey = $os;
-		$pc->mouse = $mouse;
+
+		if(Input::has('mousetag'))
+		{
+
+			$validator = Validator::make([ 'mouse'=>$mouse ],[
+			  'mouse' => 'required|exists:supply,brand'
+			]);
+
+			if($validator->fails())
+			{
+			  return redirect("workstation/$id/edit")
+			    ->withInput()
+			    ->withErrors($validator);
+			}
+
+			Supply::releaseForWorkstation($mouse);
+			$pc->mouse = $mouse;
+		}
+
+		if(Input::has('monitor'))
+		{
+
+			$validator = Validator::make([ 'monitor' => $monitor ],[
+			  'monitor' => 'required|exists:itemprofile,propertynumber'
+			]);
+
+			if($validator->fails())
+			{
+			  return redirect("workstation/$id/edit")
+			    ->withInput()
+			    ->withErrors($validator);
+			}
+
+			$pc->monitor = $monitor;
+		}
+
+		if(Input::has('avr'))
+		{
+
+			$validator = Validator::make([ 'avr' => $avr ],[
+			  'avr' => 'required|exists:itemprofile,propertynumber'
+			]);
+
+			if($validator->fails())
+			{
+			  return redirect("workstation/$id/edit")
+			    ->withInput()
+			    ->withErrors($validator);
+			}
+
+			$pc->$avr = $avr;
+		}
+
+		if(Input::has('keyboard'))
+		{
+
+			$validator = Validator::make([ 'keyboard' => $keyboard ],[
+			  'keyboard' => 'required|exists:itemprofile,propertynumber'
+			]);
+
+			if($validator->fails())
+			{
+			  return redirect("workstation/$id/edit")
+			    ->withInput()
+			    ->withErrors($validator);
+			}
+
+			$pc->$keyboard = $keyboard;
+		}
 
 		$pc->save();
 
-		Session::flash('success-message','Workstation information updated');
+		$ticketname = 'Workstation Assembly';
+		$details = "Workstation assembled with the following propertynumber: $_systemunit->propertynumber for System Unit, $_monitor->propertynumber for Monitor, $_keyboard->propertynumber for Keyboard, $_avr->propertynumber for AVR and a $mouse as mouse brand";
+		$staffassigned = Auth::user()->id;
+		$author = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
+		Ticket::generatePcTicket($pc->id,'Receive',$ticketname,$details,$author,$staffassigned,null,'Closed');
+
+		Session::flash('success-message','Workstation  updated');
 		return redirect('workstation');
 	}
 
@@ -221,25 +298,26 @@ class WorkstationController extends Controller {
 		if(Request::ajax())
 		{
 			$pc = $this->sanitizeString(Input::get('selected'));
-			foreach( Pc::separateArray($pc) as $pc )
+			$keyboard = $this->sanitizeString(Input::get('keyboard'));
+			$avr = $this->sanitizeString(Input::get('avr'));
+			$monitor = $this->sanitizeString(Input::get('monitor'));
+			$systemunit = $this->sanitizeString(Input::get('systemunit'));
+			try
 			{
-				try{
-					$pc = Pc::find($pc);
-					$pc->delete();
-				} catch ( Exception $e ) {  
-					return json_encode('error');
-				}
+				Pc::condemn($pc,$systemunit,$monitor,$keyboard,$avr);
+			} 
+			catch ( Exception $e ) 
+			{  
+				return json_encode('error');
 			}
 
 			return json_encode('success');
 		}
 
-		try{
-			$pc = Pc::find($id);
-			$pc->delete();
-		} catch ( Exception $e ) {}
+		$pc = $this->sanitizeString(Input::get('selected'));
+		Pc::condemn($pc,$systemunit,$monitor,$keyboard,$avr);
 
-		Session::flash('success-message','Workstation disassembled');
+		Session::flash('success-message','Workstation condemned');
 		return redirect('workstation');
 	}
 
@@ -262,20 +340,12 @@ class WorkstationController extends Controller {
 		{
 			$room = $this->sanitizeString(Input::get('room'));
 			$pc = $this->sanitizeString(Input::get('items'));
+			$name = $this->sanitizeString(Input::get('name'));
 
-			foreach(Pc::separateArray($pc) as $pc)
-			{
-				try
-				{
-					Pc::setPcLocation($pc,$room);
-				} 
-				catch(Exception $e) 
-				{
-					return $e;
-					return json_encode('error');
-				}
-
-			}
+			Pc::setPcLocation($pc,$room);
+			$pc = Pc::find($pc);
+			$pc->name = $name;
+			$pc->save();
 
 			return json_encode('success');
 		}
@@ -287,19 +357,12 @@ class WorkstationController extends Controller {
 		*/
 		$room = $this->sanitizeString(Input::get('room'));
 		$pc = $this->sanitizeString(Input::get('items'));
+		$name = $this->sanitizeString(Input::get('name'));
 
-		foreach(Pc::separateArray($pc) as $pc)
-		{
-			try
-			{
-				Pc::setPcLocation($pc,$room);
-			} 
-			catch(Exception $e) 
-			{
-				return json_encode('error');
-			}
-
-		}
+		Pc::setPcLocation($pc,$room);
+		$pc = Pc::find($pc);
+		$pc->name = $name;
+		$pc->save();
 
 		Session::flash('success-message','Workstation deployed');
 		return redirect('workstation/form/deployment');
@@ -324,19 +387,13 @@ class WorkstationController extends Controller {
 		{
 			$room = $this->sanitizeString(Input::get('room'));
 			$pc = $this->sanitizeString(Input::get('items'));
+			$name = $this->sanitizeString(Input::get('name'));
 
-			foreach(Pc::separateArray($pc) as $pc)
-			{
-				try
-				{
-					Pc::setPcLocation($pc,$room);
-				} 
-				catch(Exception $e) 
-				{
-					return json_encode('error');
-				}
+			Pc::setPcLocation($pc,$room);
+			$pc = Pc::find($pc);
+			$pc->name = $name;
+			$pc->save();
 
-			}
 			return json_encode('success');
 		}
 
@@ -347,19 +404,12 @@ class WorkstationController extends Controller {
 		*/
 		$room = $this->sanitizeString(Input::get('room'));
 		$pc = $this->sanitizeString(Input::get('items'));
+		$name = $this->sanitizeString(Input::get('name'));
 
-		foreach(Pc::separateArray($pc) as $pc)
-		{
-			try
-			{
-				Pc::setPcLocation($pc,$room);
-			} 
-			catch(Exception $e) 
-			{
-				return json_encode('error');
-			}
-
-		}
+		Pc::setPcLocation($pc,$room);
+		$pc = Pc::find($pc);
+		$pc->name = $name;
+		$pc->save();
 
 		Session::flash('success-message','Workstation transferred');
 		return redirect('workstation/view/transfer');

@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Validator;
 use Session;
+use App\ReservationItems;
+use App\ItemType;
+use App\ItemProfile;
+use App\Inventory;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -52,7 +56,7 @@ class ReservationItemsController extends Controller {
 				->withInput();
 		}
 
-		$itemtype = Itemtype::find($itemtype);
+		$itemtype = ItemType::find($itemtype);
 		if(count($itemtype) <= 0){
 			Session::flash('error-message','The system cannot find respective item type.');
 			return redirect()->back()
@@ -72,7 +76,7 @@ class ReservationItemsController extends Controller {
 		}
 
 
-		$reservationitems = new Reservationitems;
+		$reservationitems = new ReservationItems;
 		$reservationitems->itemtype_id = $itemtype->id;
 		$reservationitems->inventory_id = $inventory->id;
 		$reservationitems->included = $included;
@@ -106,7 +110,7 @@ class ReservationItemsController extends Controller {
 	public function edit($id)
 	{
 		return view('reservation.item.edit')
-			->with('reservationitems',Reservationitems::find($id));
+			->with('reservationitems',ReservationItems::find($id));
 	}
 
 
@@ -131,7 +135,7 @@ class ReservationItemsController extends Controller {
 				->withInput();
 		}
 
-		$itemtype = Itemtype::find($itemtype);
+		$itemtype = ItemType::find($itemtype);
 		if(count($itemtype) <= 0){
 			Session::flash('error-message','The system cannot find respective item type.');
 			return redirect()->back()
@@ -151,7 +155,7 @@ class ReservationItemsController extends Controller {
 		}
 
 
-		$reservationitems = Reservationitems::find($id);
+		$reservationitems = ReservationItems::find($id);
 		$reservationitems->itemtype_id = $itemtype->id;
 		$reservationitems->inventory_id = $inventory->id;
 		$reservationitems->included = $included;
@@ -174,12 +178,12 @@ class ReservationItemsController extends Controller {
 	{
 		if(Request::ajax())
 		{
-			$reservationitems = Reservationitems::find($id);
+			$reservationitems = ReservationItems::find($id);
 			$reservationitems->delete();
 			return json_encode('success');
 		}
 
-		$reservationitems = Reservationitems::find($id);
+		$reservationitems = ReservationItems::find($id);
 		$reservationitems->delete();
 
 		Session::flash('success-message','Item for reservation deleted');

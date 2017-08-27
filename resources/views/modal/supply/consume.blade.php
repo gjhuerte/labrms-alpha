@@ -8,10 +8,10 @@
 				<input type="hidden" id="consume-id" name="id" />
 				<div class="form-group">
 					<div class="col-md-12">
-					{{ Form::label('Accessor') }}
+					{{ Form::label('Releasor') }}
 					{{ Form::text('name',null,[
 						'class' => 'form-control',
-						'placeholder' => 'Accessors Name'
+						'placeholder' => 'Name'
 					]) }}
 					</div>
 				</div>

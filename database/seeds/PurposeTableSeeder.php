@@ -19,34 +19,22 @@ class PurposeTableSeeder extends Seeder {
 		Purpose::create(array(
       'title'=>'Oral Defense',
       'description'=>''
-		));
-
-		Purpose::create(array(
+		),array(
       'title'=>'General Assembly',
       'description'=>''
-		));
-
-		Purpose::create(array(
+		),array(
       'title'=>'Seminar',
       'description'=>''
-		));
-
-		Purpose::create(array(
+		),array(
       'title'=>'Tutorial',
       'description'=>''
-		));
-
-		Purpose::create(array(
+		),array(
       'title'=>'Make-up Classes',
       'description'=>''
-		));
-
-		Purpose::create(array(
+		),array(
       'title'=>'Class Presentation',
       'description'=>''
-		));
-
-		Purpose::create(array(
+		),array(
       'title'=>'Class Activity',
       'description'=>''
 		));

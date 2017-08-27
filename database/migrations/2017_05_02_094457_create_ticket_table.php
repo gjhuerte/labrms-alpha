@@ -21,7 +21,9 @@ class CreateTicketTable extends Migration {
 			$table->string('author',100);
 			$table->string('staffassigned',100)->nullable();
 			$table->integer('ticket_id')->unsigned()->nullable();
-			$table->foreign('ticket_id')->references('id')->on('ticket');
+			$table->foreign('ticket_id')->references('id')->on('ticket')
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->string('status');
 			$table->timestamps();
 		});

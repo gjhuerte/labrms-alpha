@@ -16,7 +16,8 @@ class CreateSupplyhistoryTable extends Migration {
 		{
             $table->integer('supply_id')->unsigned();
 			$table->foreign('supply_id')->references('id')->on('supply')
-										->onDelete('cascade');;
+										->onUpdate('cascade')
+										->onDelete('cascade');
             $table->integer('quantity');
             $table->string('remark');
 			$table->string('personinvolve');

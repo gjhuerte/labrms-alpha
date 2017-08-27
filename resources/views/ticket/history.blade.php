@@ -29,13 +29,12 @@ Ticket History
             </div>
         @endif
       <div class='col-md-12'>
-          <legend><h3 class="text-muted">Ticket {{ $ticket->id }}</h3></legend>
+          <legend><h3 class="text-muted">Ticket {{ $ticket->id }} History</h3></legend>
           <ol class="breadcrumb">
               <li><a href="{{ url('ticket') }}">Ticket</a></li>
               <li>{{ $id }}</li>
               <li class="active">History</li>
-          </ol>
-          <p class="text-muted">Note: The top most entry is the latest ticket</p>
+          </ol>=
           <table class="table table-hover table-striped table-bordered table-condensed" id="ticketTable" cellspacing="0" width="100%">
             <thead>
                   <tr rowspan="2">
@@ -54,9 +53,9 @@ Ticket History
                       </th>
                   </tr>
                     <tr>
-                <th>ID</th>
+                <th>Ticket ID</th>
+                <th>Ticket Type</th>
                 <th>Details</th>
-                <th>Type</th>
                 <th>Staff Assigned</th>
                 <th>Author</th>
                 <th>Date Created</th>
