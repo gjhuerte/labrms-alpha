@@ -122,7 +122,18 @@ class SoftwareLicenseController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		if(Request::ajax())
+		{
+			$id = $this->sanitizeString(Input::get('id'));
+			$license = SoftwareLicense::find($id);
+			$license->delete();
+			return json_encode('success');
+		}
+
+		$license = SoftwareLicense::find($id);
+		$license->delete();
+		Session::flash('success-message','Software License removed');
+		return redirect('maintenance/activity');
 	}
 
 

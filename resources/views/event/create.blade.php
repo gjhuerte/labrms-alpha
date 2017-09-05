@@ -19,6 +19,8 @@ Event | Create
 <div class="container-fluid" id="page-body">
 	<div class='col-md-offset-3 col-md-6'>
 		<div class="panel panel-body" style="padding-top: 20px;padding-left: 40px;padding-right: 40px;">
+	 		{{ Form::open(['method'=>'post','route'=>'event.store','class'=>'form-horizontal','id'=>'inventoryForm']) }}
+	 		<legend><h3 class="text-muted">Create Event</h3></legend>
 	      @if (count($errors) > 0)
          	 <div class="alert alert-danger alert-dismissible" role="alert">
 	          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -29,7 +31,6 @@ Event | Create
 	              </ul>
 	          </div>
 	      @endif
-	 		{{ Form::open(['method'=>'post','route'=>'event.store','class'=>'form-horizontal','id'=>'inventoryForm']) }}
 			<ul class="breadcrumb">
 				<li><a href="{{ url('event') }}">Event</a></li>
 				<li class="active">Create</li>
@@ -77,7 +78,7 @@ Event | Create
 				<select class="form-control" name="repeatingFormat">
 					<option value="weekly">Weekly</option>
 					<option value="monthly">Monthly</option>
-					<option value="yearly">Year</option>
+					<option value="yearly">Yearly</option>
 				</select>
 				</div>
 			</div>

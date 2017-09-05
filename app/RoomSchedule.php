@@ -23,3 +23,5 @@ class RoomSchedule extends \Eloquent{
 	public static $rules = array(
 		'subject' => 'required|min:2|max:50|unique:itemtype,name'
 	);
+
+}

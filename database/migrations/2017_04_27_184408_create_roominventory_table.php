@@ -15,9 +15,13 @@ class CreateRoominventoryTable extends Migration {
 		Schema::create('roominventory', function(Blueprint $table)
 		{
 			$table->integer('room_id')->unsigned();
-			$table->foreign('room_id')->references('id')->on('room');
+			$table->foreign('room_id')->references('id')->on('room')
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->integer('item_id')->primary()->unsigned();
-			$table->foreign('item_id')->references('id')->on('itemprofile');
+			$table->foreign('item_id')->references('id')->on('itemprofile')
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->timestamps();
 			$table->softDeletes();
 		});

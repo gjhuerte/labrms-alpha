@@ -80,7 +80,7 @@ Inventory
 			language: {
 					searchPlaceholder: "Search..."
 			},
-			"dom": "<'row'<'col-sm-9'<'toolbar'>><'col-sm-3'f>>" +
+			"dom": "<'row'<'col-sm-3'l><'col-sm-6'<'toolbar'>><'col-sm-3'f>>" +
 							"<'row'<'col-sm-12'tr>>" +
 							"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 			"processing": true,
@@ -101,15 +101,15 @@ Inventory
 	    });
 
 	 	$("div.toolbar").html(`
-				<a href="{{ url('inventory/item/create') }}" class="btn btn-flat btn-md btn-primary" style="padding: 10px;">
+				<button id="new" class="btn btn-md btn-primary">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 					<span id="nav-text">Add</span>
-				</a>
-				<button id="profile" class="btn btn-success btn-flat" type="button" style="padding: 10px;">
-					<span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-					<span class="hidden-sm hidden-xs">Profile an Item</span>
 				</button>
-				<button id="view" class="btn btn-default btn-flat" type="button" style="padding: 10px;">
+				<button id="profile" class="btn btn-success " type="button">
+					<span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+					<span class="hidden-sm hidden-xs">Profile Items</span>
+				</button>
+				<button id="view" class="btn btn-default" type="button">
 					<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
 					<span class="hidden-sm hidden-xs">View Profiled Items</span>
 				</button>
@@ -134,6 +134,20 @@ Inventory
 	    $('.truncate').succinct({
 	        size: 20
 	    });
+
+	    $('#new').on('click',function(){
+			try{
+				if(table.row('.selected').data().id != null && table.row('.selected').data().id  && table.row('.selected').data().id >= 0)
+				{
+					window.location.href = "{{ url('inventory/item/create') }}"
+											 + '?brand=' + table.row('.selected').data().brand
+											 + '&' +'model=' + table.row('.selected').data().model
+											 + '&' +'itemtype=' + table.row('.selected').data().itemtype.name
+				}
+			}catch( error ){
+				window.location.href = "{{ url('inventory/item/create') }}"
+			}
+	    })
 
 	    $('#edit').on('click',function(){
 			try{

@@ -5,12 +5,44 @@ namespace App;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class ItemTicket extends \Eloquent{
+class ItemTicket extends \Eloquent
+{
+
+	/**
+	*
+	* table name
+	*
+	*/	
 	protected $table = 'item_ticket';
+
+	/**
+	*
+	* primary key
+	*
+	*/
 	protected $primaryKey = 'id';
 
+	/**
+	*
+	* created_at and updated_at status
+	*
+	*/
 	public $timestamps = true;
-	public $fillable = ['item_id','ticket_id'];
+
+	/**
+	*
+	* used for create method
+	*
+	*/  
+	public $fillable = [
+		'item_id',
+		'ticket_id'
+	];
+
+	public function scopeTicket($query,$value)
+	{
+		return $query->where('ticket_id','=',$value);
+	}
 
 	public function ticket()
 	{
@@ -20,11 +52,6 @@ class ItemTicket extends \Eloquent{
 	public function itemprofile()
 	{
 		return $this->belongsTo('App\ItemProfile','item_id','id');
-	}
-
-	public function scopeTicket($query,$value)
-	{
-		$query->where('ticket_id','=',$value);
 	}
 
 }

@@ -19,6 +19,7 @@ Update
   <div class="row">
     <div class="col-sm-offset-3 col-sm-6">
       <div class="col-md-12 panel panel-body " style="padding: 25px;padding-top: 10px;">
+        <legend class='text-muted'><h3>Reservation Purpose</h3></legend>
         <ol class="breadcrumb">
           <li>
             <a href="{{ url('purpose') }}">Reservation Purpose</a>
@@ -48,6 +49,83 @@ Update
         </div>
         <div class="form-group">
           <div class="col-md-12">
+            {{ Form::label('Points') }}
+            <div class="list-group">
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="4" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('4 points') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    First Highest Prioritization: General Assembly, Seminar, College Tutorial
+                  </span>
+                </div>
+              </a>
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="3" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('3 points') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    Second Highest Prioritization: (Regular Class) Class Presentation, Class Activity, Oral Defense
+                  </span>
+                </div>
+              </a>
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="2" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('2 points') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    Third Highest Prioritization: Make-up clas, Tutorial Class by the Faculty
+                  </span>
+                </div>
+              </a>
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="1" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('1 point') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    Fourth Highest Prioritization: Co-curricular Activities
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12">
             {{ Form::label('description','Description') }}
             {{ Form::textarea('description',$purpose->description,[
               'required',
@@ -73,6 +151,12 @@ Update
 @section('script')
 <script>
   $(document).ready(function(){
+    @if(Input::has('points'))
+    $("input[name='points'][value='{{ Input::old('points') }}']").prop('checked',true)
+    @endif
+
+    $("input[name='points'][value='{{ $purpose->points }}']").prop('checked',true)
+
     @if( Session::has("success-message") )
         swal("Success!","{{ Session::pull('success-message') }}","success");
     @endif

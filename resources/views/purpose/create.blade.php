@@ -7,10 +7,26 @@ Create
 @include('layouts.navbar')
 @stop
 @section('style')
+{{ HTML::style(asset('css/font-awesome.min.css')) }}
 <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 <style>
   #page-body{
     display: none;
+  }
+
+  .rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+  }
+  .rating > span {
+    display: inline-block;
+    position: relative;
+    width: 1.1em;
+  }
+  .rating > span:hover:before,
+  .rating > span:hover ~ span:before {
+     content: "\2605";
+     position: absolute;
   }
 </style>
 @stop
@@ -19,6 +35,7 @@ Create
   <div class="row">
     <div class="col-sm-offset-3 col-sm-6">
       <div class="col-md-12 panel panel-body " style="padding: 25px;padding-top: 10px;">
+        <legend class='text-muted'><h3>Reservation Purpose</h3></legend>
         <ol class="breadcrumb">
           <li>
             <a href="{{ url('purpose') }}">Reservation Purpose</a>
@@ -44,6 +61,83 @@ Create
               'class'=>'form-control',
               'placeholder'=>'Reservation Purpose Title'
             ]) }}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12">
+            {{ Form::label('Points') }}
+            <div class="list-group">
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="4" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('4 points') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    First Highest Prioritization: General Assembly, Seminar, College Tutorial
+                  </span>
+                </div>
+              </a>
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="3" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('3 points') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    Second Highest Prioritization: (Regular Class) Class Presentation, Class Activity, Oral Defense
+                  </span>
+                </div>
+              </a>
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="2" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('2 points') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    Third Highest Prioritization: Make-up clas, Tutorial Class by the Faculty
+                  </span>
+                </div>
+              </a>
+              <a class="list-group-item" href="#">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <input type="radio" name="points" value="1" checked/>
+                  </div>
+                  <div class="col-sm-3">
+                    <i class="fa fa-star fa-fw" aria-hidden="true"></i>
+                  </div>
+                  <span class="col-sm-8">
+                    {{ Form::label('1 point') }}
+                  </span>
+                  <span class="col-sm-offset-4 col-sm-8">
+                    Fourth Highest Prioritization: Co-curricular Activities
+                  </span>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
         <div class="form-group">

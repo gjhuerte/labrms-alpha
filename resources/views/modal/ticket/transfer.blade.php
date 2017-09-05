@@ -39,6 +39,15 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-12">
+					{{ Form::label('Comments') }}
+					{{ Form::text('comment',null,[
+						'class' => 'form-control',
+						'id' => 'comment'
+					]) }}
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-12">
 						<button type="submit" class="btn btn-success btn-lg btn-block">Transfer</button>
 					</div>
 				</div>

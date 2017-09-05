@@ -18,7 +18,8 @@ class CreateReceiptTable extends Migration {
 			$table->string('number',25);
 			$table->integer('inventory_id')->unsigned();
 			$table->foreign('inventory_id')->references('id')->on('inventory')
-										->onDelete('cascade');;
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->string('POno',25)->nullable();
 			$table->date('POdate')->nullable();
 			$table->string('invoiceno',25)->nullable();

@@ -13,9 +13,7 @@ Dashboard
   }
 </style>
 @stop
-@section('content')
-@include('modal.ticket.create')
-<!--
+@section('content')<!--
 <div class="container-fluid">
 	<div class="col-md-3">
 		<ul class="list-group panel panel-default">

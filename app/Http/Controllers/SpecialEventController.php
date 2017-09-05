@@ -47,7 +47,6 @@ class SpecialEventController extends Controller {
 	 */
 	public function store()
 	{
-		// return Input::all();
 		$title = $this->sanitizeString(Input::get('title'));
 		$date = $this->sanitizeString(Input::get('date'));
 		$repeating = ( $this->sanitizeString(Input::get('multiple')) == 'on' ) ? true : false;
@@ -58,6 +57,13 @@ class SpecialEventController extends Controller {
 			'title' => $title,
 			'date' => $date
 		],SpecialEvent::$rules);
+
+		if($validator->fails())
+		{
+			return redirect('event/create')
+				->withInput()
+				->withErrors($validator);
+		}
 
 		$event = new SpecialEvent;
 		$event->title = $title;

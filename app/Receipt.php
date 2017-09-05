@@ -16,7 +16,7 @@ class Receipt extends \Eloquent{
 
 	//Validation rules!
 	public static $rules = array(
-		'Acknowledgement Receipt' => 'required|min:2|max:25',
+		'Property Acknowledgement Receipt' => 'required|min:2|max:25',
 		'Purchase Order Number' => 'required|min:2|max:25',
 		'Purchase Order Date' => 'required|min:2|max:25|date',
 		'Invoice Number' => 'required|min:2|max:25',
@@ -25,7 +25,7 @@ class Receipt extends \Eloquent{
 	);
 
 	public static $updateRules = array(
-		'Acknowledgement Receipt' => 'min:2|max:25',
+		'Property Acknowledgement Receipt' => 'min:2|max:25',
 		'Purchase Order Number' => 'min:2|max:25',
 		'Purchase Order Date' => 'min:2|max:25|date',
 		'Invoice Number' => 'min:2|max:25',

@@ -4,16 +4,23 @@ namespace App;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
-class TicketView extends \Eloquent{
-	//Database driver
-	/*
-		1 - Eloquent (MVC Driven)
-		2 - DB (Directly query to SQL database, no model required)
+class TicketView extends \Eloquent
+{
+
+	/**
+	*
+	* table name
+	*
+	*/	
+	protected $table = 'ticket_v';
+
+	/**
+	*
+	* created_at and updated_at status
+	*
 	*/
-
-	//The table in the database used by the model.
-	protected $table = 'ticketview';
 	public $timestamps = false;
 
 	public function scopeTickettype($query,$value)
@@ -29,6 +36,12 @@ class TicketView extends \Eloquent{
 	public function scopeStaffassigned($query,$value)
 	{
 		return $query->where('staffassigned','=',$value);
+	}
+
+	public function scopeSelf($query)
+	{
+		$name = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
+		return $query->where( 'author' , '=' , $name );
 	}
 
 	public function scopeStaff($query,$value = null)

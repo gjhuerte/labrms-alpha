@@ -29,13 +29,12 @@ Ticket History
             </div>
         @endif
       <div class='col-md-12'>
-          <legend><h3 class="text-muted">Ticket {{ $ticket->id }}</h3></legend>
+          <legend><h3 class="text-muted">Ticket {{ $ticket->id }} History</h3></legend>
           <ol class="breadcrumb">
               <li><a href="{{ url('ticket') }}">Ticket</a></li>
               <li>{{ $id }}</li>
               <li class="active">History</li>
           </ol>
-          <p class="text-muted">Note: The top most entry is the latest ticket</p>
           <table class="table table-hover table-striped table-bordered table-condensed" id="ticketTable" cellspacing="0" width="100%">
             <thead>
                   <tr rowspan="2">
@@ -54,13 +53,14 @@ Ticket History
                       </th>
                   </tr>
                     <tr>
-                <th>ID</th>
+                <th>Ticket ID</th>
+                <th>Ticket Type</th>
                 <th>Details</th>
-                <th>Type</th>
                 <th>Staff Assigned</th>
                 <th>Author</th>
                 <th>Date Created</th>
                 <th>Status</th>
+                <th>Comment</th>
               </tr>
             </thead>
           </table>
@@ -96,8 +96,8 @@ Ticket History
       ajax: "{{ url('ticket/history') }}" + '/' + {{ $id }},
       columns: [
           { data: "id" },
-          { data: "details" },
           { data: "tickettype" },
+          { data: "details" },
           { data: function(callback){
             return callback.user.firstname + " " + callback.user.middlename + " " + callback.user.lastname
           } },
@@ -105,7 +105,8 @@ Ticket History
           {data: function(callback){
             return moment(callback.created_at).format("dddd, MMMM Do YYYY");
           }},
-          { data: "status" }
+          { data: "status" },
+          { data: "comments" }
       ],
     });
 

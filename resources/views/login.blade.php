@@ -35,12 +35,21 @@ Login
 <script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
 @stop
 @section('content')
-<div class="container-fluid" id="page-body" style="margin-top: 50px;margin-left: 30px;margin-right: 30px;">
+<div class="container-fluid" id="page-body">
   <div class="row">
-    <div class="col-sm-offset-4 col-sm-4">
+    <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
       <div class="panel panel-body panel-shadow">
         <div class="col-sm-12" id="loginPanel" style="padding: 20px" >
-          <legend><h3 class="text-center text-primary">Log In</h3></legend>
+          <legend>
+            <div class="hidden-xs row center-block" style="margin-bottom: 10px;">
+              <div class="col-xs-4" style="padding-right:5px;">
+                <img class=" img img-responsive pull-right" src="{{ asset('images/logo/ccis/ccis-logo-64.png') }}" style="width:64px;height: auto;"/>
+              </div>
+              <div class="col-xs-8" style="padding-left:5px;">
+                <h4 class="text-muted pull-left">College of Computer and Information Sciences</h4>
+              </div>
+            </div>
+          </legend>
           <div style="margin-top: 10px;">
             <div id="error-container"></div>
             {{ Form::open(array('class' => 'form-horizontal','id'=>'loginForm')) }}
@@ -72,6 +81,11 @@ Login
                   <button type="submit" id="loginButton" data-loading-text="Logging in..." class="btn btn-md btn-primary btn-block" autocomplete="off">
                   Login
                 </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12 text-center">
+                <p class="text-muted" style="letter-spacing: 1px"> CCIS - LOO </p>
               </div>
             </div>
 {{--             <a href="{{ route('reset') }}" class="text-center text-muted" type="button" role="button" style="text-decoration: none;"><small style="letter-spacing: 2px;">Forgot your password?</small></a> --}}

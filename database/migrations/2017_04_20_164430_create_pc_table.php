@@ -17,15 +17,23 @@ class CreatePcTable extends Migration {
 			$table->increments('id');
 			$table->integer('systemunit_id')->unsigned();
 			$table->foreign('systemunit_id')->references('id')->on('itemprofile')
+										->onUpdate('cascade')
 										->onDelete('cascade');
-			$table->integer('monitor_id')->unsigned();
-			$table->foreign('monitor_id')->references('id')->on('itemprofile');
+			$table->integer('monitor_id')->unsigned()->nullable();
+			$table->foreign('monitor_id')->references('id')->on('itemprofile')
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->integer('keyboard_id')->unsigned()->nullable();
-			$table->foreign('keyboard_id')->references('id')->on('itemprofile');
+			$table->foreign('keyboard_id')->references('id')->on('itemprofile')
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->integer('avr_id')->unsigned()->nullable();
-			$table->foreign('avr_id')->references('id')->on('itemprofile');
+			$table->foreign('avr_id')->references('id')->on('itemprofile')
+										->onUpdate('cascade')
+										->onDelete('cascade');
 			$table->string('oskey',50)->nullable();
 			$table->string('mouse',50)->nullable();
+			$table->string('name',50)->nullable();
 
 
 

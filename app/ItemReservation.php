@@ -8,20 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 class ItemReservation extends \Eloquent{
 	use  SoftDeletes;
 
-	//Database driver
-	/*
-		1 - Eloquent (MVC Driven)
-		2 - DB (Directly query to SQL database, no model required)
-	*/ 
-
-	//The table in the database used by the model.
+	/**
+	*
+	* table name
+	*
+	*/	
 	protected $table  = 'item_reservation';
+
+	/**
+	*
+	*	fields to be set as date
+	*
+	*/
 	protected $dates = ['deleted_at'];
-	//The attribute that used as primary key.
+
+	/**
+	*
+	* primary key
+	*
+	*/
 	protected $primaryKey = 'id';
 
+	/**
+	*
+	* created_at and updated_at status
+	*
+	*/
 	public $timestamps = false;
-	
-	//Validation rules!
 
 }

@@ -82,7 +82,7 @@ class UserTableSeeder extends Seeder {
 			 'lastname' => 'Doe',
 			 'contactnumber' => '09123456789',
 			 'email' => 'johndoe@yahoo.com',
-			 'type' => 'johndoe',
+			 'type' => 'student',
 			 'status' => '1'
 		));
 	}

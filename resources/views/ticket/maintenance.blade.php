@@ -64,7 +64,7 @@ Ticket | Maintenance
 				<div id="activity-field">
 					<div class="form-group">
 						<div class="col-sm-12">
-						{{ Form::label('activity','Actvitity Done') }}
+						{{ Form::label('activity','Activity Done') }}
 						{{ Form::select('activity',$activity,Input::old('activity'),[
 							'id' => 'activity',
 							'class' => 'form-control'

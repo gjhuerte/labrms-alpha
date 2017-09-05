@@ -14,7 +14,8 @@ class CreateInventoryForeignKey extends Migration {
 	{
 		Schema::table('inventory', function(Blueprint $table)
 		{
-			$table->foreign('itemtype_id')->references('id')->on('itemtype');
+			$table->foreign('itemtype_id')->references('id')->on('itemtype')
+									->onUpdate('cascade');
 		});
 	}
 
