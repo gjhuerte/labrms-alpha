@@ -96,6 +96,27 @@
           <a href="{{ url('dashboard') }}"><img class="img" src="{{ asset('images/logo/Dashboard/dashboard-16.png') }}" style="width:25px;height:25px;margin-right: 5px;"> Dashboard</a>
         </li>
 
+        <!-- maintenance dropdown tab -->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <img class="img" src="{{ asset('images/logo/IS/infosys-16.png') }}" style="width:25px;height:25px;margin-right: 5px;"> Information System <span class="caret"></span></a>
+          <!-- dropdown items -->
+          <ul class="dropdown-menu">
+            <!-- maintenance tab -->
+            <li>{{ link_to('maintenance/activity','Maintenance Activities') }}</li>
+            <li>{{ link_to('event','Event') }}</li>
+            @if(Auth::user()->accesslevel == 0)
+            <li>{{ link_to('item/type','Item Types') }}</li>
+            <li>{{ link_to('room/category','Laboratory Room Category') }}</li>
+            <li>{{ HTML::link('schedule','Laboratory Schedule') }}</li>
+            <li>{{ link_to('room','Laboratory Room') }}</li>
+            <li>{{ link_to('purpose','Reservation Purpose') }}</li>
+            @endif
+            <li>{{ link_to('software','Software') }}</li>
+            <li>{{ link_to('software/type','Software Types') }}</li>
+          </ul> <!-- end of dropdown items -->
+        </li> <!-- end of maintenance dropdown tab -->
+
         <!-- dropdown tab -->
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -111,7 +132,7 @@
                 <!-- create tab -->
                 <li>{{ link_to('reservation/create','Form') }}</li>
                 <!-- view all reservation -->
-                <li>{{ HTML::link('reservation/view/all','Approval') }}</li>
+                <li>{{ HTML::link('reservation/','List') }}</li>
                 <!-- view all reservation items -->
                 <li>{{ HTML::link('reservation/items/list','Item Filter') }}</li>
               </ul> <!-- end of dropdown items -->
@@ -124,7 +145,7 @@
 
             <!-- inventory dropdown tab -->
             <li class="dropdown-submenu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Inventory  
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Inventory
               </a>
               <!-- dropdown items -->
               <ul class="dropdown-menu">
@@ -134,6 +155,7 @@
                 <li>{{ HTML::link('inventory/room','Room') }}</li>
                 <li>{{ HTML::link('supplies','Supplies') }}</li>
                 <li>{{ link_to('lostandfound','Lost And Found') }}</li>
+                <li>{{ link_to('lend','Lent Items') }}</li>
               </ul> <!-- end of dropdown items -->
             </li> <!-- end of inventory dropdown tab -->
 
@@ -145,25 +167,6 @@
           </ul> <!-- end of dropdown items -->
         </li> <!-- end of dropdown tab -->
 
-        <!-- maintenance dropdown tab -->
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-          <img class="img" src="{{ asset('images/logo/IS/infosys-16.png') }}" style="width:25px;height:25px;margin-right: 5px;"> Information System <span class="caret"></span></a>
-          <!-- dropdown items -->
-          <ul class="dropdown-menu">
-            <!-- maintenance tab -->
-            <li>{{ link_to('maintenance/activity','Maintenance Activities') }}</li>
-            <li>{{ link_to('event','Event') }}</li>
-            @if(Auth::user()->accesslevel == 0)
-            <li>{{ link_to('item/type','Item Types') }}</li>
-            <li>{{ HTML::link('schedule','Laboratory Schedule') }}</li>
-            <li>{{ link_to('room','Laboratory Room') }}</li>
-            <li>{{ link_to('purpose','Reservation Purpose') }}</li>
-            @endif
-            <li>{{ link_to('software','Software') }}</li>
-          </ul> <!-- end of dropdown items -->
-        </li> <!-- end of maintenance dropdown tab -->
-
         @if(Auth::user()->accesslevel == 0)
         <!-- utilities dropdown tab -->
         <li class="dropdown">
@@ -173,6 +176,9 @@
           <ul class="dropdown-menu">
             <!-- utilities tab -->
             <li>{{ link_to('account','Accounts') }}</li>
+          @if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1)
+            <li>{{ link_to('admin/backup','Backup and Restore') }}</li>
+          @endif
           </ul> <!-- end of dropdown items -->
         </li> <!-- end of utilities dropdown tab -->
         @endif
@@ -181,7 +187,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle text-capitalize" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-          <img class="img" 
+          <img class="img"
           @if(Auth::user()->accesslevel == 0)
           src="{{ asset('images/logo/LabHead/labhead-icon-16.png') }}"
           @elseif(Auth::user()->accesslevel == 1)

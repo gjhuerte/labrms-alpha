@@ -14,9 +14,44 @@ Dashboard
 </style>
 @stop
 @section('content')
-@include('modal.ticket.create')
-<!--
 <div class="container-fluid">
+	<div class="col-md-3" id="accordion" role="tablist" aria-multiselectable="true">
+		<div class="panel panel-info">
+			<div class="panel-heading" role="tab" id="headingOne">
+				<div class="panel-title">
+				    <a role="button">
+				      Reservation list
+				    </a>
+				</div>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" style="margin-bottom: 0;padding-bottom:0;">
+				<div id="reservation-list">
+				</div>
+			</div>
+        </div> <!-- end of notification tab -->
+	</div>
+	<div class=" col-md-6">
+		<div class="col-sm-12 panel panel-body"  id='calendar'>
+			<div></div>
+		</div>
+	</div>
+	<div class="col-md-3" id="accordion" role="tablist" aria-multiselectable="true">
+		<div class="panel panel-primary">
+			<div class="panel-heading" role="tab" id="headingOne">
+				<div class="panel-title">
+				    <a role="button">
+				      Ticket list
+				    </a>
+				</div>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" style="margin-bottom: 0;padding-bottom:0;">
+				<div id="ticket-list">
+				</div>
+			</div> 
+        </div> <!-- end of notification tab -->
+	</div>
+</div>
+<!-- <div class="container-fluid">
 	<div class="col-md-3">
 		<ul class="list-group panel panel-default">
 			<div class="panel-heading">
@@ -53,18 +88,153 @@ Dashboard
 {{ HTML::script(asset('js/timetable.min.js')) }}
 <script type="text/javascript">
 	$(document).ready(function() {
+
+		$.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+			type: 'get',
+            url: "{{ url('dashboard') }}" + '?ticket=' + 'all',
+            dataType: 'json',
+            success: function(response){
+            	$('#ticket-list').html("")
+
+            	$.each(response.data,function(index,callback){
+	            	ret_val = `
+				    <a href="{{ url('ticket/history') }}/` + callback.id + `" class="list-group-item">`
+
+
+					ret_val += `<p class="list-group-item-text">Date:` + 
+						moment(callback.created_at).format('MMMM DD, YYYY') + `</p>`
+
+					ret_val += `<p class="list-group-item-text">Tag:` + callback.tag + `</p>`
+
+					ret_val += `<p class="list-group-item-text">Title:` + callback.title + `</p>`
+
+					ret_val += `<p class="list-group-item-text">Details:` + callback.details + `</p>`
+
+					ret_val += `<p class="list-group-item-text">Author:` + callback.author + `</p>`
+
+					ret_val += `
+						</a>
+					`
+
+					$('#ticket-list').append(ret_val)
+            	})
+
+    //         	ret_val = `
+				// 	<nav>
+				// 	  <ul class="pagination">
+				// 	    <li>
+				// 	      <a href="` + response.prev_page_url + `" aria-label="Previous">
+				// 	        <span aria-hidden="true">&laquo;</span>
+				// 	      </a>
+				// 	    </li>
+				// `;
+
+				// for( ctr = response.current_page ; ctr <= response.last_page ; ctr++ )
+				// {
+
+	   //          	ret_val += `
+				// 		    <li><a href="` + response.path + `?page=` + ctr + `">` + response.current_page + `</a></li>
+				// 	`;
+
+				// }
+
+
+	   //      	ret_val += `
+				// 	      <a href="` + response.next_page_url + `" aria-label="Next">
+				// 	        <span aria-hidden="true">&raquo;</span>
+				// 	      </a>
+				// 	    </li>
+				// 	  </ul>
+				// 	</nav>
+				// `;
+
+    //         	$('#ticket-list').append(ret_val)
+			}
+		})
+
+		$.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+			type: 'get',
+            url: "{{ url('dashboard') }}" + '?reservation=' + 'all',
+            dataType: 'json',
+            success: function(response){
+            	$('#reservation-list').html("")
+            	$.each(response.data,function(index,callback){
+	            	ret_val = `
+				    <a href="#" class="list-group-item">
+				      <h4 class="list-group-item-heading">`
+
+			      	if(callback.approval == 0) 
+						ret_val += `
+							<p class="text-warning">
+								<span class="label label-info">Undecided</span>
+							</p>
+						`
+					if(callback.approval == 1) 
+						ret_val += `
+							<p class="text-success">
+					  		<span class="label label-success">Approved</span>
+							</p>
+						`
+					if(callback.approval == 2) 
+						ret_val += `
+							<p class="text-danger">
+					  		<span class="label label-danger">Disapproved</span>
+							</p>
+						`
+						
+					ret_val += `</h4>`
+
+					if(callback.itemprofile)
+					{
+						if(callback.itemprofile.length > 0)
+						{
+							ret_val += `<ul class="list-unstyled"><label>Item List</label>`
+					  		$.each(callback.itemprofile,function(index,itemprofile){
+					  			ret_val +=  `
+					  				<li class="list-group-item-text">` + itemprofile.inventory.itemtype.name + `-` + itemprofile.propertynumber + `</li>`
+					  		})
+					  		ret_val += `</ul>`
+						}
+					}
+
+					ret_val += `<p class="list-group-item-text">Date:` + 
+						moment(callback.timein).format('MMMM DD, YYYY') + `</p>`
+
+					ret_val += `<p class="list-group-item-text">Time:` + moment(callback.timein).format('hh:mm a') + ' - ' + moment(callback.timeout).format('hh:mm a') + `</p>`
+
+					ret_val += `<p class="list-group-item-text">Purpose:` + callback.purpose + `</p>`
+
+					if(callback.approval == 2) 
+						ret_val += `<p class="list-group-item-text">Remarks:` + callback.remark + `</p>`
+
+					ret_val += `
+						</a>
+					`
+
+					$('#reservation-list').append(ret_val)
+            	})
+			}
+		})
+
 		@if( Session::has("success-message") )
 		  swal("Success!","{{ Session::pull('success-message') }}","success");
 		@endif
 		@if( Session::has("error-message") )
 		  swal("Oops...","{{ Session::pull('error-message') }}","error");
 		@endif
-		setInterval(function(){
-			var count = $('#notification-count').val();
-			count++;
-			$('#notification-count').val(count);
-			$('#notification-count').html(count);
-		},1000);
+
+		// setInterval(function(){
+		// 	var count = $('#notification-count').val();
+		// 	count++;
+		// 	$('#notification-count').val(count);
+		// 	$('#notification-count').html(count);
+		// },1000);
 
 		var timetable = new Timetable();
 		timetable.setScope(7, 21); // optional, only whole hours between 0 and 23

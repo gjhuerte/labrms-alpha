@@ -12,10 +12,30 @@
 */
 
 Route::middleware(['auth'])->group(function(){
+	/*
+	|--------------------------------------------------------------------------
+	| Ticket list
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::resource('ticket','TicketsController',[
+		'except'=>array('show')
+	]);
 
 	Route::resource('dashboard','DashboardController',array('only'=>array('index')));
 
-	Route::resource('reservation','ReservationController',array('only'=>array('create','store')));
+	Route::prefix('reservation')->group(function(){
+
+		Route::get('create',[
+			'as' => 'reservation.create',
+			'uses' => 'ReservationController@create'
+		]);
+
+		Route::post('/',[
+			'as' => 'reservation.store',
+			'uses' => 'ReservationController@store'
+		]);
+	});
 
 	Route::get('profile',['as'=>'profile.index','uses'=>'SessionsController@show']);
 
@@ -30,6 +50,8 @@ Route::middleware(['auth'])->group(function(){
 		'uses'=>'PurposeController@getAllPurpose'
 	]);
 
+	Route::resource('faculty','FacultyController');
+
 });
 
 /*
@@ -40,6 +62,50 @@ Route::middleware(['auth'])->group(function(){
 */
 Route::middleware(['auth'])->group(function(){
 
+	/*
+	|--------------------------------------------------------------------------
+	| get all reservation item list
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get('get/reservation/items/list/all',[
+		'as' => 'reservation.items.list.all',
+		'uses' => 'ReservationItemsAjaxController@getAllReservationItemList'
+	]);
+
+	/*
+	|--------------------------------------------------------------------------
+	| get all items available
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get('get/reservation/item/available',[
+		'as' => 'reservation.item.available.all',
+		'uses' => 'ReservationController@getAvailableReservationItemType'
+	]);
+
+	/*
+	|--------------------------------------------------------------------------
+	| get all items available
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get('get/reservation/item/count',[
+		'as' => 'reservation.item.available.count',
+		'uses' => 'ReservationController@getAvailableReservationItemTypeCount'
+	]);
+
+
+	/*
+	|--------------------------------------------------------------------------
+	| get all item types for reservation
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get('get/reservation/item/type/all',[
+		'as' => 'reservation.item.type.all',
+		'uses' => 'ReservationItemsAjaxController@getAllReservationItemType'
+	]);
 
 });
 
@@ -49,7 +115,26 @@ Route::middleware(['auth'])->group(function(){
 |--------------------------------------------------------------------------
 |
 */
-Route::middleware(['auth','laboratoryhead'])->group(function(){
+Route::middleware(['auth','laboratorystaff'])->group(function(){
+
+	Route::resource('lend','LentItemsController');
+
+	Route::prefix('reservation')->group(function(){
+		Route::get('/',[
+			'as' => 'reservation.index',
+			'uses' => 'ReservationController@index'
+		]);
+
+		Route::post('{reservation}/approve',[
+			'as' => 'reservation.approve',
+			'uses' => 'ReservationController@approve'
+		]);
+
+		Route::post('{reservation}/disapprove',[
+			'as' => 'reservation.disapprove',
+			'uses' => 'ReservationController@disapprove'
+		]);
+	});
 
 	/*
 	|--------------------------------------------------------------------------
@@ -88,6 +173,56 @@ Route::middleware(['auth','laboratoryhead'])->group(function(){
 |
 */
 Route::middleware(['auth','laboratorystaff'])->group(function () {
+
+
+	/*
+	|--------------------------------------------------------------------------
+	| Room Category
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::prefix('room')->group(function(){
+		Route::get('category',[
+			'as' => 'room.category.index',
+			'uses' => 'RoomCategoryController@index'
+		]);
+		Route::post('category',[
+			'as' => 'room.category.store',
+			'uses' => 'RoomCategoryController@store'
+		]);
+		Route::put('category/{room}',[
+			'as' => 'room.category.update',
+			'uses' => 'RoomCategoryController@update'
+		]);
+		Route::delete('category/{room}',[
+			'as' => 'room.category.destroy',
+			'uses' => 'RoomCategoryController@destroy'
+		]);
+	});
+	/*
+	|--------------------------------------------------------------------------
+	| Software Types
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::prefix('software')->group(function(){
+		Route::get('type',[
+			'as' => 'software.type.index',
+			'uses' => 'SoftwareTypesController@index'
+		]);
+		Route::post('type',[
+			'as' => 'software.type.store',
+			'uses' => 'SoftwareTypesController@store'
+		]);
+		Route::put('type/{software}',[
+			'as' => 'software.type.update',
+			'uses' => 'SoftwareTypesController@update'
+		]);
+		Route::delete('type/{software}',[
+			'as' => 'software.type.destroy',
+			'uses' => 'SoftwareTypesController@destroy'
+		]);
+	});
 
 	/*
 	|--------------------------------------------------------------------------
@@ -256,6 +391,14 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 
 	/*
 	|--------------------------------------------------------------------------
+	| ticket per room
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get('ticket/room/{id}','TicketsController@getRoomTicket');
+
+	/*
+	|--------------------------------------------------------------------------
 	| transfer ticket
 	|--------------------------------------------------------------------------
 	|
@@ -305,16 +448,6 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 	|
 	*/
 	Route::post('ticket/{id}/reopen','TicketsController@reOpenTicket');
-
-	/*
-	|--------------------------------------------------------------------------
-	| Ticket list
-	|--------------------------------------------------------------------------
-	|
-	*/
-	Route::resource('ticket','TicketsController',[
-		'except'=>array('show')
-	]);
 
 	/*
 	|--------------------------------------------------------------------------
@@ -446,11 +579,11 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 			'as' => 'software.license.update',
 			'uses' => 'SoftwareLicenseController@update'
 		]);
-		Route::patch('license{license}',[
+		Route::patch('license/{license}',[
 			'as' => 'software.license.update',
 			'uses' => 'SoftwareLicenseController@update'
 		]);
-		Route::delete('license{license}',[
+		Route::delete('license/{license}',[
 			'as' => 'software.license.destroy',
 			'uses' => 'SoftwareLicenseController@destroy'
 		]);
@@ -719,6 +852,19 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 
 	/*
 	|--------------------------------------------------------------------------
+	| get item information
+	| returns pc info if linked to pc
+	| returns item information if not
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get("get/item/information/{propertynumber}",[
+		'as' => 'item.information',
+		'uses' => 'ItemsAjaxController@getItemInformation'
+	]);
+
+	/*
+	|--------------------------------------------------------------------------
 	| return all item types
 	|--------------------------------------------------------------------------
 	|
@@ -802,17 +948,6 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 
 	/*
 	|--------------------------------------------------------------------------
-	| get all software types
-	|--------------------------------------------------------------------------
-	|
-	*/
-	Route::get('get/software/type/all',[
-		'as'=>'software.type.all',
-		'uses'=>'SoftwareAjaxController@getAllSoftwareTypes'
-	]);
-
-	/*
-	|--------------------------------------------------------------------------
 	| return all brands
 	|--------------------------------------------------------------------------
 	|
@@ -853,17 +988,6 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 	Route::get('get/item/propertynumber/server',[
 		'as' => 'inventory.item.propertynumber.server',
 		'uses' => 'ItemsAjaxController@getPropertyNumberOnServer'
-	]);
-
-	/*
-	|--------------------------------------------------------------------------
-	| ???????????????????????????????
-	|--------------------------------------------------------------------------
-	|
-	*/
-	Route::get('reservation/view/all',[
-		'as' => 'reservation.view.all',
-		'uses' => 'ReservationController@index'
 	]);
 
 	/*
@@ -1110,29 +1234,6 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 		'as' => 'workstation.pc.software',
 		'uses' => 'WorkstationSoftwareAjaxController@getSoftwareInstalled'
 	]);
-
-	/*
-	|--------------------------------------------------------------------------
-	| get all reservation item list
-	|--------------------------------------------------------------------------
-	|
-	*/
-	Route::get('get/reservation/items/list/all',[
-		'as' => 'reservation.items.list.all',
-		'uses' => 'ReservationItemsAjaxController@getAllReservationItemList'
-	]);
-
-	/*
-	|--------------------------------------------------------------------------
-	| get all item types for reservation
-	|--------------------------------------------------------------------------
-	|
-	*/
-	Route::get('get/reservation/item/type/all',[
-		'as' => 'reservation.item.type.all',
-		'uses' => 'ReservationItemsAjaxController@getAllReservationItemType'
-	]);
-
 	/*
 	|--------------------------------------------------------------------------
 	| get all reservation items brand
@@ -1241,6 +1342,7 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 	Route::get('get/ticket/tag',[
 		'uses' => 'TicketsController@getTagInformation'
 	]);
+
 });
 
 /*
@@ -1249,7 +1351,7 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 |--------------------------------------------------------------------------
 |
 */
-Route::middleware(['auth','laboratoryuser'])->group(function(){
+Route::middleware(['auth'])->group(function(){
 
 
 	/*
@@ -1258,9 +1360,19 @@ Route::middleware(['auth','laboratoryuser'])->group(function(){
 	|--------------------------------------------------------------------------
 	|
 	*/
-	Route::get('ticket/complaint',[
-		'uses'=>'TicketsController@complaintViewForStudentAndFaculty'
+	Route::get('ticket',[
+		'uses'=>'TicketsController@index'
 	]);
+
+	/*
+	|------------------c--------------------------------------------------------
+	| complaint ticket
+	|--------------------------------------------------------------------------
+	|
+	*/
+	// Route::get('ticket/create',[
+	// 	'uses'=>'TicketsController@create'
+	// ]);
 
 	/*
 	|--------------------------------------------------------------------------
@@ -1268,10 +1380,10 @@ Route::middleware(['auth','laboratoryuser'])->group(function(){
 	|--------------------------------------------------------------------------
 	|
 	*/
-	Route::post('ticket/complaint',[
-		'as'=>'ticket.complaint',
-		'uses'=>'TicketsController@complaint'
-	]);
+	// Route::post('ticket',[
+	// 	'as' => 'ticket.store',
+	// 	'uses'=>'TicketsController@store'
+	// ]);
 
 });
 
@@ -1329,3 +1441,7 @@ Route::middleware(['session_start'])->group(function () {
 	Route::get('reset',['as'=>'reset','uses'=>'SessionsController@getResetForm']);
 	Route::post('reset',['as'=>'reset.store','uses'=>'SessionsController@reset']);
 });
+
+/** CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
+Route::get('{page}/{subs?}', ['uses' => 'PageController@index'])
+    ->where(['page' => '^((?!admin).)*$', 'subs' => '.*']);

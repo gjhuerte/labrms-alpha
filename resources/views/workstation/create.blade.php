@@ -1,18 +1,14 @@
 @extends('layouts.master-blue')
 @section('title')
-Workstation | Assemble
+Workstation | Add
 @stop
 @section('navbar')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @include('layouts.navbar')
 @stop
-@section('script-include')
-<script type="text/javascript" src="{{ asset('js/standalone/selectize.js') }}"></script>
-@stop
 @section('style')
 {{ HTML::style(asset('css/jquery-ui.min.css')) }}
 {{ HTML::style(asset('css/animate.css')) }}
-<link rel="stylesheet" href="{{ asset('css/selectize.bootstrap3.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('css/style.min.css') }}" />
 <style>
   {
@@ -34,7 +30,7 @@ Workstation | Assemble
       <legend><h3 class="text-primary">Workstation</h3></legend>
       <ul class="breadcrumb">
         <li><a href="{{ url('workstation') }}">Workstation</a></li>
-        <li class="active">Assemble</li>
+        <li class="active">Add</li>
       </ul>
         @if (count($errors) > 0)
             <div class="alert alert-danger alert-dismissible" role="alert">
@@ -57,6 +53,18 @@ Workstation | Assemble
                 'placeholder'=>'Operating System Key',
                 'required'
               ]) }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              {{ Form::label('name','Workstation Name') }}
+              {{ Form::text('name',Input::old('name'),[
+                'id'=>'name',
+                'class'=>'form-control',
+                'placeholder' => 'Workstation Name'
+              ]) }}
+              <p class="text-muted">For Identifying the workstation. Convention: WS-[Room Name]-[Number]</p>
             </div>
           </div>
 
@@ -122,7 +130,7 @@ Workstation | Assemble
 
           <div class="form-group">
             <div class="col-sm-12">
-              <button class="btn btn-primary btn-lg btn-block btn-flat" name="create" type="submit"><span class="glyphicon glyphicon-check"></span> Assemble</button>
+              <button class="btn btn-primary btn-lg btn-block btn-flat" name="create" type="submit"><span class="glyphicon glyphicon-check"></span> Add</button>
             </div>
           </div>
         </div>

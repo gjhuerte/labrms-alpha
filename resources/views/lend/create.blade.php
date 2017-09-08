@@ -1,25 +1,41 @@
 @extends('layouts.master-blue')
 @section('title')
-Lending
+Lend Log
 @stop
 @section('navbar')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @include('layouts.navbar')
 @stop
-@section('style')
-{{ HTML::style(asset('css/jquery.timepicker.min.css')) }}
-@stop
 @section('script-include')
-{{ HTML::script(asset('js/jquery.timepicker.min.js')) }}
+<script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
 @stop
-@section('content')
+@section('style')
+{{ HTML::style(asset('css/bootstrap-select.min.css')) }}
+<link rel="stylesheet" href="{{ asset('css/selectize.bootstrap3.css') }}" type="text/css">
+{{ HTML::style(asset('css/bootstrap-tagsinput.css')) }}
+{{ HTML::style(asset('css/style.min.css')) }}
 <style>
+	#page-body, #hide,#hide-notes,#lend-info{
+		display:none;
+	}
 	.panel-padding{
 		padding: 10px;
 	}
+	
 </style>
-<div class="container-fluid">
-	<div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
+@stop
+@section('script-include')
+{{ HTML::script(asset('js/moment.min.js')) }}
+{{ HTML::script(asset('js/bootstrap-select.min.js')) }}
+@stop
+@section('content')
+<div class="container-fluid" id="page-body">
+	<div class="col-md-offset-3 col-md-6 panel panel-body" id="lend" style="padding: 10px;">
+		<div style="padding:20px;">
+			<legend>
+				<h3 style="color:#337ab7;">Lend Creation Form
+				</h3>
+			</legend>
 		@if (count($errors) > 0)
 		  <div class="alert alert-danger alert-dismissible" role="alert">
 		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -29,44 +45,71 @@ Lending
 		          @endforeach
 		      </ul>
 		  </div>
-		@endif    
-		<div class="panel panel-body" style="padding:20px;">
-			<legend><h3 style="color:#337ab7;">Lending Form</h3></legend>
-			{{ Form::open(['class'=>'form-horizontal','method'=>'post','route'=>'lend.store','id'=>'reservationForm']) }}
+		@endif
+			{{ Form::open(['class'=>'form-horizontal','method'=>'post','route'=>'lend.store','id'=>'lendForm']) }}
 			<!-- Item type -->
 			<div class="form-group">
-				<div class="col-sm-3">
-				{{ Form::label('itemtype','Item type') }}
+				<div class="col-xs-3">
+					{{ Form::label('itemtype','Item') }}
 				</div>
-				<div class="col-sm-9">
-				{{ Form::select('type',$itemtype,Input::old('item'),[
-					'id'=>'type',
-					'class'=>'form-control'
-				]) }}
-				</div>	
-			</div>
-			<!-- Item name -->
-			<div class="form-group">
-				<div class="col-sm-3">
-				{{ Form::label('itemname','Item name') }}
-				</div>
-				<div class="col-sm-9">
-				{{ Form::select('itemname',['Empty list'=>'Empty list'],Input::old('itemname'),[
-					'id'=>'itemname',
-					'class'=>'form-control'
-				]) }}
+				<div class="col-xs-9"> 
+		            {{ Form::text('item',Input::old('item'),[
+		              'id' => 'item',
+		              'class'=>'form-control',
+		              'placeholder' => 'Property Number'
+		            ]) }}
 				</div>
 			</div>
-			<!-- Item name -->
+			<!-- First name -->
 			<div class="form-group">
-				<div class="col-sm-3">
-				{{ Form::label('property_number','Property Number') }}
+				<div class="col-xs-3">
+					{{ Form::label('firstname','Firstname') }}
 				</div>
-				<div class="col-sm-9">
-				{{ Form::select('property_number',['Empty list'=>'Empty list'],Input::old('property_number'),[
-					'id'=>'property_number',
-					'class' => 'form-control'
-				]) }}
+				<div class="col-xs-9"> 
+		            {{ Form::text('firstname',Input::old('firstname'),[
+		              'id' => 'firstname',
+		              'class'=>'form-control',
+		              'placeholder' => 'Firstname'
+		            ]) }}
+				</div>
+			</div>
+			<!-- Middle name -->
+			<div class="form-group">
+				<div class="col-xs-3">
+					{{ Form::label('middlename','Middlename') }}
+				</div>
+				<div class="col-xs-9"> 
+		            {{ Form::text('middlename',Input::old('middlename'),[
+		              'id' => 'middlename',
+		              'class'=>'form-control',
+		              'placeholder' => 'Middlename'
+		            ]) }}
+				</div>
+			</div>
+			<!-- Last name -->
+			<div class="form-group">
+				<div class="col-xs-3">
+					{{ Form::label('lastname','Lastname') }}
+				</div>
+				<div class="col-xs-9"> 
+		            {{ Form::text('lastname',Input::old('lastname'),[
+		              'id' => 'lastname',
+		              'class'=>'form-control',
+		              'placeholder' => 'Lastname'
+		            ]) }}
+				</div>
+			</div>
+			<!-- Course Year and Section -->
+			<div class="form-group">
+				<div class="col-xs-3">
+					{{ Form::label('courseyearsection','Course Year and Section') }}
+				</div>
+				<div class="col-xs-9"> 
+		            {{ Form::text('courseyearsection',Input::old('courseyearsection'),[
+		              'id' => 'courseyearsection',
+		              'class'=>'form-control',
+		              'placeholder' => 'Course Year-Section'
+		            ]) }}
 				</div>
 			</div>
 			<!-- creator name -->
@@ -75,9 +118,10 @@ Lending
 				{{ Form::label('name','Faculty-in-charge') }}
 				</div>
 				<div class="col-sm-9">
-				{{ Form::text('name',Input::old('name'),[
-					'class'=>'form-control',
-					'placeholder'=>'Faculty-in-charge'
+				{{
+					Form::select('name',[],Input::old('name'),[
+					'id'=>'name',
+					'class'=>'form-control'
 				]) }}
 				</div>
 			</div>
@@ -87,15 +131,17 @@ Lending
 				{{ Form::label('location','Location') }}
 				</div>
 				<div class="col-sm-9">
-				{{ Form::select('location',$room,Input::old('location'),[
+				{{
+					Form::select('location',[],Input::old('location'),[
+					'id'=>'location',
 					'class'=>'form-control'
 				]) }}
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-12">
-				{{ Form::button('Borrow',[
-					'class'=>'btn btn-primary btn-block',
+				{{ Form::submit('Lent',[
+					'class'=>'btn btn-lg btn-primary btn-block',
 					'id'=>'request'
 				]) }}
 				</div>
@@ -106,147 +152,185 @@ Lending
 </div>
 @stop
 @section('script')
+{{ HTML::script(asset('js/bootstrap-tagsinput.min.js')) }}
+{{ HTML::script(asset('js/moment.min.js')) }}
+<script type="text/javascript" src="{{ asset('js/standalone/selectize.js') }}"></script>
 <script>
-	$(function() {
-		$( "#dateofuse" ).datepicker({
-		  changeMonth: true,
-		  changeYear: true,
-		  maxAge: 59,
-		  minAge: 15
-		});
-	});
-
-	$('#type').change(function(){
-		itemNameAjaxRequest();
-	});
-
 	$(document).ready(function(){
-		$("#dateofuse").val('{{ $date }}');
-		itemNameAjaxRequest();
-	});
 
-	function propertyNumberAjaxRequest(){
-	var itemname = $('#itemname').val();
-	$.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-	  type: 'post',
-	  url: '{{ url('/getAllPropertyNumber') }}',
-	  data: {'itemname' : itemname}, 
-	  dataType: 'json',
-	  success: function(response){ 
-	    options = "";
-	    if(!$.trim(response))
-	    {
-	      options = "<option>Empty list</option>";
+		$('#contains').change(function(){
+			$('#purpose').toggle(400)
+			$('#description').toggle(400)
+		})
 
-	    }else{
-		    for(var ctr = 0;ctr<response.length;ctr++){
-		    	if(response[ctr].length == 0)
-		    	{
-	      			options = "<option>Empty list</option>";
-		    	}
-		    	else
-		    	{
-		      		options += "<option value="+response[ctr].id+">"+response[ctr].property_number+"</option>";
-		    	}
-		    }
-	    }   
-	    $('#property_number').html(" ");
-	    $('#property_number').append(options);
-	  },
-	  error: function(response){
-	    console.log(response.responseJSON);
-	  }
-	 });
-	}
+		@if( Session::has("success-message") )
+		  swal("Success!","{{ Session::pull('success-message') }}","success");
+		@endif
+		@if( Session::has("error-message") )
+		  swal("Oops...","{{ Session::pull('error-message') }}","error");
+		@endif
 
-	function itemNameAjaxRequest(){
-		var itemtype = $('#type').val();
-		$.ajax({
+	    $( "#lendForm" ).validate( {
+	      rules: {
+	        firstname: "required",
+	        lastname: "required",
+	        item: {
+	          required: true
+	        },
+	      },
+	      messages: {
+	        firstname: "Please enter your firstname",
+	        lastname: "Please enter your lastname",
+	        item: {
+	          required: "Please enter an item property number",
+	        },
+	      },
+	      errorElement: "em",
+	      errorPlacement: function ( error, element ) {
+	        // Add the `help-block` class to the error element
+	        error.addClass( "help-block" );
+
+	        // Add `has-feedback` class to the parent div.form-group
+	        // in order to add icons to inputs
+	        element.parents( ".form-group" ).addClass( "has-feedback" );
+
+	        if ( element.prop( "type" ) === "checkbox" ) {
+	          error.insertAfter( element.parent( "label" ) );
+	        } else {
+	          error.insertAfter( element );
+	        }
+
+	        // Add the span element, if doesn't exists, and apply the icon classes to it.
+	        if ( !element.next( "span" )[ 0 ] ) {
+	          $( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+	        }
+	      },
+	      success: function ( label, element ) {
+	        // Add the span element, if doesn't exists, and apply the icon classes to it.
+	        if ( !$( element ).next( "span" )[ 0 ] ) {
+	          $( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+	        }
+	      },
+	      submitHandler: function(form) {
+	        // do other things for a valid form
+			name = $('#firstname').val() +  ' ' + $('#lastname').val()
+			swal({
+			  title: "Are you sure?",
+			  text: "You will now be lending this item to " + name + '. Do you want to continue?',
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",
+			  confirmButtonText: "Yes, submit it!",
+			  cancelButtonText: "No, cancel it!",
+			  closeOnConfirm: false,
+			  closeOnCancel: false
+			},
+			function(isConfirm){
+			  if (isConfirm) {
+					form.submit();
+			  } else {
+			    swal("Cancelled", "Request Cancelled", "error");
+			  }
+			});
+	      },
+	      highlight: function ( element, errorClass, validClass ) {
+	        $( element ).parents( ".form-group" ).addClass( "has-error" ).removeClass( "has-success" );
+	        $( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+	      },
+	      unhighlight: function ( element, errorClass, validClass ) {
+	        $( element ).parents( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
+	        $( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+	      }
+	    } );
+
+		init();
+
+		function init(){
+	      $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-			type: 'post',
-			url: '{{ url('/getAllItemName') }}',
-			data: {'itemtype' : itemtype}, 
-			dataType: 'json',
-			success: function(response){ 
-			options = "";
-			if(!$.trim(response))
-			{
-		  		options = "<option>Empty list</option>";
+	        type: 'get',
+	        url: "{{ url('room') }}",
+	        dataType: 'json',
+	        success: function(response){
+	          items = "";
+	          for(ctr = 0;ctr<response.data.length;ctr++){
+	            items += `<option value=`+response.data[ctr].name+`>
+	            `+response.data[ctr].name+`
+	            </option>`;
+	          }
 
-			}else{
-			    for(var ctr = 0;ctr<response.length;ctr++){
-			    	if(response[ctr].itemprofile.length > 0)
-			    	{
-			      		options += "<option value='"+response[ctr].itemname+"'>"+response[ctr].itemname+"</option>";
-			    	}else{
-		  				options = "<option>Empty list</option>";
-			    	}
-			    }
-			}   
-				$('#itemname').html(" ");
-				$('#itemname').append(options);
-				propertyNumberAjaxRequest();
-			},
-			error: function(response){
-			console.log(response.responseJSON);
-			}
-		});
-	}
+	          if(response.length == 0){
+	              items += `<option>There are no available room</option>`
+	          }
 
-	@if( Session::has("success-message") )
-	  swal("Success!","{{ Session::pull('success-message') }}","success");
-	@endif
-	@if( Session::has("error-message") )
-	  swal("Oops...","{{ Session::pull('error-message') }}","error");
-	@endif
+	          $('#location').html("");
+	          $('#location').append(items);
+	        },
+					complete: function(){
 
-	$('#starttime').timepicker({
-		timeFormat: 'h:mm p',
-		interval: 30,
-		minTime: '7',
-		maxTime: '7:00pm',
-		defaultTime: '7:00am',
-		startTime: '7:00am',
-		dynamic: false,
-		dropdown: true,
-		scrollbar: true
-	});  
+						$('#location').selectize({
+								create: true,
+								sortField: {
+										field: 'text',
+										direction: 'asc'
+								},
+								dropdownParent: 'body'
+						})
 
-	$('#endtime').timepicker({
-	    timeFormat: 'h:mm p',
-	    interval: 30,
-	    minTime: '8',
-	    maxTime: '9:00pm',
-	    defaultTime: '8:00am',
-	    startTime: '8:00am',
-	    dynamic: false,
-	    dropdown: true,
-	    scrollbar: true
-	});
+						$('#location').val({{ Input::old('location') }})
+					}
+	      });
 
-	$('#request').click(function(){
-		swal({
-		  title: "Are you sure?",
-		  text: "By lending this equipment, you agreed to the policies and terms of the Laboratory Operations Office.",
-		  type: "warning",
-		  showCancelButton: true,
-		  confirmButtonText: "Yes, borrow it!",
-		  cancelButtonText: "No, cancel it!",
-		  closeOnConfirm: false,
-		  closeOnCancel: false
-		},
-		function(isConfirm){
-		  if (isConfirm) {
-				$("#reservationForm").submit();
-		  } else {
-		    swal("Cancelled", "Request Cancelled", "error");
-		  }
-		});
+	      $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+	        type: 'get',
+	        url: "{{ url('faculty') }}",
+	        dataType: 'json',
+	        success: function(response){
+	          items = "";
+	          for(ctr = 0;ctr<response.data.length;ctr++){
+							lastname = response.data[ctr].lastname;
+							firstname = response.data[ctr].firstname;
+							if(response.data[ctr].middlename){
+								middlename = response.data[ctr].middlename;
+							}else{
+								middlename = "";
+							}
+				name = lastname + ', ' + firstname + ' ' + middlename
+	            items += `<option value='`+ name +`'>
+	            ` + name + `
+	            </option>`;
+	          }
+
+	          if(response.length == 0){
+	              items += `<option>There are no available faculty</option>`
+	          }
+
+	          $('#name').html("");
+	          $('#name').append(items);
+	        },
+					complete: function(){
+
+						$('#name').selectize({
+								create: true,
+								sortField: {
+										field: 'text',
+										direction: 'asc'
+								},
+								dropdownParent: 'body'
+						})
+
+						$('#name').val({{ Input::old('name') }})
+					}
+	      });
+		}
+
+		$('#page-body').show();
 	});
 </script>
 @stop
+

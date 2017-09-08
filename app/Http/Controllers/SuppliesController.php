@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Validator;
 use Session;
 use App\Supply;
+use Auth;
 use App\SupplyHistory;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
@@ -52,8 +53,10 @@ class SuppliesController extends Controller {
 		$itemtype = $this->sanitizeString(Input::get('itemtype'));
 		$unit = $this->sanitizeString(Input::get('unit'));
 		$quantity = $this->sanitizeString(Input::get('quantity'));
+		$ris = $this->sanitizeString(Input::get('ris'));
 
 		$validator = Validator::make([
+				'Requisition and Issue Slip' => $ris,
 				'Brand' => $brand,
 				'Item Type' => $itemtype,
 				'Unit' => $unit,
@@ -67,37 +70,27 @@ class SuppliesController extends Controller {
 					->withErrors($validator);
 		}
 
-		try
-		{
-			$supply = Supply::where('brand','=',$brand)->first();
+		$supply = Supply::where('brand','=',$brand)->first();
 
-			if($supply)
-			{
-				$supply->quantity = $supply->quantity + $quantity;
-				$supply->save();
-			} 
-			else
-			{
-				$supply = new Supply;
-				$supply->quantity = $quantity;
-				$supply->brand = $brand;
-				$supply->itemtype_id = $itemtype;
-				$supply->unit = $unit;
-				$supply->save();
-			}
+		if($supply)
+		{
+			$supply->quantity = $supply->quantity + $quantity;
+			$supply->save();
 		} 
-		catch(Exception $e)
+		else
 		{
-
 			$supply = new Supply;
 			$supply->quantity = $quantity;
 			$supply->brand = $brand;
 			$supply->itemtype_id = $itemtype;
 			$supply->unit = $unit;
 			$supply->save();
-
 		}
 
+		$purpose = "$quantity supplies added with slip of $ris.";
+		$name = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
+
+		SupplyHistory::createRecord($supply->id,$quantity,$purpose,$name);
 		Session::flash('success-message','Supplies added');
 		return redirect('supplies');
 	}
@@ -111,13 +104,16 @@ class SuppliesController extends Controller {
 	 */
 	public function show($id)
 	{
-		try{
+		try
+		{
 
 			$supplyhistory = SupplyHistory::where('supply_id','=',$id)->get();
 			return view('inventory.supplies.show')
 						->with('supplyhistory',$supplyhistory)
 						->with('supply',Supply::with('itemtype')->find($id));
-		} catch(Exception $e){
+		} 
+		catch(Exception $e)
+		{
 			return redirect('supplies');
 		}
 	}

@@ -97,10 +97,10 @@ Create
 					<div class="form-group">
 						<!-- description -->
 						<div class="col-sm-12">
-							{{ Form::label('maxrequirement','Maximum System Requirements') }}
+							{{ Form::label('maxrequirement','Recommended System Requirements') }}
 							{{ Form::textarea('maxrequirement',Input::old('maxrequirement'),[
 								'class'=>'form-control',
-								'placeholder'=>'Enter maximum system requirements here...',
+								'placeholder'=>'recommended system requirements here...',
 								'data-autoresize',
 								'rows' => '2'
 							]) }}
@@ -156,12 +156,12 @@ Create
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
 			type: 'get',
-			url: '{{ url("get/software/type/all") }}',
+			url: '{{ url("software/type") }}',
 			dataType: 'json',
 			success: function(response){
 				options = "";
-				for(ctr = 0;ctr<response.length;ctr++){
-					options +=  `<option value="`+response[ctr]+`">`+response[ctr]+`</option>`;
+				for(ctr = 0;ctr<response.data.length;ctr++){
+					options +=  `<option value="`+response.data[ctr].type+`">`+response.data[ctr].type+`</option>`;
 				}
 				$('#softwaretype').html("");
 				$('#softwaretype').append(options);

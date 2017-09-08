@@ -6,6 +6,14 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "backpack/backupmanager": "^1.2",
+        "backpack/base": "^0.7.25",
+        "backpack/crud": "^3.2",
+        "backpack/langfilemanager": "^1.0",
+        "backpack/logmanager": "^2.3",
+        "backpack/pagemanager": "^1.1",
+        "backpack/settings": "^2.0",
+        "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4"

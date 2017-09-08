@@ -25,14 +25,13 @@ Laboratory Schedule
 				<thead>
 					<th>ID</th>
 					<th>Day</th>
-					<th>Room</th>
-					<th>Faculty-in-charge</th>
 					<th>Time Start</th>
 					<th>Time End</th>
 					<th>Subject</th>
 					<th>Section</th>
 					<th>Academic Year</th>
 					<th>Semester</th>
+					<th>Faculty-in-charge</th>
 				</thead>
 			</table>
 		</div>
@@ -61,38 +60,38 @@ Laboratory Schedule
 		    language: {
 		        searchPlaceholder: "Search..."
 		    },
-	    	"dom": "<'row'<'col-sm-9'<'toolbar'>><'col-sm-3'f>>" +
+	    	"dom": "<'row'<'col-sm-3'l><'col-sm-6'<'toolbar'>><'col-sm-3'f>>" +
 						    "<'row'<'col-sm-12'tr>>" +
 						    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
 			"processing": true,
 	        ajax: "{{ url('schedule') }}",
 	        columns: [
 	            { data: "id" },
-	            { data: "type" },
-	            { data: "problem" },
-	            { data: "problem" },
-	            { data: "problem" },
-	            { data: "problem" },
-	            { data: "problem" },
+	            { data: "day" },
 	            { 
 	            	data: function(callback){
-	            		return moment(callback.updated_at).format("dddd, MMMM Do YYYY, h:mm a");
+	            		return moment(callback.timein).format("dddd, MMMM Do YYYY, h:mm a");
 	            	} 
 	        	},
 	            { 
 	            	data: function(callback){
-	            		return moment(callback.created_at).format("dddd, MMMM Do YYYY, h:mm a");
+	            		return moment(callback.timeout).format("dddd, MMMM Do YYYY, h:mm a");
 	            	} 
 	        	},
+	            { data: "subject" },
+	            { data: "section" },
+	            { data: "academicyear" },
+	            { data: "semester" },
+	            { data: "faculty" },
 	        ],
 	    } );
 
 	 	$("div.toolbar").html(`
- 			<button id="new" class="btn btn-primary btn-flat" style="margin-right:5px;padding: 5px 10px;" data-target="reservationItemsAddModal" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>  Create Schedule</button>
- 			<button id="edit" class="btn btn-default btn-flat" style="margin-right:5px;padding: 6px 10px;"><span class="glyphicon glyphicon-pencil"></span>  Update</button>
+ 			<button id="new" class="btn btn-primary" style="margin-right:5px;padding: 5px 10px;" data-target="reservationItemsAddModal" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>  Create Schedule</button>
+ 			<button id="edit" class="btn btn-default" style="margin-right:5px;padding: 6px 10px;"><span class="glyphicon glyphicon-pencil"></span>  Update</button>
  			<button id="delete" class="btn btn-danger btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-trash"></span> Remove</button>
 			<div class="btn-group">
-			  <button type="button" class="btn btn-default btn-flat dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="room" style="padding: 5px;"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span id="room-name"></span> <span class="caret"></span>
+			  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="room" style="padding: 5px;"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span id="room-name"></span> <span class="caret"></span>
 			  </button>
 			  <ul class="dropdown-menu" id="room-items">
 			      @foreach($rooms as $room)

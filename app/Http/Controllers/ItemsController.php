@@ -93,6 +93,7 @@ class ItemsController extends Controller {
 												->where('status','=',$status)
 												->with('inventory.itemtype')
 												->with('receipt')
+												->withTrashed()
 												->get()
 					]);	
 				}

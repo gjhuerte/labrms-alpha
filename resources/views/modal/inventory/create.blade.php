@@ -21,7 +21,7 @@
 					<!-- item name -->
 					<div class="form-group">
 						<div class="col-sm-12">
-						{{ Form::label('number','Acknowledgement Receipt ( M.R., P.A.R. )') }}
+						{{ Form::label('number','Property Acknowledgement Receipt') }}
 						{{ Form::text('number',Input::old('number'),[
 							'class' => 'form-control',
 							'placeholder' => 'Acknowledgement Receipt',

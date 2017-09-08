@@ -64,8 +64,8 @@ class SoftwareController extends Controller {
 				'License Type' => $licensetype,
 				'company' => $company,
 				'Minimum System Requirement' => $minrequirement,
-				'Maximum System Requirement' => $maxrequirement,
-			],Software::$rules);
+				'Recommended System Requirement' => $maxrequirement,
+		],Software::$rules);
 
 		if($validator->fails())
 		{
@@ -130,7 +130,7 @@ class SoftwareController extends Controller {
 	 */
 	public function update($id)
 	{
-		$id = $this->sanitizeString(Input::get('id'));
+		$id = $this->sanitizeString($id);
 		$name = $this->sanitizeString(Input::get('name'));
 		$company = $this->sanitizeString(Input::get('company'));
 		$licensetype = $this->sanitizeString(Input::get('licensetype'));
@@ -151,7 +151,7 @@ class SoftwareController extends Controller {
 				'License Type' => $licensetype,
 				'company' => $company,
 				'Minimum System Requirement' => $minrequirement,
-				'Maximum System Requirement' => $maxrequirement,
+				'Recommended System Requirement' => $maxrequirement,
 			],Software::$rules);
 
 		$validator = Validator::make([

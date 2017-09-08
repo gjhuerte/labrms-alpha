@@ -14,7 +14,7 @@ Change Password
 @stop
 @section('content')
 <div class="container-fluid" id='page-body' hidden>
-  <div class="col-md-offset-4 col-md-4">
+  <div class="col-md-offset-3 col-md-6">
     <div class="panel panel-body panel-shadow" style="margin-top: 70px;margin-bottom: 50px;padding: 20px;">
         @if (count($errors) > 0)
            <div class="alert alert-danger alert-dismissible" role="alert">

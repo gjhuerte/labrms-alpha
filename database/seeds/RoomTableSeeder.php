@@ -16,38 +16,70 @@ class RoomTableSeeder extends Seeder {
    	//delete users table records
    	DB::table('room')->delete();
    	//insert some dummy records
-   	Room::create(array(
-       'name' => 'S501','description' => 'Web Development'
+   	Room::insert(array(
+       [
+        'name' => 'S501',
+        'category' => 'Web Development'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'S502',
+        'category' => 'Networking'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'S503',
+        'category' => 'Networking'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'S504',
+        'category' => 'Hardware,Networking'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'Consultation Room',
+        'category' => 'Consultation,Meeting'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'Faculty Room',
+        'category' => 'Faculty Area'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'Server',
+        'category' => ''
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'S508',
+        'category' => 'Programming,Web Development'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'S510',
+        'category' => 'Database,Web Development,Multimedia'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ],
+       [
+        'name' => 'S511',
+        'category' => 'Multimedia'
+        /*'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')*/
+       ]
     ));
-   	Room::create(array(
-       'name' => 'S502','description' => 'Networking'
-    ));
-   	Room::create(array(
-       'name' => 'S503','description' => 'Networking'
-    ));
-   	Room::create(array(
-       'name' => 'S504','description' => 'Hardware,Networking'
-    ));
-   	Room::create(array(
-       'name' => 'Consultation Room','description' => 'Consultation,Meeting'
-    ));
-   	Room::create(array(
-       'name' => 'Faculty Room','description' => 'Faculty Area'
-    ));
-   	Room::create(array(
-       'name' => 'Server','description' => 'Center of Service'
-    ));
-   	Room::create(array(
-       'name' => 'S508','description' => 'Programming,Web Development'
-    ));
-   	Room::create(array(
-       'name' => 'S510','description' => 'Database,Web Development,Multimedia'
-    ));
-   	Room::create(array(
-       'name' => 'S511','description' => 'Multimedia'
-    ));
-	}
 
+	}
 
 
 }

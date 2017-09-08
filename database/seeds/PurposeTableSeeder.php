@@ -16,39 +16,35 @@ class PurposeTableSeeder extends Seeder {
 		//delete purpose table records
 		DB::table('purpose')->delete();
 
-		Purpose::create(array(
-      'title'=>'Oral Defense',
-      'description'=>''
-		));
-
-		Purpose::create(array(
-      'title'=>'General Assembly',
-      'description'=>''
-		));
-
-		Purpose::create(array(
-      'title'=>'Seminar',
-      'description'=>''
-		));
-
-		Purpose::create(array(
-      'title'=>'Tutorial',
-      'description'=>''
-		));
-
-		Purpose::create(array(
-      'title'=>'Make-up Classes',
-      'description'=>''
-		));
-
-		Purpose::create(array(
-      'title'=>'Class Presentation',
-      'description'=>''
-		));
-
-		Purpose::create(array(
-      'title'=>'Class Activity',
-      'description'=>''
+		Purpose::insert(array(
+		[
+      	 'title'=>'Oral Defense',
+      	 'description'=>''
+		],
+		[
+      	 'title'=>'General Assembly',
+      	 'description'=>''
+		],
+		[
+      	 'title'=>'Seminar',
+      	 'description'=>''
+		],
+		[
+      	 'title'=>'Tutorial',
+      	 'description'=>''
+		],
+		[
+      	 'title'=>'Make-up Classes',
+      	 'description'=>''
+		],
+		[
+      	 'title'=>'Class Presentation',
+      	 'description'=>''
+		],
+		[
+      	 'title'=>'Class Activity',
+      	 'description'=>''
+		]
 		));
 	}
 

@@ -11,13 +11,10 @@
         <dd class="text-muted" style="padding: 10px;margin: 10px;">
           <ul class="list-unstyled text-justify">
             <li>
-              <strong>3 and above</strong> working days prior to the day of use <span class="label label-success">Safe</span>
-            </li>
-            <li>
               <strong>3</strong> days. The default day for reservation <span class="label label-warning">Ok</span>
             </li>
             <li>
-              <strong>Below 3</strong> days. This may revoke your chance of reservation unless you present a letter for special case approved by higher authority <span class="label label-danger">Danger</span>
+              <strong>Below 3</strong> days. This will automatically revoke your chance of reservation unless you present a letter for special case approved by higher authority.  <span class="label label-danger">Danger</span>
             </li>
           </ul>
         </dd>

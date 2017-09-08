@@ -12,11 +12,12 @@ class CreateItemreservationviewTable extends Migration {
 	 */
 	public function up()
 	{
-		DB::statement("CREATE VIEW itemreservationview AS 
-			SELECT u.lastname,u.firstname,i.propertynumber,r.timein,r.timeout,r.purpose,r.location,r.approval,r.facultyincharge,r.remark
+		DB::statement("CREATE VIEW reserveditems AS 
+			SELECT u.lastname,u.middlename,u.firstname,inv.brand,inv.model,i.propertynumber,r.timein,r.timeout,r.purpose,r.location,r.approval,r.facultyincharge,r.remark
 			FROM item_reservation AS ir 
 			JOIN reservation AS r ON ir.reservation_id = r.id 
 			JOIN itemprofile AS i ON i.id = ir.item_id 
+			JOIN inventory AS inv ON inv.id = i.inventory_id
 			JOIN user AS u ON r.user_id = u.id;");
 	}
 
@@ -27,7 +28,7 @@ class CreateItemreservationviewTable extends Migration {
 	 */
 	public function down()
 	{
-		DB::statement("DROP VIEW itemreservationview;");
+		DB::statement("DROP VIEW reserveditems;");
 	}
 
 }

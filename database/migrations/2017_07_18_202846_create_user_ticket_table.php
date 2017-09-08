@@ -17,9 +17,11 @@ class CreateUserTicketTable extends Migration {
 			$table->increments('id');
             $table->integer('user_id')->unsigned();
 			$table->foreign('user_id')->references('id')->on('user')
+									->onUpdate('cascade')
 									->onDelete('cascade');
             $table->integer('ticket_id')->unsigned();
 			$table->foreign('ticket_id')->references('id')->on('ticket')
+									->onUpdate('cascade')
 									->onDelete('cascade');
 			$table->timestamps();
 		});
