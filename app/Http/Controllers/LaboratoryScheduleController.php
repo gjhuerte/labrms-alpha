@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Validator;
 use Session;
-use App\LaboratorySchedule;
+use App\RoomSchedule;
 use App\Room;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
@@ -21,7 +21,7 @@ class LaboratoryScheduleController extends Controller {
 	{
 		if(Request::ajax())
 		{
-			return json_encode([ 'data' => LaboratorySchedule::all() ]);
+			return json_encode([ 'data' => RoomSchedule::all() ]);
 		}
 
 		return view('schedule.index')
@@ -47,6 +47,7 @@ class LaboratoryScheduleController extends Controller {
 	 */
 	public function store()
 	{
+		return Input::all();
 		return redirect('schedule');
 	}
 
@@ -71,11 +72,14 @@ class LaboratoryScheduleController extends Controller {
 	 */
 	public function edit($id)
 	{
-		try{
-			$schedule = Schedule::find($id);
+		$schedule = Schedule::find($id);
+		if(isset($schedule))
+		{
 			return view('schedule.edit')
 					->with('schedule',$schedule);
-		} catch( Exception $e ) {
+		}
+		else
+		{
 			Session::flash('error-message','Error occurred while processing your data.');
 			return redirect('schedule');
 		}

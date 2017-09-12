@@ -7,6 +7,8 @@ use Session;
 use Auth;
 use Validator;
 use App\User;
+use App\Reservation;
+use App\TicketView;
 use Hash;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
@@ -103,8 +105,12 @@ class SessionsController extends Controller {
 	public function show()
 	{
 		$person = Auth::user();
+		$reservation = Reservation::withInfo()->user(Auth::user()->id)->get()->count();
+		$tickets = TicketView::self()->get()->count();
 		return view('user.index')
-			->with('person',$person);
+			->with('person',$person)
+			->with('reservation',$reservation)
+			->with('tickets',$tickets);
 	}
 
 

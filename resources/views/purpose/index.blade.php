@@ -31,6 +31,7 @@ Reservation Purpose
 					<th>ID</th>
 					<th>Title</th>
 					<th>Description</th>
+					<th>Points</th>
 				</thead>
 			</table>
 		</div>
@@ -49,7 +50,7 @@ Reservation Purpose
 		    language: {
 		        searchPlaceholder: "Search..."
 		    },
-	    	"dom": "<'row'<'col-sm-9'<'toolbar'>><'col-sm-3'f>>" +
+	    	"dom": "<'row'<'col-sm-3'l><'col-sm-6'<'toolbar'>><'col-sm-3'f>>" +
 						    "<'row'<'col-sm-12'tr>>" +
 						    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
 			"processing": true,
@@ -58,6 +59,7 @@ Reservation Purpose
 	            { data: "id" },
 	            { data: "title" },
 	            { data: "description" },
+	            { data: "points" }
 	        ],
 	    } );
 

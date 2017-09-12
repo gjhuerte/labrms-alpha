@@ -164,5 +164,22 @@ class MaintenanceActivityController extends Controller {
 		return redirect('maintenance/activity');
 	}
 
+	/**
+	*	input type and returns maintenance activity
+	*	based on the said type
+	*	@param type
+	*	@return list of maintenance activity
+	*
+	*/
+	public function getMaintenanceActivity()
+	{
+		if(Request::ajax())
+		{
+			$type = $this->sanitizeString(Input::get('type'));
+
+			return json_encode(MaintenanceActivity::type($type)->pluck('id','activity'));
+		}
+	}
+
 
 }

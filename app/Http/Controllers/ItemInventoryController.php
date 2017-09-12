@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Inventory;
 use App\Receipt;
+use App\ItemType;
 use Session;
 use Validator;
 use Illuminate\Support\Facades\Request;
@@ -39,7 +40,30 @@ class ItemInventoryController extends Controller {
 	 */
 	public function create()
 	{
-		return view('inventory.item.create');
+		$brand = null;
+		$model = null;
+		$itemtype = null;
+
+		if(Input::has('brand'))
+		{
+			$brand = $this->sanitizeString(Input::get('brand'));
+		}
+		
+		if(Input::has('model'))
+		{
+			$model = $this->sanitizeString(Input::get('model'));
+		}
+		
+		if(Input::has('itemtype'))
+		{
+			$itemtype = $this->sanitizeString(Input::get('itemtype'));
+			$itemtype = ItemType::type($itemtype)->pluck('id')->first();
+		}
+
+		return view('inventory.item.create')
+					->with('brand',$brand)
+					->with('model',$model)
+					->with('itemtype',$itemtype);
 	}
 
 	/**
@@ -58,7 +82,7 @@ class ItemInventoryController extends Controller {
 		$fundcode = $this->sanitizeString(Input::get('fundcode'));
 
 		$validator = Validator::make([
-				'Acknowledgement Receipt' => $number,
+				'Property Acknowledgement Receipt' => $number,
 				'Purchase Order Number' => $ponumber,
 				'Purchase Order Date' => $podate,
 				'Invoice Number' => $invoicenumber,

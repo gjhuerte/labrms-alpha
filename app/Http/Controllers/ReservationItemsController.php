@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Validator;
 use Session;
+use App\ReservationItems;
+use App\ItemType;
+use App\ItemProfile;
+use App\Inventory;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -45,20 +49,46 @@ class ReservationItemsController extends Controller {
 		$included = $this->sanitizeString(Input::get('included'));
 		$excluded = $this->sanitizeString(Input::get('excluded'));
 
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	validate inventory
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
 		$inventory = Inventory::where('brand',$brand)->where('model',$model)->first();
-		if(count($inventory) <= 0){
+		if(count($inventory) <= 0)
+		{
 			Session::flash('error-message','The system cannot find respective brand and model.');
 			return redirect()->back()
 				->withInput();
 		}
 
-		$itemtype = Itemtype::find($itemtype);
-		if(count($itemtype) <= 0){
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	validate itemtype
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$itemtype = ItemType::find($itemtype);
+		if(count($itemtype) <= 0)
+		{
 			Session::flash('error-message','The system cannot find respective item type.');
 			return redirect()->back()
 				->withInput();
 		}
 
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	validate 
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
 		$validator = Validator::make([
 				'itemtype' => $itemtype->id,
 				'inventory' => $inventory->id
@@ -71,8 +101,41 @@ class ReservationItemsController extends Controller {
 				->withErrors($validator);
 		}
 
+		if($included != '')
+		{
+			foreach(explode(',',$included) as $propertynumber)
+			{
+				$validator = Validator::make(['Property Number' => $propertynumber],[
+					'Property Number' => 'exists:itemprofile,propertynumber'
+				],[ 'Property Number.exists' => "The :attribute $propertynumber must exists" ]);
 
-		$reservationitems = new Reservationitems;
+				if($validator->fails())
+				{
+					return redirect("reservation/items/list/$id/edit")
+						->withInput()
+						->withErrors($validator);
+				}
+			}
+		}
+
+		if($excluded != '')
+		{
+			foreach(explode(',',$excluded) as $propertynumber)
+			{
+				$validator = Validator::make(['Property Number' => $propertynumber],[
+					'Property Number' => 'exists:itemprofile,propertynumber'
+				],[ 'Property Number.exists' => "The :attribute $propertynumber must exists" ]);
+
+				if($validator->fails())
+				{
+					return redirect('reservation/items/list/create')
+						->withInput()
+						->withErrors($validator);
+				}
+			}
+		}
+
+		$reservationitems = new ReservationItems;
 		$reservationitems->itemtype_id = $itemtype->id;
 		$reservationitems->inventory_id = $inventory->id;
 		$reservationitems->included = $included;
@@ -106,7 +169,7 @@ class ReservationItemsController extends Controller {
 	public function edit($id)
 	{
 		return view('reservation.item.edit')
-			->with('reservationitems',Reservationitems::find($id));
+			->with('reservationitems',ReservationItems::find($id));
 	}
 
 
@@ -124,20 +187,46 @@ class ReservationItemsController extends Controller {
 		$included = $this->sanitizeString(Input::get('included'));
 		$excluded = $this->sanitizeString(Input::get('excluded'));
 
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	validate inventory
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
 		$inventory = Inventory::where('brand',$brand)->where('model',$model)->first();
-		if(count($inventory) <= 0){
+		if(count($inventory) <= 0)
+		{
 			Session::flash('error-message','The system cannot find respective brand and model.');
 			return redirect()->back()
 				->withInput();
 		}
 
-		$itemtype = Itemtype::find($itemtype);
-		if(count($itemtype) <= 0){
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	validate itemtype
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$itemtype = ItemType::find($itemtype);
+		if(count($itemtype) <= 0)
+		{
 			Session::flash('error-message','The system cannot find respective item type.');
 			return redirect()->back()
 				->withInput();
 		}
 
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	validate
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
 		$validator = Validator::make([
 				'itemtype' => $itemtype->id,
 				'inventory' => $inventory->id
@@ -145,13 +234,46 @@ class ReservationItemsController extends Controller {
 
 		if($validator->fails())
 		{
-			return redirect()->back()
+			return redirect('reservation/items/list/create')
 				->withInput()
 				->withErrors($validator);
 		}
 
+		if($included != '')
+		{
+			foreach(explode(',',$included) as $propertynumber)
+			{
+				$validator = Validator::make(['Property Number' => $propertynumber],[
+					'Property Number' => 'exists:itemprofile,propertynumber'
+				],[ 'Property Number.exists' => "The :attribute $propertynumber must exists" ]);
 
-		$reservationitems = Reservationitems::find($id);
+				if($validator->fails())
+				{
+					return redirect("reservation/items/list/$id/edit")
+						->withInput()
+						->withErrors($validator);
+				}
+			}
+		}
+
+		if($excluded != '')
+		{
+			foreach(explode(',',$excluded) as $propertynumber)
+			{
+				$validator = Validator::make(['Property Number' => $propertynumber],[
+					'Property Number' => 'exists:itemprofile,propertynumber'
+				],[ 'Property Number.exists' => "The :attribute $propertynumber must exists" ]);
+
+				if($validator->fails())
+				{
+					return redirect("reservation/items/list/$id/edit")
+						->withInput()
+						->withErrors($validator);
+				}
+			}
+		}
+
+		$reservationitems = ReservationItems::find($id);
 		$reservationitems->itemtype_id = $itemtype->id;
 		$reservationitems->inventory_id = $inventory->id;
 		$reservationitems->included = $included;
@@ -174,12 +296,12 @@ class ReservationItemsController extends Controller {
 	{
 		if(Request::ajax())
 		{
-			$reservationitems = Reservationitems::find($id);
+			$reservationitems = ReservationItems::find($id);
 			$reservationitems->delete();
 			return json_encode('success');
 		}
 
-		$reservationitems = Reservationitems::find($id);
+		$reservationitems = ReservationItems::find($id);
 		$reservationitems->delete();
 
 		Session::flash('success-message','Item for reservation deleted');

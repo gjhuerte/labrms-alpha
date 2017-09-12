@@ -37,18 +37,19 @@ Workstation Profile
 @stop
 @section('content')
 <div class="container-fluid" id="page-body">
-	@include('modal.workstation.software.install')
+@include('modal.workstation.software.install')
 	@include('modal.workstation.software.edit')
 	<div class="col-sm-12">
 		<div class="panel panel-default" style="padding:0px 20px">
 			<div class="panel-body">
-				<legend><h3 class="text-muted">Workstation</h3></legend>
+				<legend><h3 class="text-muted">Workstation {{ $workstation->name }}</h3></legend>
 				<ul class="breadcrumb">
 					<li><a href="{{ url('workstation') }}">Workstation</a></li>
 					<li class="active">{{ $workstation->id }}</li>
 				</ul>
-				<table class="table table-bordered">
+				<table class="table table-bordered" style="width:100%;">
 					<thead>
+						<th>Name</th>
 						<th>OS License Key</th>
 						<th>System Unit</th>
 						<th>Monitor</th>
@@ -58,6 +59,7 @@ Workstation Profile
 					</thead>
 					<tbody>
 						<tr>
+							<td>{{ $workstation->name }}</td>
 							<td>{{ $workstation->oskey }}</td>
 							<td>{{ ($workstation->systemunit) ? $workstation->systemunit->propertynumber : "" }}</td>
 							<td>{{ ($workstation->monitor) ? $workstation->monitor->propertynumber : "" }}</td>
@@ -78,13 +80,12 @@ Workstation Profile
 				  <div class="tab-content">
 				    <div role="tabpanel" class="tab-pane" id="history">
 				    	<div class="panel panel-body" style="padding: 10px;">
-							<table class="table table-bordered" id="historyTable">
+							<table class="table table-bordered" id="historyTable" style="width:100%;">
 								<thead>
 						            <th>ID</th>
 						            <th>Name</th>
 						            <th>Details</th>
 						            <th>Author</th>
-						            <th>Staff Assigned</th>
 						            <th>Status</th>
 						        </thead>
 							</table>
@@ -124,7 +125,6 @@ $(document).ready(function(){
         	{ data: 'ticketname' },
         	{ data: 'details' },
         	{ data: 'author' },
-        	{ data: 'staffassigned' },
         	{ data: 'status' }
         ],
     } );

@@ -17,10 +17,6 @@ Ticket | Create
 		padding: 25px;
 		margin: 10px;
 	}
-
-	.panel{
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	}
 </style>
 <div class="container-fluid" id="page-body" style="margin-top: 40px;">
 	<div class='col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6'>  
@@ -51,7 +47,7 @@ Ticket | Create
 				<div class="form-group">
 					<div class="col-sm-12">
 					{{ Form::label('tag','Tag (Optional)') }}
-					<p class="text-muted text-info">This field is for identifying the equipment, room, or workstation linked to this ticket.</p>
+					<p class="text-muted text-info">This field is for identifying the equipment, room, or workstation linked to this ticket. Note: Use the property number for equipments</p>
 					{{ Form::text('tag',Input::old('tag'),[
 						'id' => 'tag',
 						'class' => 'form-control',
@@ -71,17 +67,19 @@ Ticket | Create
 					</div>
 				</div>
 
+				@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2 )
 				<div class="form-group" id="author-form">
 					<div class="col-sm-12">
-						{{ Form::label('author','Author') }}
-						<span type="button" id="inventory-help" class="btn-link glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover" title="Help" data-content="The ticket author is the person who request for this ticket to be generated. If the ticket has no author, you can leave this field blank" tabindex="0" data-trigger="focus" style="text-decoration: none;"></span>
+						{{ Form::label('author','Complainant') }}
 						{{ Form::text('author',Input::old('author'),[
 						'class'=>'form-control',
 						'placeholder' => Auth::user()->firstname.' '.Auth::user()->lastname
 						]) }}
-						<p class="text-muted text-warning">Leave this blank if you're the ticket author.</p>
+						<p class="text-muted text-warning">Leave this field blank if you're the complainant.</p>
 					</div>
 				</div>
+				@endif
+				
 				<div class="form-group">
 					<!-- description -->
 					<div class="col-sm-12">
@@ -128,31 +126,57 @@ Ticket | Create
 					}
 					else
 					{
-						if(response.systemunit_id != null || response.monitor_id != null)
+									
+						if(response.propertynumber)
 						{
-							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Good News!</strong> This tag belongs to a PC
-								</div>
-							`);
-						}
 
-						if(response.propertynumber != null)
-						{
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Great!</strong> You can link this tag to an equipment
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Item Profile
+									</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Property Number:  `+response.propertynumber+`<span id="transfer-date"></span></li>
+									  <li class="list-group-item">Serial Number: `+response.serialnumber+` <span id="transfer-tag"></span></li>
+									  <li class="list-group-item">Status: `+response.status+`<span id="transfer-title"></span></li>
+									</ul>
 								</div>
-							`);
+							`)
 						}
-
-						if(response.name != null)
+						else if(response.systemunit_id)
 						{
+
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Great!</strong> You've inputted a correct room name
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Workstation Information
+									</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Workstation Name:  `+response.name+`</li>
+									  <li class="list-group-item">System Unit:  `+response.systemunit.propertynumber+`</li>
+									  <li class="list-group-item">Monitor:  `+response.monitor.propertynumber+`</li>
+									  <li class="list-group-item">AVR: `+response.avr.propertynumber+`</li>
+									  <li class="list-group-item">Keyboard:  `+response.keyboard.propertynumber+`</li>
+									  <li class="list-group-item">Mouse:  `+response.mouse+`</li>
+									  <li class="list-group-item">Status: `+response.systemunit.status+`</li>
+									</ul>
 								</div>
-							`);
+							`)
+						}
+						else if(response.name)
+						{
+
+							$('#tickettag').html(`
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Room Information
+									</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Room Name:  `+response.name+`</li>
+									  <li class="list-group-item">Category:  `+response.description+`</li>
+									</ul>
+								</div>
+							`)
 						}
 					}
 				}

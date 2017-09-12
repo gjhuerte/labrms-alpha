@@ -19,7 +19,7 @@ class AccountsAjaxController extends Controller {
 	{
 		if(Request::ajax())
 		{
-			$user = User::select('id','username','lastname','firstname','middlename','email','contactnumber','type','accesslevel','status')->get();
+			$user = User::all();
 			return json_encode(['data'=>$user]);
 		}
 	}

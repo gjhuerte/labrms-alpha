@@ -23,7 +23,6 @@ Item Types
 		<div class="col-sm-12 panel panel-body  table-responsive">
 			<legend><h3 class="text-muted">Item Types</h3></legend>
 			<p class="text-muted">Note: Other actions will be shown when a row has been selected</p>
-			<p class="text-muted">You can view all deleted item type <a href="{{ url('item/type/view/restore') }}">here</a></p>
 			<table class="table table-striped table-hover table-bordered" id='itemTypeTable'>
 				<thead>
 					<th>ID</th>

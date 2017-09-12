@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Validator;
 use Session;
+use App\ReservationItems;
+use App\ItemType;
+use App\ItemProfile;
+use App\Inventory;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -14,26 +18,47 @@ class ReservationItemsAjaxController extends Controller {
 	{
 		if(Request::ajax())
 		{
-			$reservationitems = Reservationitems::leftJoin('inventory','inventory.id','=','reservationitems.inventory_id')->leftJoin('itemtype','itemtype.id','=','reservationitems.itemtype_id')->select('reservationitems.id as id','itemtype.name as name','inventory.model as model','inventory.brand as brand','reservationitems.included as included','reservationitems.excluded as excluded','reservationitems.status as status')->get();
+			$reservationitems = ReservationItems::leftJoin('inventory','inventory.id','=','reservationitems.inventory_id')->leftJoin('itemtype','itemtype.id','=','reservationitems.itemtype_id')->select('reservationitems.id as id','itemtype.name as name','inventory.model as model','inventory.brand as brand','reservationitems.included as included','reservationitems.excluded as excluded','reservationitems.status as status')->get();
+
 			return json_encode(['data'=>$reservationitems]);
 		}
 	}
 
+	/*
+	|--------------------------------------------------------------------------
+	|
+	| 	Update status of reservation item
+	|
+	|--------------------------------------------------------------------------
+	|
+	*/
 	public function updateReservationItemListStatus($id)
 	{
-		$reservationitems = Reservationitems::find($id);
+		$reservationitems = ReservationItems::find($id);
 		if(count($reservationitems) > 0)
 		{
-			($reservationitems->status == 'Disabled')  ? $reservationitems->status = 'Enabled' : $reservationitems->status = 'Disabled';
+			if($reservationitems->status == 'Disabled')
+			{
+				$reservationitems->status = 'Enabled';
+			}
+			else
+			{
+				$reservationitems->status = 'Disabled';	
+			} 
+
 			$reservationitems->save();
 			return json_encode('success');
 		}
+
+		return json_encode('error');
 	}
 
 	public function getAllReservationItemType()
 	{
-		$reservationitems = Reservationitems::leftJoin('itemtype','reservationitems.itemtype_id','=','itemtype.id')
-													->select('itemtype.name as name')->get();
+		$reservationitems = ReservationItems::with('itemtype')
+												->enabled()
+												->get()
+												->unique('itemtype_id');
 		return json_encode($reservationitems);
 	}
 
@@ -59,7 +84,7 @@ class ReservationItemsAjaxController extends Controller {
 	{
 		$propertynumber = $this->sanitizeString(Input::get('propertynumber'));
 		$itemtype = $this->sanitizeString(Input::get('itemtype'));
-		$itemtype = Itemtype::where('name',$itemtype)
+		$itemtype = ItemType::where('name',$itemtype)
 								->select('id')
 								->first();
 		if(count($itemtype) > 0)
@@ -70,7 +95,7 @@ class ReservationItemsAjaxController extends Controller {
 									->where('model',$model)
 									->first();
 			if(count($inventory) > 0){
-				$propertynumber = Itemprofile::where('inventory_id',$inventory->id)
+				$propertynumber = ItemProfile::where('inventory_id',$inventory->id)
 												->whereNotIn('propertynumber',explode(',',$propertynumber))
 												->select('propertynumber')
 												->get();

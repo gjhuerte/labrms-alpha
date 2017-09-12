@@ -17,7 +17,8 @@ class CreateSupplyTable extends Migration {
 			$table->increments('id');
             $table->integer('itemtype_id')->unsigned();
 			$table->foreign('itemtype_id')->references('id')->on('itemtype')
-										->onDelete('cascade');;
+										->onUpdate('cascade')
+										->onDelete('cascade');
             $table->string('brand');
             $table->string('unit');
             $table->integer('quantity');

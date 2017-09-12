@@ -7,7 +7,7 @@ Create
 @include('layouts.navbar')
 @stop
 @section('style')
-{{ HTML::style(asset('css/jquery.timepicker.css')) }}
+{{ HTML::style(asset('css/timePicker.css')) }}
 <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 <style>
   #page-body{
@@ -39,6 +39,16 @@ Create
         @endif
         {{ Form::open(array('method'=>'post','route'=>'schedule.store','class' => 'form-horizontal')) }}
         <div class="form-group">
+          <div class="col-sm-12">
+          {{ Form::label('room','Room') }}
+          {{ Form::select('room',['Loading all Laboratory Rooms ..'],Input::old('room'),[
+            'id' => 'room',
+            'class' => 'form-control',
+            'placeholder' => 'Room'
+          ]) }}
+          </div>
+        </div>
+        <div class="form-group">
           <div class="col-md-12">
             {{ Form::label('subject','Subject') }}
             {{ Form::text('subject',Input::old('subject'),[
@@ -66,20 +76,12 @@ Create
             ]) }}
           </div>
         </div>
-        <div class="form-group">
-          <div class="col-md-12">
-            {{ Form::label('section','Course, Year & Section') }}
-            {{ Form::text('section',Input::old('section'),[
-              'class'=>'form-control',
-              'placeholder'=>'Course Year-Section'
-            ]) }}
-          </div>
-        </div>
         <div class="form-group" id="timerange">
           <div class="col-md-6">
             {{ Form::label('timestart','Time Start') }}
             {{ Form::text('timestart',Input::old('timestart'),[
-              'class'=>'form-control time',
+              'id' => 'timestart',
+              'class'=>'form-control',
               'placeholder'=>'Time Start'
             ]) }}
           </div>
@@ -106,9 +108,7 @@ Create
 </div><!-- Container -->
 @stop
 @section('script')
-{{ HTML::script(asset('js/datepair.min.js')) }}
-{{ HTML::script(asset('js/jquery.datepair.min.js')) }}
-{{ HTML::script(asset('js/jquery.timepicker.min.js')) }}
+{{ HTML::script(asset('js/jquery.timePicker.min.js')) }}
 <script>
   $(document).ready(function(){
     @if( Session::has("success-message") )
@@ -118,9 +118,28 @@ Create
         swal("Oops...","{{ Session::pull('error-message') }}","error");
     @endif
 
-    // initialize input widgets first
-    $('#timerange > .col-md-6 > .form-control').timepicker({
-        'showDuration': true
+    $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+      type : "get",
+      url : "{{ route('room.index') }}",
+      dataType : "json",
+      success : function(response){
+        options = "";
+        for(ctr = 0;ctr<response.data.length;ctr++){
+          options += `<option value='`+response.data[ctr].id+`'>`+response.data[ctr].name+`</option>'`;
+        }
+
+        $('#room').html("");
+        $('#room').append(options);
+        @if(Input::old('room'))
+        $('#room').val("{{ Input::old('location') }}"); 
+        @endif
+      },
+      error : function(response){
+        $('#room').html("<option>Loading all Laboratory Rooms ...</option>")
+      }
     });
     
     $('#page-body').show();

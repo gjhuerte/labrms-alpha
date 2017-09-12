@@ -32,8 +32,8 @@ Software
 					<th>Company</th>
 					<th>License type</th>
 					<th>Software type</th>
-					<th>Minimum Requirements</th>
-					<th>Maximum Requirements</th>
+					<th>Minimum System Requirements</th>
+					<th>Recommended System Requirements</th>
 					<th>Room/s Assigned</th>
 					<th class="no-sort"></th>
 				</thead>
@@ -74,7 +74,7 @@ Software
 	            { data: function(callback){
 	            	htmllist = `<ul class="list-unstyled">`
 	            	callback.roomsoftware.forEach(function(element){
-	            		htmllist += `<li class="col-xs-12">` + element.room.name + ` <button class="remove btn btn-danger btn-xs" data-id="`+ callback.id +`" data-room="`+ element.room.id +`"><span class="glyphicon glyphicon-remove"></span></button></li>`
+	            		htmllist += `<li class="col-xs-12">` + element.room.name + ` <button class="remove btn btn-danger btn-xs" data-id="`+ callback.id +`" data-room="`+ element.room.id +`" style="border:none;"><span class="glyphicon glyphicon-remove"></span></button></li>`
 	            	})
 	            	htmllist += `</ul>`
 	            	return htmllist;
@@ -86,10 +86,10 @@ Software
 	    } );
 
 	 	$("div.toolbar").html(`
- 			<button id="new" class="btn btn-primary btn-flat" style="margin-right:5px;padding: 5px 10px;" data-target="#createSoftwareModal" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>  Create</button>
- 			<button id="edit" class="btn btn-default btn-flat" style="margin-right:5px;padding: 6px 10px;"><span class="glyphicon glyphicon-pencil"></span>  Update</button>
- 			<button id="delete" class="btn btn-danger btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-trash"></span> Remove</button>
- 			<button id="assign" class="btn btn-warning btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon"></span> Assign to a room</button>
+ 			<button id="new" class="btn btn-primary" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-plus"></span>  Create</button>
+ 			<button id="edit" class="btn btn-default" style="margin-right:5px;padding: 6px 10px;"><span class="glyphicon glyphicon-pencil"></span>  Update</button>
+ 			<button id="delete" class="btn btn-danger" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-trash"></span> Remove</button>
+ 			<button id="assign" class="btn btn-warning" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon"></span> Assign to a room</button>
 		`);
  
     table
@@ -112,19 +112,24 @@ Software
 			try{
 				if(table.row('.selected').data().id != null && table.row('.selected').data().id  && table.row('.selected').data().id >= 0)
 				{
-					$('#edit-id').val(table.row('.selected').data().id)
-					$('#edit-name').val(table.row('.selected').data().softwarename)
-					$('#edit-company').val(table.row('.selected').data().company)
-					$('#edit-licensetype').val(table.row('.selected').data().licensetype)
-					$('#edit-softwaretype').val(table.row('.selected').data().softwaretype)
-					$('#edit-minrequirement').val(table.row('.selected').data().minsysreq)
-					$('#edit-maxrequirement').val(table.row('.selected').data().maxsysreq)
-					$('#updateSoftwareModal').modal('show');
+					// $('#edit-id').val(table.row('.selected').data().id)
+					// $('#edit-name').val(table.row('.selected').data().softwarename)
+					// $('#edit-company').val(table.row('.selected').data().company)
+					// $('#edit-licensetype').val(table.row('.selected').data().licensetype)
+					// $('#edit-softwaretype').val(table.row('.selected').data().softwaretype)
+					// $('#edit-minrequirement').val(table.row('.selected').data().minsysreq)
+					// $('#edit-maxrequirement').val(table.row('.selected').data().maxsysreq)
+					// $('#updateSoftwareModal').modal('show');
+					window.location.href = '{{ url('software') }}' + '/' + table.row('.selected').data().id + '/edit'
 				}
 			}catch( error ){
 				swal('Oops..','You must choose atleast 1 row','error');
 			}
 		});
+
+		$('#new').on('click',function(){
+			window.location.href = "{{ url('software/create') }}"
+		})
 
 		$('#assign').on('click',function(){
 			try{
@@ -198,7 +203,7 @@ Software
 	    		url: '{{ url("software/room/remove") }}' + '/' + $(this).data('id') + '/' + $(this).data('room'),
 	    		dataType: 'json',
 	    		success: function(response){
-	    			if(response == 'success') swal('Operation Success','Software unlink from room','success')
+	    			if(response == 'success') swal('Operation Success','Software unlinked from room','success')
 	    			else swal('Operation Failed','Problem occurred while processing data. Please reload the page','error')
 	    			table.ajax.reload()
 	    		}

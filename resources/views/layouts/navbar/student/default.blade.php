@@ -55,7 +55,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>{{ link_to('dashboard','Home') }}</li>
         <li>{{ link_to('reservation/create','Reservation') }}</li>
-        <li>{{ link_to('ticket/complaint','Complaint') }} </li>
+        <li>{{ link_to('ticket','Complaint') }} </li>
         <li>{{ link_to('logout','Logout') }}</li>
 
       </ul><!-- end of navbar right -->

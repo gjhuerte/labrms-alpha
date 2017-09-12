@@ -11,24 +11,94 @@ use Hash;
 class User extends \Eloquent implements Authenticatable {
 	use SoftDeletes, AuthenticableTrait;
 
-	//Database driver
-	/*
-		1 - Eloquent (MVC Driven)
-		2 - DB (Directly query to SQL database, no model required)
-	*/
-
-	//The table in the database used by the model.
+	/**
+	*
+	* table name
+	*
+	*/	
 	protected $table  = 'user';
+
+	/**
+	*
+	*	fields to be set as date
+	*
+	*/
 	protected $dates = ['deleted_at'];
-	//The attribute that used as primary key.
+
+	/**
+	*
+	* primary key
+	*
+	*/
 	protected $primaryKey = 'id';
 
+	/**
+	*
+	* created_at and updated_at status
+	*
+	*/
 	public $timestamps = true;
 
-	protected $fillable = ['lastname','firstname','middlename','username','password','contactnumber','email','type','status','accesslevel'];
+	/**
+	*
+	* used for create method
+	*
+	*/  
+	protected $fillable = [
+		'lastname',
+		'firstname',
+		'middlename',
+		'username',
+		'password',
+		'contactnumber',
+		'email',
+		'type',
+		'status',
+		'accesslevel'
+	];
 
+	public function getFirstNameAttribute($value)
+	{
+		return ucwords($value);
+	}
+
+	public function getMiddleNameAttribute($value)
+	{
+		return ucwords($value);
+	}
+
+	public function getLastNameAttribute($value)
+	{
+		return ucwords($value);
+	}
+
+	// public function setFirstNameAttribute($value)
+	// {
+	// 	$this->attribute['firstname'] ucwords($value);
+	// }
+
+	// public function setMiddleNameAttribute($value)
+	// {
+	// 	$this->attribute['middlename'] = ucwords($value);
+	// }
+
+	// public function setLastNameAttribute($value)
+	// {
+	// 	$this->attribute['lastname'] =  ucwords($value);
+	// }
+
+	/**
+	*
+	* not shown when querying
+	*
+	*/  
 	protected $hidden = ['password','remember_token'];
-	//Validation rules!
+
+	/**
+	*
+	* validation rules
+	*
+	*/
 	public static $rules = array(
 		'Username' => 'required_with:password|min:4|max:20|unique:User,username',
 		'Password' => 'required|min:8|max:50',
@@ -39,6 +109,11 @@ class User extends \Eloquent implements Authenticatable {
 		'Email' => 'required|email'
 	);
 
+	/**
+	*
+	* update rules
+	*
+	*/
 	public static $updateRules = array(
 		'Username' => 'min:4|max:20',
 		'Password' => 'min:6|max:50',

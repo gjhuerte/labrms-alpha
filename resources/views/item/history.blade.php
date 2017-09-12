@@ -51,10 +51,11 @@ Item History
               </th>
           </tr>
           <tr rowspan="2">
-              <th class="text-center" colspan="12">Ticket Details</th>
+              <th class="text-center" colspan="12">History</th>
           </tr>
           <tr>
-            <th>ID</th>
+            <th>Ticket ID</th>
+            <th>Ticket Type</th>
             <th>Name</th>
             <th>Details</th>
             <th>Author</th>
@@ -66,6 +67,7 @@ Item History
         @forelse($itemprofile->ticket as $ticket)
           <tr>
             <td>{{ $ticket->id }}</td>
+            <td>{{ $ticket->tickettype }}</td>
             <td>{{ $ticket->ticketname }}</td>
             <td>{{ $ticket->details }}</td>
             <td>{{ $ticket->author }}</td>
