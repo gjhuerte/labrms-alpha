@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder {
 		$this->call(ItemtypeTableSeeder::class);
 		$this->call(TickettypeTableSeeder::class);
 		$this->call(PurposeTableSeeder::class);
+		$this->call(SoftwareTypeTableSeeder::class);
+		$this->call(RoomCategoryTableSeeder::class);
+		// $this->call(LanguageTableSeeder::class);
+		$this->call(SettingsTableSeeder::class);
 
 	}
 

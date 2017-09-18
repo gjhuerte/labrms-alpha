@@ -15,6 +15,12 @@ Ticket History
 </style>
 @stop
 @section('content')
+@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
+@include('modal.ticket.transfer')
+@if($ticket->tickettype == 'Complaint')
+@include('modal.ticket.resolve') 
+@endif
+@endif
 <div class="container-fluid" id="page-body">
   <div class="col-md-12">
     <div class="panel panel-body ">
@@ -29,18 +35,17 @@ Ticket History
             </div>
         @endif
       <div class='col-md-12'>
-          <legend><h3 class="text-muted">Ticket {{ $ticket->id }}</h3></legend>
+          <legend><h3 class="text-muted">Ticket {{ $ticket->id }} History</h3></legend>
           <ol class="breadcrumb">
               <li><a href="{{ url('ticket') }}">Ticket</a></li>
               <li>{{ $id }}</li>
               <li class="active">History</li>
           </ol>
-          <p class="text-muted">Note: The top most entry is the latest ticket</p>
           <table class="table table-hover table-striped table-bordered table-condensed" id="ticketTable" cellspacing="0" width="100%">
             <thead>
                   <tr rowspan="2">
                       <th class="text-left" colspan="4">Ticket Name:  
-                        <span style="font-weight:normal">{{ $ticket->ticketname }}</span> 
+                        <span style="font-weight:normal">{{ $ticket->title }}</span> 
                       </th>
                       <th class="text-left" colspan="4">Ticket Type:  
                         <span style="font-weight:normal">{{ $ticket->tickettype }}</span> 
@@ -54,13 +59,14 @@ Ticket History
                       </th>
                   </tr>
                     <tr>
-                <th>ID</th>
+                <th>Ticket ID</th>
+                <th>Ticket Type</th>
                 <th>Details</th>
-                <th>Type</th>
                 <th>Staff Assigned</th>
                 <th>Author</th>
                 <th>Date Created</th>
                 <th>Status</th>
+                <th>Comment</th>
               </tr>
             </thead>
           </table>
@@ -96,8 +102,8 @@ Ticket History
       ajax: "{{ url('ticket/history') }}" + '/' + {{ $id }},
       columns: [
           { data: "id" },
-          { data: "details" },
           { data: "tickettype" },
+          { data: "details" },
           { data: function(callback){
             return callback.user.firstname + " " + callback.user.middlename + " " + callback.user.lastname
           } },
@@ -105,9 +111,61 @@ Ticket History
           {data: function(callback){
             return moment(callback.created_at).format("dddd, MMMM Do YYYY");
           }},
-          { data: "status" }
+          { data: "status" },
+          { data: "comments" }
       ],
     });
+
+    $('.toolbar').html(`
+      @if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
+      <button id="assign" class="btn btn-success btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-share-alt"></span> Assign </button>
+      @if($ticket->tickettype == 'Complaint')
+      <button id="resolve" class="btn btn-default btn-flat" style="margin-right:5px;padding: 5px 10px;"><span class="glyphicon glyphicon-check"></span> Create an Action</button>
+      @endif
+      @endif
+    `)
+
+    @if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
+
+      $('#assign').click( function () {
+          $('#transfer-id').val('{{ $ticket->id }}')
+          $('#transfer-date').text(moment('{{ $ticket->date }}').format("dddd, MMMM Do YYYY, h:mm a"))
+          $('#transfer-tag').text('{{ $ticket->tag }}')
+          $('#transfer-title').text('{{ $ticket->title }}')
+          $('#transfer-details').text('{{ $ticket->details }}')
+          $('#transfer-author').text('{{ $ticket->author }}')
+          $('#transfer-assigned').text('{{ $ticket->staffassigned }}')
+          $('#transferTicketModal').modal('show')
+      } );
+     @if($ticket->tickettype == 'Complaint')
+
+      $('#resolve').click( function () {
+            $('#resolve-id').val('{{ $ticket->id }}');
+              tag = '{{ $ticket->tag }}' 
+            if(tag.indexOf('PC') !== -1 || tag.indexOf('Item') !== -1)
+            {
+              if(tag.indexOf('PC') !== -1)
+              {
+                $('#item-tag').val(tag.substr(4))
+              }
+
+              if(tag.indexOf('Item') !== -1)
+              {
+                $('#item-tag').val(tag.substr(6))
+              }
+
+              $('#resolve-equipment').show()
+            }
+            else
+            {
+              $('#item-tag').val("")
+              $('#resolve-equipment').hide()
+            }
+
+            $('#resolveTicketModal').modal('show')
+      } );
+      @endif
+      @endif
 
 
     $('#page-body').show()

@@ -10,6 +10,7 @@ use App\ItemProfile;
 use App\PcTicket;
 use App\RoomTicket;
 use App\Room;
+use Carbon\Carbon;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,6 +38,10 @@ class Ticket extends \Eloquent{
 	);
 
 	public static $maintenanceRules = array(
+		'Details' => 'required|min:2|max:500',
+	);
+
+	public static $resolveRules = array(
 		'Details' => 'required|min:2|max:500',
 	);
 
@@ -88,6 +93,16 @@ class Ticket extends \Eloquent{
 	public function getTickettypeAttribute($value)
 	{
 		return ucwords($value);
+	}
+
+	public function scopeOpen($query)
+	{
+		return $query->where('status','=','Open');
+	}
+
+	public function scopeClosed($query)
+	{
+		return $query->where('status','=','Closed');
 	}
 
 	public function getDetailsAttribute($value)
@@ -229,7 +244,7 @@ class Ticket extends \Eloquent{
 	*	@return $ticket object generated
 	*
 	*/
-	public static function generateTicket($tickettype,$ticketname,$details,$author,$staffassigned,$ticket_id,$status)
+	public static function generateTicket($tickettype,$ticketname,$details,$author,$staffassigned,$ticket_id,$status,$comment = null)
 	{
 		$ticket = new Ticket;
 		$ticket->tickettype = $tickettype;
@@ -239,6 +254,7 @@ class Ticket extends \Eloquent{
 		$ticket->staffassigned = $staffassigned;
 		$ticket->ticket_id = $ticket_id;
 		$ticket->status = $status;
+		$ticket->comments = $comment;
 		$ticket->save();
 		return $ticket;
 	}
@@ -329,6 +345,7 @@ class Ticket extends \Eloquent{
 		*/
 		$author = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
 		$staffassigned = Auth::user()->id;
+		$ticket = Ticket::find($id);
 
 		/*
 		|--------------------------------------------------------------------------
@@ -351,37 +368,9 @@ class Ticket extends \Eloquent{
 		|--------------------------------------------------------------------------
 		|
 		*/
-		if($underrepair == true)
+		if($underrepair == 'undermaintenance' || $underrepair == 'working')
 		{
-			$tag = Ticket::find($id);
-
-			/*
-			|--------------------------------------------------------------------------
-			|
-			| 	Check if the equipment is connected to pc
-			|
-			|--------------------------------------------------------------------------
-			|
-			*/
-			$pc = PcTicket::ticket($tag)->first();
-			if(count($pc) > 0)
-			{
-				Pc::setItemStatus($pc->id,'undermaintenance');
-			} 
-			
-			/*
-			|--------------------------------------------------------------------------
-			|
-			| 	Check if the tag is equipment
-			|
-			|--------------------------------------------------------------------------
-			|
-			*/
-			$itemticket = ItemTicket::ticket($tag)->first();
-			if( count($itemticket) > 0)
-			{
-				ItemProfile::setItemStatus($itemticket->item_id,'undermaintenance');
-			} 
+			Ticket::changeStatus($ticket->id,$underrepair);
 		}
 
 		/*
@@ -395,7 +384,7 @@ class Ticket extends \Eloquent{
 		$ticket = Ticket::generateTicket('action taken','Action Taken',$details,$author,$staffassigned,$ticket->id,$status);
 	}
 
-	public static function transferTicket($id,$staffassigned)
+	public static function transferTicket($id,$staffassigned,$comment)
 	{
 		/*
 		|--------------------------------------------------------------------------
@@ -425,7 +414,7 @@ class Ticket extends \Eloquent{
 		|--------------------------------------------------------------------------
 		|
 		*/
-		$ticket = Ticket::generateTicket($ticket->tickettype,$ticket->ticketname,$ticket->details,$ticket->author,$staffassigned,$ticket->id,$status);
+		$ticket = Ticket::generateTicket($ticket->tickettype,$ticket->ticketname,$ticket->details,$ticket->author,$staffassigned,$ticket->id,$status,$comment);
 	}
 	
 
@@ -436,7 +425,7 @@ class Ticket extends \Eloquent{
 	*	@param $details accepts details
 	*
 	*/
-	public static function generateMaintenanceTicket($tag,$ticketname,$details,$underrepair)
+	public static function generateMaintenanceTicket($tag,$ticketname,$details,$underrepair,$workstation = false)
 	{
 
 		/*
@@ -532,20 +521,122 @@ class Ticket extends \Eloquent{
 			if( count($room) > 0 ) 
 			{
 				Ticket::generateRoomTicket($room->id,'maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+
+				if($workstation)
+				{
+					DB::transaction(function() use ( $tag, $ticketname,$details,$author,$staffassigned,$ticket_id,$status ) {
+						foreach(Pc::whereHas('systemunit',function($query) use ($tag) {
+							$query->where('location','=',$tag);
+						})->get() as $pc)
+						{
+							Ticket::generatePcTicket($pc->id,'maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+						}
+					});
+				}
 			}
 			else
 			{
 
+
 				/*
 				|--------------------------------------------------------------------------
 				|
-				| 	Create general ticket
+				| 	Check if the equipment is connected to pc
 				|
 				|--------------------------------------------------------------------------
 				|
 				*/
-				Ticket::generateTicket('maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+				$pc = Pc::isPc($tag);
+				if(count($pc) > 0)
+				{
+					/*
+					|--------------------------------------------------------------------------
+					|
+					| 	set the item status to underrepair
+					|
+					|--------------------------------------------------------------------------
+					|
+					*/
+					if($underrepair == true)
+					{
+						Pc::setItemStatus($pc->id,'undermaintenance');
+					}	
+
+					Ticket::generatePcTicket($pc->id,'maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+				} 
+				else
+				{
+					
+					/*
+					|--------------------------------------------------------------------------
+					|
+					| 	Create general ticket
+					|
+					|--------------------------------------------------------------------------
+					|
+					*/
+					Ticket::generateTicket('maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+				}
+
 			}
+		}
+	}
+
+	public static function changeStatus($tag,$status)
+	{
+
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Check if the equipment is connected to pc
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$pc = PcTicket::ticket($tag)->first();
+		if(count($pc) > 0)
+		{
+			Pc::setItemStatus($pc->pc_id,$status);
+		} 
+		
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Check if the tag is equipment
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$itemticket = ItemTicket::ticketID($tag)->first();
+		if( count($itemticket) > 0)
+		{
+			ItemProfile::setItemStatus($itemticket->item_id,$status);
+		} 
+	}
+
+	public static function condemnTicket($tag)
+	{
+		$author = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
+		$details = 'Item Condemned on ' . Carbon::now() . 'by ' . $author;
+		$staffassigned = Auth::user()->id;
+		$ticket_id = null;
+		$status = 'Closed';
+		$tickettype = 'condemn';
+		$ticketname = 'Item Condemn';
+
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Check if the tag is equipment
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		$itemprofile = ItemProfile::propertyNumber($tag)->first();
+		if(isset($itemprofile->id))
+		{
+			Ticket::generateEquipmentTicket($itemprofile->id,$tickettype,$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+		
 		}
 	}
 }

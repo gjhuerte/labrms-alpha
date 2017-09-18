@@ -13,7 +13,7 @@ class CreateFacultyviewTable extends Migration {
 	public function up()
 	{
 		DB::statement("CREATE VIEW facultyview AS
-                        SELECT lastname,firstname,middlename
+                        SELECT id,lastname,firstname,middlename
                         FROM user
                         WHERE type IN ('faculty','FACULTY','Faculty');");
 	}

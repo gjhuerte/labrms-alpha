@@ -16,11 +16,14 @@ class CreateRoomLogTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('login_id')->nullable()->unsigned();
-			$table->foreign('login_id')->references('id')->on('log');
+			$table->foreign('login_id')->references('id')->on('log')
+									->onUpdate('cascade');
 			$table->integer('logout_id')->nullable()->unsigned();
-			$table->foreign('logout_id')->references('id')->on('log');
+			$table->foreign('logout_id')->references('id')->on('log')
+									->onUpdate('cascade');
 			$table->integer('room_id')->unsigned();
-			$table->foreign('room_id')->references('id')->on('room');
+			$table->foreign('room_id')->references('id')->on('room')
+									->onUpdate('cascade');
 			$table->string('facultyincharge',100);
 			$table->string('section',20);
 			$table->timestamps();

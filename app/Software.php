@@ -14,21 +14,21 @@ class Software extends \Eloquent{
 
 	public static $rules = array(
 		'Software Name' => 'required|min: 2|max: 100',
-		'Software Type' => 'required|min: 2|max: 100|in:Programming,Database,Multimedia,Networking',
+		'Software Type' => 'required|min: 2|max: 100',
 		'License Type' => 'required|min: 2|max: 100',
 		'Company' => 'min: 2|max: 100',
 		'Minimum System Requirement' => 'min: 2|max: 100',
-		'Maximum System Requirement' => 'min: 2|max: 100'
+		'Recommended System Requirement' => 'min: 2|max: 100'
 
 	);
 
 	public static $updateRules = array(
 		'Software Name' => 'alpha|min: 2|max: 100',
-		'Software Type' => 'alpha|min: 2|max: 100|in:Programming,Database,Multimedia,Networking',
+		'Software Type' => 'alpha|min: 2|max: 100',
 		'License Type' => 'alpha|min: 2|max: 100',
 		'Company' => 'alpha|min: 2|max: 100',
 		'Minimum System Requirement' => 'alpha|min: 2|max: 100',
-		'Maximum System Requirement' => 'alpha|min: 2|max: 100'
+		'Recommended System Requirement' => 'alpha|min: 2|max: 100'
 	);
 
 	public static $types = [

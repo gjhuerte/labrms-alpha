@@ -36,4 +36,9 @@ class MaintenanceActivity extends \Eloquent{
     return ucwords($value);
   }
 
+  public function scopeType($query,$type)
+  {
+    return $query->where('type','=',$type);
+  }
+
 }

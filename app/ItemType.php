@@ -3,31 +3,66 @@
 namespace App;
 
 use DB;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class ItemType extends \Eloquent{
-		use SoftDeletes;
-	//Database driver
-	/*
-		1 - Eloquent (MVC Driven)
-		2 - DB (Directly query to SQL database, no model required)
-	*/
+	// use SoftDeletes;
 
-	//The table in the database used by the model.
+	/**
+	*
+	* table name
+	*
+	*/	
 	protected $table = 'itemtype';
-	protected $dates = ['deleted_at'];
 
-	//The attribute that used as primary key.
+	/**
+	*
+	* primary key
+	*
+	*/
 	protected $primaryKey = 'id';
+
+	/**
+	*
+	*	fields to be set as date
+	*
+	*/
+	// protected $dates = ['deleted_at'];
+
+	/**
+	*
+	* created_at and updated_at status
+	*
+	*/
 	public $timestamps = true;
-	public $fillable = ['name','description','category'];
-	//Validation rules!
+
+	/**
+	*
+	* used for create method
+	*
+	*/  
+	public $fillable = [
+		'name',
+		'description',
+		'category'
+	];
+
+	/**
+	*
+	* validation rules
+	*
+	*/
 	public static $rules = array(
 		'name' => 'required|min:2|max:50|unique:itemtype,name',
 		'description' => 'required|min:5|max:450'
 	);
 
+	/**
+	*
+	* update rules
+	*
+	*/
 	public static $updateRules = array(
 		'name' => 'min:2|max:50',
 		'description' => 'min:5|max:450'

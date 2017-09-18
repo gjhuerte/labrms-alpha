@@ -39,8 +39,17 @@ Inventory | Supplies
 				<li><a href="{{ url('supplies') }}">Supplies</a></li>
 				<li class="active">Add</li>
 			</ul>
+			<div class="form-group">
+				<div class="col-sm-12">
+				{{ Form::label('ris','Requisition and Issue Slip') }}
+				{{ Form::text('ris',Input::old('ris'),[
+					'class' => 'form-control',
+					'placeholder' => 'Requisition and Issue Slip',
+					'id' => 'brand'
+				]) }}
+				</div>
+			</div>
 			<div id="alert-existing"></div>
-			<!-- item name -->
 			<div class="form-group">
 				<div class="col-sm-12">
 				{{ Form::label('brand','Brand') }}

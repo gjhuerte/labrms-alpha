@@ -6,8 +6,8 @@ Supply History
 @include('layouts.navbar')
 @stop
 @section('content')
-<div class="container">
-	<div class="col-sm-offset-2 col-sm-8">
+<div class="container-fluid">
+	<div class="col-sm-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<legend><h3 class="text-muted">Supply History</h3></legend>
@@ -17,7 +17,7 @@ Supply History
 					<li class="active">{{ $supply->brand }}</li>
 				</ul>
 				<div class="table-responsive">
-					<table class="table table-hover" id="supplyHistoryTable">
+					<table class="table table-hover table-striped table-bordered" id="supplyHistoryTable">
 						<thead>
 							<th>Date</th>
 							<th>Quantity</th>

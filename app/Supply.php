@@ -4,6 +4,7 @@ namespace App;
 
 use DB;
 use App\SupplyHistory;
+use App\ItemType;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,7 @@ class Supply extends \Eloquent{
 	//Validation rules!
 	protected $primaryKey = 'id';
 	public static $rules = array(
+		'Requisition and Issue Slip' => 'required',
 		'Item Type' => 'required|exists:Itemtype,id',
 		'Brand' => 'min:2|max:100',
 		'Unit' => 'required|alpha',
@@ -45,6 +47,12 @@ class Supply extends \Eloquent{
 	public function scopeBrand($query,$brand)
 	{
 		return $query->where('brand','=',$brand);
+	}
+
+	public function scopeItemType($query,$name)
+	{
+		$itemtype = ItemType::where('name','=',$name)->first();
+		return $query->where('itemtype_id','=',$itemtype->id);
 	}
 
 	/*

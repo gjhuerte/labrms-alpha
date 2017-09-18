@@ -21,68 +21,68 @@ class UserTableSeeder extends Seeder {
 		   'username' => 'admin',
 		   'password' => Hash::make('12345678'),
 		   'accesslevel' =>'0',
-			 'firstname' => 'Administrator',
+			 'firstname' => 'Carlo',
 			 'middlename' => '',
-			 'lastname' => 'Only',
+			 'lastname' => 'Inovero',
 			 'contactnumber' => '09123456789',
-			 'email' => 'admin@yahoo.com',
+			 'email' => 'cginovero@gmail.com',
 			 'type' => 'faculty',
 			 'status' => '1'
 		));
 
 		//insert some dummy records
 		User::create(array(
-		   'username' => 'labassistant',
+		   'username' => 'jheotestor',
 		   'password' => Hash::make('12345678'),
 		   'accesslevel' =>'1',
-			 'firstname' => 'Laboratory',
+			 'firstname' => 'Jheo',
 			 'middlename' => '',
-			 'lastname' => 'Assistant',
+			 'lastname' => 'Testor',
 			 'contactnumber' => '09123456789',
-			 'email' => 'labassistant@yahoo.com',
+			 'email' => 'email@email.com',
 			 'type' => 'faculty',
 			 'status' => '1'
 		));
 
 		//insert some dummy records
 		User::create(array(
-		   'username' => 'labstaff',
+		   'username' => 'kristian',
 		   'password' => Hash::make('12345678'),
 		   'accesslevel' =>'2',
-			 'firstname' => 'Laboratory',
+			 'firstname' => 'Kristian',
 			 'middlename' => '',
-			 'lastname' => 'Staff',
+			 'lastname' => 'Espinosa',
 			 'contactnumber' => '09123456789',
-			 'email' => 'labstaff@yahoo.com',
-			 'type' => 'faculty',
+			 'email' => 'email@email.com',
+			 'type' => 'student',
 			 'status' => '1'
 		));
 
 		//insert some dummy records
 		User::create(array(
-		   'username' => 'faculty',
+		   'username' => 'ajablir',
 		   'password' => Hash::make('12345678'),
 		   'accesslevel' =>'3',
-			 'firstname' => 'Faculty',
+			 'firstname' => 'Adrian Joseph',
 			 'middlename' => '',
-			 'lastname' => 'Office',
+			 'lastname' => 'Ablir',
 			 'contactnumber' => '09123456789',
-			 'email' => 'faculty@yahoo.com',
+			 'email' => 'email@email.com',
 			 'type' => 'faculty',
 			 'status' => '1'
 		));
 
 		//insert some dummy records
 		User::create(array(
-		   'username' => 'student',
+		   'username' => 'gabriel',
 		   'password' => Hash::make('12345678'),
 		   'accesslevel' =>'4',
-			 'firstname' => 'John',
+			 'firstname' => 'Gabriel Jay',
 			 'middlename' => '',
-			 'lastname' => 'Doe',
+			 'lastname' => 'Huerte',
 			 'contactnumber' => '09123456789',
-			 'email' => 'johndoe@yahoo.com',
-			 'type' => 'johndoe',
+			 'email' => 'gjhuerte@gmail.com',
+			 'type' => 'student',
 			 'status' => '1'
 		));
 	}

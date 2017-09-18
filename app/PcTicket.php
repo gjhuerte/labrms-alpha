@@ -12,14 +12,13 @@ class PcTicket extends \Eloquent{
 	public $timestamps = true;
 	public $fillable = ['pc_id','ticket_id'];
 
-	public function ticket()
-	{
-		return $this->hasMany('Ticket','ticket_id','ticket_id');
-	}
-
 	public function scopeTicket($query,$value)
 	{
-		$query->where('ticket_id','=',$value);
+		return $query->where('ticket_id','=',$value);
 	}
 
+	// public function ticket()
+	// {
+	// 	return $this->hasMany('App\Ticket','ticket_id','ticket_id');
+	// }
 }

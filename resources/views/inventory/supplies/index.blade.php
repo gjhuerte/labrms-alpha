@@ -71,7 +71,7 @@ Inventory | Supplies
 			language: {
 					searchPlaceholder: "Search..."
 			},
-			"dom": "<'row'<'col-sm-9'<'toolbar'>><'col-sm-3'f>>" +
+			"dom": "<'row'<'col-sm-3'l><'col-sm-6'<'toolbar'>><'col-sm-3'f>>" +
 							"<'row'<'col-sm-12'tr>>" +
 							"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 	    	columnDefs:[
@@ -92,11 +92,11 @@ Inventory | Supplies
 	    });
 
 	 	$("div.toolbar").html(`
-				<button id="add" class="btn btn-flat btn-md btn-primary" data-toggle='modal' data-target='#createSuppliesModal' style="padding: 10px;">
+				<button id="add" class="btn btn-md btn-primary" data-toggle='modal' data-target='#createSuppliesModal'>
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 					<span id="nav-text"> Add</span>
 				</button>
-				<button id="consume" class="btn btn-default btn-flat" type="button" style="padding: 10px;">
+				<button id="consume" class="btn btn-default" type="button">
 					<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
 					<span class="hidden-sm hidden-xs"> Release</span>
 				</button>

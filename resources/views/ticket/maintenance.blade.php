@@ -64,7 +64,7 @@ Ticket | Maintenance
 				<div id="activity-field">
 					<div class="form-group">
 						<div class="col-sm-12">
-						{{ Form::label('activity','Actvitity Done') }}
+						{{ Form::label('activity','Activity Done') }}
 						{{ Form::select('activity',$activity,Input::old('activity'),[
 							'id' => 'activity',
 							'class' => 'form-control'
@@ -148,8 +148,19 @@ Ticket | Maintenance
 						if(response.systemunit_id != null || response.monitor_id != null)
 						{
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Good News!</strong> This tag belongs to a PC
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Workstation Information
+									</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Workstation Name:  `+response.name+`</li>
+									  <li class="list-group-item">System Unit:  `+response.systemunit.propertynumber+`</li>
+									  <li class="list-group-item">Monitor:  `+response.monitor.propertynumber+`</li>
+									  <li class="list-group-item">AVR: `+response.avr.propertynumber+`</li>
+									  <li class="list-group-item">Keyboard:  `+response.keyboard.propertynumber+`</li>
+									  <li class="list-group-item">Mouse:  `+response.mouse+`</li>
+									  <li class="list-group-item">Status: `+response.systemunit.status+`</li>
+									</ul>
 								</div>
 							`);
 							$('#undermaintenance-tag').show()
@@ -158,8 +169,15 @@ Ticket | Maintenance
 						if(response.propertynumber != null)
 						{
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Great!</strong> You can link this tag to an equipment
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Item Profile
+									</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Property Number:  `+response.propertynumber+`<span id="transfer-date"></span></li>
+									  <li class="list-group-item">Serial Number: `+response.serialnumber+` <span id="transfer-tag"></span></li>
+									  <li class="list-group-item">Status: `+response.status+`<span id="transfer-title"></span></li>
+									</ul>
 								</div>
 							`);
 							$('#undermaintenance-tag').show()
@@ -168,8 +186,21 @@ Ticket | Maintenance
 						if(response.name != null)
 						{
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Great!</strong> You've inputted a correct room name
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Room Information
+									</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Room Name:  `+response.name+`</li>
+									  <li class="list-group-item">Category:  `+response.description+`</li>
+									</ul>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<input type="checkbox" name="include-workstation" />
+										Include workstations assigned to this room? 
+										<p class="text-muted"></p>
+									</div>
 								</div>
 							`);
 							$('#undermaintenance-tag').hide()

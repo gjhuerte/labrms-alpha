@@ -22,14 +22,13 @@ class RoomsController extends Controller {
 		if(Request::ajax())
 		{
 			return json_encode([
-					'data'=> Room::select('name','id','description')->get()
+					'data'=> Room::all()
 				]);
 		}
 
 		$rooms = Room::all();
 		return view('room.index')
-			->with('rooms',$rooms)
-			->with('active_tab','overview');
+			->with('rooms',$rooms);
 	}
 
 
@@ -52,11 +51,13 @@ class RoomsController extends Controller {
 	{
 		$name = $this->sanitizeString(Input::get("name"));
 		$description = $this->sanitizeString(Input::get('description'));
+		$category = $this->sanitizeString(implode(Input::get('category'),","));
 
 		$validator = Validator::make([
 
-				'Name' => $name,
-				'Description' => $description
+			'Name' => $name,
+			'Description' => $description,
+			'Category' => $category
 
 		],Room::$rules);
 
@@ -70,6 +71,8 @@ class RoomsController extends Controller {
 		$room = new Room;
 		$room->name = $name;
 		$room->description = $description;
+		$room->category = $category;
+		$room->status = 'working';
 		$room->save();
 
 		Session::flash('success-message','Room information created!');
@@ -85,7 +88,9 @@ class RoomsController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+		$room = Room::find($id);
+		return view('room.show')
+				->with('room',$room);
 	}
 
 
@@ -111,14 +116,15 @@ class RoomsController extends Controller {
 	 */
 	public function update($id)
 	{
-		$id = $this->sanitizeString(Input::get('id'));
 		$name = $this->sanitizeString(Input::get("name"));
 		$description = $this->sanitizeString(Input::get('description'));
+		$category = $this->sanitizeString(implode(Input::get('category'),","));
 
 		$validator = Validator::make([
 
 			'Name' => $name,
-			'Description' => $description
+			'Description' => $description,
+			'Category' => $category
 
 		],Room::$updateRules);
 
@@ -132,6 +138,8 @@ class RoomsController extends Controller {
 		$room = Room::find($id);
 		$room->name = $name;
 		$room->description = $description;
+		$room->category = $category;
+		$room->status = 'working';
 		$room->save();
 
 		Session::flash('success-message','Room information updated!');
@@ -173,5 +181,10 @@ class RoomsController extends Controller {
 		return redirect('room/view/restore');
 	}
 
+	public function getRoomName($id)
+	{
+		$room = Room::find($id);
+		return json_encode($room->name);
+	}
 
 }

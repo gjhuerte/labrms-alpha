@@ -4,6 +4,7 @@ namespace App;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use App\FacultyView;
 
 class RoomSchedule extends \Eloquent{
 	//Database driver
@@ -21,5 +22,26 @@ class RoomSchedule extends \Eloquent{
 	public $fillable = ['room_id','faculty','academicyear','semester','day','timein','timeout','subject','section'];
 	//Validation rules!
 	public static $rules = array(
-		'subject' => 'required|min:2|max:50|unique:itemtype,name'
+		'Subject' => 'required|min:2|max:50',
+		'Day' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+		'Room' => 'exists:room,id',
+		'Semester' => 'exists:systemtime,semester',
+		'Academic Year' => 'exists:systemtime,academicyear',
+		'Faculty' => 'exists:user,id'
 	);
+
+	public static $updateRules = array(
+		'Subject' => 'min:2|max:50',
+		'Room' => 'exists:room,id',
+		'Semester' => 'exists:systemtime,semester',
+		'Academic Year' => 'exists:systemtime,academicyear',
+		'Faculty' => 'exists:user,id'
+	);
+
+	public function faculty()
+	{
+		return $this->belongsTo('App\FacultyView','faculty','id');
+	}
+
+
+}

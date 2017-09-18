@@ -17,6 +17,7 @@ Room Inventory
 @section('content')
 <div class="container-fluid" id="page-body">
 	<div class="" style="background-color: white;padding: 20px;">
+		<legend><h3 class="text-muted">Room Inventory</h3></legend>
 		<table class="table table-hover table-condensed table-bordered table-responsive" id="roomTable">
 			<thead>
 				<th>Item Model</th>
