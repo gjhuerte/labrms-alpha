@@ -164,5 +164,38 @@ class MaintenanceActivityController extends Controller {
 		return redirect('maintenance/activity');
 	}
 
+	/**
+	*	input type and returns maintenance activity
+	*	based on the said type
+	*	@param type
+	*	@return list of maintenance activity
+	*
+	*/
+	public function getMaintenanceActivity()
+	{
+		if(Request::ajax())
+		{
+			$type = $this->sanitizeString(Input::get('type'));
+
+			return json_encode(MaintenanceActivity::type($type)->pluck('activity','id'));
+		}
+	}
+
+	public function getAllMaintenanceActivity()
+	{
+
+		return json_encode(['data'=>MaintenanceActivity::all()]);
+	}
+
+	public function getPreventiveMaintenanceActivity()
+	{
+		return json_encode(MaintenanceActivity::where('type','preventive')->select('problem')->get());
+	}
+
+	public function getCorrectiveMaintenanceActivity()
+	{
+		return json_encode(MaintenanceActivity::where('type','corrective')->select('problem')->get());
+	}
+
 
 }

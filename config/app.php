@@ -2,6 +2,31 @@
 
 return [
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Company Details
+    |--------------------------------------------------------------------------
+    |
+    | The value inputted in the field is equivalent to the clients basic information
+    | To change the values, you need to update the environment variable for it to work
+    */
+
+    'company' => [
+
+        'header' => env('COMPANY_HEADER','Main Header'),
+
+        'subheader' => env('COMPANY_SUBHEADER','Secondary Header'),
+
+        'department' => env('COMPANY_SUBHEADER','Main Department'), 
+
+        'subdepartment' => env('COMPANY_SUBDEPARTMENT','Secondary Department'),
+
+        'image' => env('COMPANY_IMAGE','Main Image Link'),
+
+        'subimage' => env('COMPANY_SUBIMAGE','Secondary Image Link')
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -120,7 +145,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
@@ -177,6 +202,23 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+
+        /*
+        * Backpack Service Providers...
+        */
+        Backpack\Base\BaseServiceProvider::class,
+        Backpack\CRUD\CrudServiceProvider::class,
+        Backpack\LangFileManager\LangFileManagerServiceProvider::class,
+
+        Spatie\Backup\BackupServiceProvider::class,
+        Backpack\BackupManager\BackupManagerServiceProvider::class,
+
+        Backpack\LogManager\LogManagerServiceProvider::class,   
+
+        Backpack\Settings\SettingsServiceProvider::class,
+
+        Cviebrock\EloquentSluggable\ServiceProvider::class, 
+        Backpack\PageManager\PageManagerServiceProvider::class,
 
     ],
 

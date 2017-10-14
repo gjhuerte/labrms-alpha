@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Inventory;
 use App\Receipt;
+use App\ItemType;
+use App;
 use Session;
 use Validator;
 use Illuminate\Support\Facades\Request;
@@ -39,7 +41,30 @@ class ItemInventoryController extends Controller {
 	 */
 	public function create()
 	{
-		return view('inventory.item.create');
+		$brand = null;
+		$model = null;
+		$itemtype = null;
+
+		if(Input::has('brand'))
+		{
+			$brand = $this->sanitizeString(Input::get('brand'));
+		}
+		
+		if(Input::has('model'))
+		{
+			$model = $this->sanitizeString(Input::get('model'));
+		}
+		
+		if(Input::has('itemtype'))
+		{
+			$itemtype = $this->sanitizeString(Input::get('itemtype'));
+			$itemtype = ItemType::type($itemtype)->pluck('id')->first();
+		}
+
+		return view('inventory.item.create')
+					->with('brand',$brand)
+					->with('model',$model)
+					->with('itemtype',$itemtype);
 	}
 
 	/**
@@ -58,7 +83,7 @@ class ItemInventoryController extends Controller {
 		$fundcode = $this->sanitizeString(Input::get('fundcode'));
 
 		$validator = Validator::make([
-				'Acknowledgement Receipt' => $number,
+				'Property Acknowledgement Receipt' => $number,
 				'Purchase Order Number' => $ponumber,
 				'Purchase Order Date' => $podate,
 				'Invoice Number' => $invoicenumber,
@@ -101,7 +126,7 @@ class ItemInventoryController extends Controller {
 				->withErrors($validator);
 		}
 
-		Inventory::createRecord([
+		$inventory = Inventory::createRecord([
 			'brand' => $brand,
 			'itemtype' => $itemtype,
 			'model' => $model,
@@ -118,6 +143,11 @@ class ItemInventoryController extends Controller {
 			'fundcode' => $fundcode
 		]);
 
+		if(Input::has('redirect-profiling'))
+		{
+			return redirect("item/profile/create?id=$inventory->id");
+		}
+
 		Session::flash('success-message','Items added to Inventory');
 		return redirect('inventory/item');
 	}
@@ -131,6 +161,13 @@ class ItemInventoryController extends Controller {
 	 */
 	public function show($id)
 	{
+
+		if($id == 'search')
+		{
+			return $this->searchView();
+		}
+
+
 		if(Request::ajax())
 		{
 			return json_encode(
@@ -146,7 +183,8 @@ class ItemInventoryController extends Controller {
 
 	public function edit($id)
 	{
-		try{
+		try
+		{
 			$inventory = Inventory::find($id);
 			return view('inventory.item.edit')
 					->with('inventory',$inventory);
@@ -255,4 +293,80 @@ class ItemInventoryController extends Controller {
 		}
 	}
 
+	public function searchView()
+	{
+		$brand = App\Inventory::distinct('brand')->pluck('brand','brand');
+		$model = App\Inventory::distinct('brand')->pluck('model','model');
+		$itemtype = App\ItemType::distinct()->pluck('name','name');
+		return view('inventory.item.search')
+					->with('brand',$brand)
+					->with('model',$model)
+					->with('itemtype',$itemtype)
+					->with('inventory',[]);
+	}
+
+	public function search()
+	{
+		// return Input::all();
+		$keyword = $this->sanitizeString(Input::get('keyword'));
+		$total = $this->sanitizeString(Input::get('total'));
+		$brand = $this->sanitizeString(Input::get('brand'));
+		$model = $this->sanitizeString(Input::get('model'));
+		$itemtype = $this->sanitizeString(Input::get('itemtype'));
+		$profiled = $this->sanitizeString(Input::get('profiled'));
+
+		$inventory = new App\Inventory;
+
+		if($this->hasData($keyword))
+		{
+			$inventory = $inventory->where(function($query) use ($keyword){
+				$query->where('brand','like','%'.$keyword.'%')
+						->orWhere('model','like','%'.$keyword.'%')
+						->orWhere('details','like','%'.$keyword.'%')
+						->orWhere('warranty','like','%'.$keyword.'%')
+						->orWhere('unit','like','%'.$keyword.'%')
+						->orWhere('quantity','like','%'.$keyword.'%')
+						->orWhere('profileditems','like','%'.$keyword.'%');
+			});
+		}
+
+		if(Input::get('include-total') == 'on')
+		{
+			$inventory = $inventory->where('quantity','like','%'.$total.'%');
+		}
+
+		if(Input::get('include-profiled') == 'on')
+		{
+			$inventory = $inventory->where('quantity','like','%'.$profiled.'%');
+		}
+
+		if(Input::get('include-brand') == 'on')
+		{
+			$inventory = $inventory->where('quantity','like','%'.$brand.'%');
+		}
+
+		if(Input::get('include-model') == 'on')
+		{
+			$inventory = $inventory->where('quantity','like','%'.$model.'%');
+		}
+
+		if(Input::get('include-itemtype') == 'on')
+		{
+			$inventory = $inventory->where('quantity','like','%'.$itemtype.'%');
+		}
+
+		$count = $inventory->count();
+
+		Session::flash('success-message',"Search Result: $count");
+
+		$brand = App\Inventory::distinct('brand')->pluck('brand','brand');
+		$model = App\Inventory::distinct('brand')->pluck('model','model');
+		$itemtype = App\ItemType::distinct()->pluck('name','name');
+		return view('inventory.item.search')
+					->with('brand',$brand)
+					->with('model',$model)
+					->with('itemtype',$itemtype)
+					->with('inventory',$inventory->get());
+
+	}
 }

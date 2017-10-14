@@ -21,6 +21,10 @@ Inventory
 	th , tbody{
 		text-align: center;
 	}
+
+	td{
+		font-size:12px;
+	}
 </style>
 @stop
 @section('script-include')
@@ -31,27 +35,27 @@ Inventory
 @include('modal.inventory.item.assign')
 	<div class="col-md-12">
 		<div class="panel panel-body table-responsive">
+			<legend><h3 class="text-muted">{{ $inventory->itemtype->name }} Inventory</h3></legend>
 			<ol class="breadcrumb">
 			  <li><a href="{{ url('inventory/item') }}">Item Inventory</a></li>
 			  <li class="active">{{{ $inventory->model }}}</li>
 			</ol>
-			<legend><h3 class="text-muted">{{ $inventory->itemtype->name }} Inventory</h3></legend>
 			<p class="text-muted">Note: Actions will be shown when a row has been selected</p>	
 			<table class="table table-hover table-striped table-bordered table-condensed" id="itemProfileTable" cellspacing="0" width="100%">
 				<thead>
 		          <tr rowspan="2">
-		              <th class="text-left" colspan="3">Brand:  
+		              <th class="text-left" colspan="4">Brand:  
 		                <span style="font-weight:normal">{{ $inventory->brand }}</span> 
 		              </th>
-		              <th class="text-left" colspan="3">Model:  
+		              <th class="text-left" colspan="4">Model:  
 		                <span style="font-weight:normal">{{ $inventory->model }}</span> 
 		              </th>
 		          </tr>
 		          <tr rowspan="2">
-		              <th class="text-left" colspan="3">Item Type:  
+		              <th class="text-left" colspan="4">Item Type:  
 		                <span style="font-weight:normal">{{ $inventory->itemtype->name }}</span>  
 		              </th>
-		              <th class="text-left" colspan="3"> 
+		              <th class="text-left" colspan="4"> 
 		              </th>
 		          </tr>
 		          	<tr>
@@ -60,7 +64,9 @@ Inventory
 						<th>Serial Number</th>
 						<th>Location</th>
 						<th>Date Received</th>
+						<th>Date Profiled</th>
 						<th>Status</th>
+						<th class="no-sort"></th>
 					</tr>
 				</thead>
 			</table>
@@ -78,13 +84,16 @@ Inventory
 			select: {
 				style: 'single'
 			},
+	    	columnDefs:[
+				{ targets: 'no-sort', orderable: false },
+	    	],
 			language: {
 					searchPlaceholder: "Search..."
 			},
 	    	"dom": "<'row'<'col-sm-2'l><'col-sm-7'<'toolbar'>><'col-sm-3'f>>" +
 						    "<'row'<'col-sm-12'tr>>" +
 						    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-		"processing": true,
+			"processing": true,
 				ajax: "{{ url("item/profile/$inventory->id") }}",
 				columns: [
 						{ data: "id" },
@@ -94,16 +103,26 @@ Inventory
 						{data: function(callback){
 							return moment(callback.datereceived).format("dddd, MMMM Do YYYY");
 						}},
-						{ data: "status" }
+						{data: function(callback){
+							return moment(callback.created_at).format("dddd, MMMM Do YYYY");
+						}},
+						{ data: "status" },
+						{ data: function(callback){
+							return `
+							<a href="{{ url('item/profile/history') }}/`+callback.id+`" class="btn btn-xs btn-block btn-default">
+								View
+							</a>
+							`
+						} }
 				],
 		});
 
 		$("div.toolbar").html(`
-		  	<button class="btn btn-success btn-flat" data-toggle="modal" data-target="#assignModal" id="assign" style="padding:10px;">
+		  	<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#assignModal" id="assign">
 		  		<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> Assign
 		  	</button>
 			<div class="btn-group">
-				<button id="delete" class="btn btn-danger btn-flat" type="button" style="padding:10px">
+				<button id="delete" class="btn btn-danger btn-sm" type="button">
 					<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 					<span class="hidden-sm hidden-xs">Condemn</span>
 				</button>
@@ -126,6 +145,9 @@ Inventory
 
 		$('#assign').on('click',function(){
 			$('#assign-item').val(table.row('.selected').data().id)
+			$('#assign-propertynumber').text(table.row('.selected').data().propertynumber)
+			$('#assign-serialid').text(table.row('.selected').data().serialnumber)
+			$('#assign-location').text(table.row('.selected').data().location)
 		})
 
 		$('#edit').on('click',function(){

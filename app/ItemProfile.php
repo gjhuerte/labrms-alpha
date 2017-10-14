@@ -16,35 +16,80 @@ use Illuminate\Database\Eloquent\Model;
 
 class ItemProfile extends \Eloquent{
 	use SoftDeletes;
-	//Database driver
-	/*
-		1 - Eloquent (MVC Driven)
-		2 - DB (Directly query to SQL database, no model required)
-	*/
-	//The table in the database used by the model.
+
+	/**
+	*
+	* table name
+	*
+	*/	
 	protected $table = 'itemprofile';
-	protected $dates = ['deleted_at'];
-	public $timestamps = true;
-	public $fillable = ['property_number','serialid','location','datereceived','status'];
-	//Validation rules!
+
+	/**
+	*
+	* primary key
+	*
+	*/
 	protected $primaryKey = 'id';
+
+	/**
+	*
+	*	fields to be set as date
+	*
+	*/
+	protected $dates = ['deleted_at'];
+
+	/**
+	*
+	* created_at and updated_at status
+	*
+	*/
+	public $timestamps = true;
+
+	/**
+	*
+	* used for create method
+	*
+	*/  
+	public $fillable = [
+		'property_number',
+		'serialid',
+		'location',
+		'datereceived',
+		'status'
+	];
+
+	/**
+	*
+	* validation rules
+	*
+	*/
 	public static $rules = array(
 		'Property Number' => 'required|min:5|max:100|unique:itemprofile,propertynumber',
 		'Serial Number' => 'required|min:5|max:100|unique:itemprofile,serialnumber',
-		'Location' =>'required|min:5|max:100',
+		'Location' =>'required',
 		'Date Received' =>'required|date',
 		'Status' =>'required|min:5|max:50'
 
 	);
 
+	/**
+	*
+	* update rules
+	*
+	*/
 	public static $updateRules = array(
 		'Property Number' => 'min:5|max:100',
 		'Serial Number' => 'min:5|max:100',
-		'Location' =>'min:5|max:100',
+		'Location' =>'',
 		'Date Received' =>'date',
 		'Status' =>'min:5|max:50'
 
 	);
+
+	public function itemtype()
+	{
+		return $this->hasManyThrough('App\ItemType','App\Inventory','id','id');
+	}
 
 	/*
 	*
@@ -106,6 +151,11 @@ class ItemProfile extends \Eloquent{
 		return $this->belongsToMany('App\Ticket','item_ticket','item_id','ticket_id');
 	}
 
+	public function scopeLocation($query,$location)
+	{
+		return $query->where('location','=',$location);	
+	}
+
 	/*
 	*
 	*	Limit the scope by propertynumber
@@ -115,6 +165,50 @@ class ItemProfile extends \Eloquent{
 	public function scopePropertyNumber($query,$propertynumber)
 	{
 		return $query->where('propertynumber','=',$propertynumber);
+	}
+
+	public static function assignToRoom($item,$room)
+	{
+
+		$itemprofile = Itemprofile::find($item);
+		$author = Auth::user()->firstname . " " . Auth::user()->middlename . " " . Auth::user()->lastname;
+		$details = "$itemprofile->propertynumber assigned to $room->name by $author";
+		$tickettype = 'Transfer';
+		$ticketname = 'Transfer';
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Save
+		|	1 - If existing update
+		|	2 - If not create new record
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/			
+
+		$itemprofile->location = $room->name;
+		if($itemprofile->deployment == null)
+		{
+			$itemprofile->deployment = Carbon::now();
+			$ticketname = 'Deployment';
+		}
+		$itemprofile->save();
+
+		if(count($itemprofile->room) > 0)
+		{
+			$itemprofile->room()->sync([ 'room_id'=>$room->id ]);
+		}		
+		else
+		{
+			$roominventory = new RoomInventory;
+			$roominventory->room_id = $room->id;
+			$roominventory->item_id = $item;
+			$roominventory->save();
+		}
+
+		Ticket::generateEquipmentTicket($item,$tickettype,$ticketname,$details,$author,Auth::user()->id,null,'Closed');
+
+
 	}
 
 	/**
@@ -239,6 +333,7 @@ class ItemProfile extends \Eloquent{
 		$itemprofile->status = 'working';
 		$itemprofile->inventory_id = $inventory_id;
 		$itemprofile->receipt_id = $receipt_id;
+		$itemprofile->profiled_by = Auth::user()->firstname . " " . Auth::user()->middlename . " " .Auth::user()->lastname;
 		$itemprofile->save();	
 
 		/*
@@ -357,10 +452,10 @@ class ItemProfile extends \Eloquent{
 	*/
 	public function scopeUnassembled($query)
 	{
-		return $query->whereNotIn('id',Pc::pluck('systemunit_id'))
-					->whereNotIn('id',Pc::pluck('monitor_id'))
-					->whereNotIn('id',Pc::pluck('keyboard_id'))
-					->whereNotIn('id',Pc::pluck('avr_id'));
+		return $query->whereNotIn('id',Pc::whereNotNull('systemunit_id')->pluck('systemunit_id'))
+					->whereNotIn('id',Pc::whereNotNull('monitor_id')->pluck('monitor_id'))
+					->whereNotIn('id',Pc::whereNotNull('keyboard_id')->pluck('keyboard_id'))
+					->whereNotIn('id',Pc::whereNotNull('avr_id')->pluck('avr_id'));
 	}
 
 	/**
@@ -391,7 +486,7 @@ class ItemProfile extends \Eloquent{
 			*	get the item profile
 			*	assign to $item variable
 			*/
-			$item = ItemProfile::find($_item->id);
+			$item = ItemProfile::find($_item);
 
 			/*
 			*	set item location
@@ -435,8 +530,13 @@ class ItemProfile extends \Eloquent{
 			*	create room inventory
 			*	room inventory links item and room
 			*/
-			RoomInventory::createRecord($room,$item->id);
+			RoomInventory::createRecord($room,$item);
 		}
+	}
+
+	public function getIDFromPropertyNumber($propertynumber)
+	{
+		return ItemProfile::propertyNumber($propertynumber)->pluck('id');
 	}
 
 }

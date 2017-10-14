@@ -27,27 +27,27 @@ Inventory | Create
 <div class="container-fluid" id="page-body">
 	<div class='col-md-offset-3 col-md-6'>
 		<div class="panel panel-body" style="padding-top: 20px;padding-left: 40px;padding-right: 40px;">
-	      @if (count($errors) > 0)
-         	 <div class="alert alert-danger alert-dismissible" role="alert">
-	          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	              <ul class="list-unstyled" style='margin-left: 10px;'>
-	                  @foreach ($errors->all() as $error)
-	                      <li class="text-capitalize">{{ $error }}</li>
-	                  @endforeach
-	              </ul>
-	          </div>
-	      @endif
 	 		{{ Form::open(['method'=>'post','route'=>'inventory.item.store','class'=>'form-horizontal','id'=>'inventoryForm']) }}
+			<legend><h3 style="color:#337ab7;"><span id="form-name">Receipt</span></h3></legend>
 			<ul class="breadcrumb">
 				<li><a href="{{ url('inventory/item') }}">Item Inventory</a></li>
 				<li class="active">Create</li>
 			</ul>
+			@if (count($errors) > 0)
+				 <div class="alert alert-danger alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			      <ul class="list-unstyled" style='margin-left: 10px;'>
+			          @foreach ($errors->all() as $error)
+			              <li class="text-capitalize">{{ $error }}</li>
+			          @endforeach
+			      </ul>
+			  </div>
+			@endif
 	 		<div id="receipt">
-				<legend><h3 style="color:#337ab7;">Receipt</h3></legend>
 				<!-- item name -->
 				<div class="form-group">
 					<div class="col-sm-12">
-					{{ Form::label('number','Receipt') }}
+					{{ Form::label('number','Property Acknowledgement Receipt') }}
 					{{ Form::text('number',Input::old('number'),[
 						'class' => 'form-control',
 						'placeholder' => 'Receipt',
@@ -114,7 +114,6 @@ Inventory | Create
 				</div>
 	 		</div>
 	 		<div id="inventory">
-				<legend><h3 style="color:#337ab7;">Inventory</h3></legend>
 				<div id="page-one">
 					<div id="alert-existing"></div>
 					<!-- item name -->
@@ -197,6 +196,12 @@ Inventory | Create
 						</div>
 					</div>
 					<div class="form-group">
+						<div class="col-sm-12">
+						<input type="checkbox" id="redirect-profiling" name="redirect-profiling" checked />
+						<span class="text-muted" style="font-size:12;">Profile items</span>
+						</div>
+					</div>
+					<div class="form-group">
 						<div class="col-sm-offset-4 col-sm-4">
 							<button name="previous" id="previous" class="btn btn-default btn-flat btn-block" type="button"> <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> Previous</button>
 						</div>
@@ -215,7 +220,9 @@ Inventory | Create
 {{ HTML::script(asset('js/moment.min.js')) }}
 <script type="text/javascript">
 	$(document).ready(function(){
+
 		$('#brand').on('change',function(){
+			console.log('triggered');
 			url = "{{ url('get') }}" + '/' + $('#itemtype').val() + '/' + $('#brand').val() + '/' + $('#model').val()
 			setValue(url)
 		});
@@ -227,6 +234,16 @@ Inventory | Create
 			url = "{{ url('get') }}" + '/' + $('#itemtype').val() + '/' + $('#brand').val() + '/' + $('#model').val()
 			setValue(url)
 		});
+
+		@if(isset($brand))
+		$('#brand').val('{{ $brand }}')
+		$('#brand').trigger("change");
+		@endif
+
+		@if(isset($model))
+		$('#model').val('{{ $model }}')
+		$('#model').trigger("change");
+		@endif
 
 		function setValue(_url)
 		{
@@ -266,6 +283,7 @@ Inventory | Create
 		})
 
 		$('#link-to-inventory').click(function(){
+			$('#form-name').text('Inventory')
 			$('#page-two').hide(600);
 			$('#receipt').hide(600);
 			$('#inventory').show();
@@ -273,16 +291,19 @@ Inventory | Create
 		});
 
 		$('#link-to-receipt').click(function(){
+			$('#form-name').text('Receipt')
 			$('#inventory').hide(600);
 			$('#receipt').show(600);
 		});
 
 		$('#next').click(function(){
+			$('#form-name').text('Inventory')
 			$('#page-one').hide(600);
 			$('#page-two').show(600);
 		});
 
 		$('#previous').click(function(){
+			$('#form-name').text('Receipt')
 			$('#page-two').hide(600);
 			$('#page-one').show(600);
 		});
@@ -326,6 +347,14 @@ Inventory | Create
 					@if(Input::old('itemtype'))
 					$('#itemtype').val("{{ Input::old('itemtype') }}")
 					@endif
+
+					@if(isset($itemtype))
+					$('#itemtype').val('{{ $itemtype }}')
+					@endif
+				},
+				complete: function(){
+
+					$('#itemtype').trigger("change");
 				}
 			})
 		}

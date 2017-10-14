@@ -18,6 +18,7 @@ Items Profile
 @section('content')
 <div class="container-fluid" id="page-body">
 	<div class="" style="background-color: white;padding: 20px;">
+		<legend><h3 class="text-muted">Items Profile</h3></legend>
 		<table class="table table-hover table-condensed table-bordered table-responsive" id="roomTable">
 			<thead>
 				<th>ID</th>
@@ -105,11 +106,15 @@ Items Profile
 					  <button type="button" class="btn btn-default btn-flat dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="status" style="padding:10px;"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span id="status-name"></span> <span class="caret"></span>
 					  </button>
 					  <ul class="dropdown-menu" id="statusitems">
-					      @foreach($status as $status)
-							<li role="presentation" value='{{ $status }}'>
-								<a class="status" data-name='{{ $status }}'>{{ $status }}</a>
-							</li>
-					    @endforeach
+						<li role="presentation" value='working'>
+							<a class="status" data-name='working'>working</a>
+						</li>
+						<li role="presentation" value='undermaintenance'>
+							<a class="status" data-name='undermaintenance'>undermaintenance</a>
+						</li>
+						<li role="presentation" value='condemn'>
+							<a class="status" data-name='condemn'>condemned</a>
+						</li>
 					  </ul>
 					</div>
 				`);

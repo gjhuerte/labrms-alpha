@@ -23,7 +23,8 @@ Create
 @section('content')
 <div class="container-fluid" id="page-body">
   <div class="row">
-    <div class="col-md-offset-3 col-md-6">
+    <div class="col-md-offset-3 col-md-6 panel panel-default panel-body">
+      {{ Form::open(['method'=>'post','route'=>'reservation.items.list.store','class'=>'form-horizontal']) }}
       @if (count($errors) > 0)
           <div class="alert alert-danger alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -34,8 +35,7 @@ Create
               </ul>
           </div>
       @endif
-      {{ Form::open(['method'=>'post','route'=>'reservation.items.list.store','class'=>'form-horizontal']) }}
-        <div id="smartwizard" class="panel panel-default panel-body" style="padding: 20px 10px;margin: 10px;">
+        <div id="smartwizard" class="" style="padding: 20px 10px;margin: 10px;">
           <ul>
               <li><a href="#step-1">Basic Information<br /><small></small></a></li>
               <li><a href="#step-2">Included<br /><small></small></a></li>

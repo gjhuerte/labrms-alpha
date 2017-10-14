@@ -5,13 +5,20 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				{{ Form::open(['method'=>'post','route'=>'item.profile.assign']) }}
 					<div style="margin-top:20px;margin-bottom:20px;">
-						<div class="form-group">
-						{{ Form::label('Selected Items') }}
-						{{ Form::text('item',null,[
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								Item Details
+							</div>
+							<ul class="list-group">
+							  <li class="list-group-item">Property Number:  <span id="assign-propertynumber"></span></li>
+							  <li class="list-group-item">Serial ID:  <span id="assign-serialid"></span></li>
+							  <li class="list-group-item">Location: <span id="assign-location"></span></li>
+							</ul>
+						</div>
+						{{ Form::hidden('item',null,[
 							'id' => 'assign-item',
 							'class' => 'form-control'
 						]) }}
-						</div>
 						<div class="form-group">
 						{{ Form::label('Room') }}
 						{{ Form::select('room',['Loading all rooms'],null,[
@@ -38,7 +45,10 @@ $('#assignModal').on('show.bs.modal',function(){
 		success: function(response){
 			options = "";
 			for(ctr = 0;ctr<response.data.length;ctr++){
-				options += `<option value='`+response.data[ctr].name+`'>`+response.data[ctr].name+`</option>'`;
+				if(response.data[ctr].name != $('#assign-location').text())
+				{
+					options += `<option value='`+response.data[ctr].name+`'>`+response.data[ctr].name+`</option>'`;
+				}
 			}
 
 			$('#location').html("");

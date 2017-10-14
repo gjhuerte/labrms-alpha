@@ -3,6 +3,7 @@
 Items for Reservation
 @stop
 @section('navbar')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @include('layouts.navbar')
 @stop
 @section('style')

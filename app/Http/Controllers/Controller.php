@@ -16,12 +16,12 @@ class Controller extends BaseController
 		$var = strip_tags($var);
 		$var = htmlentities($var);
 		$var = stripslashes($var);
-		return $var;
+		return stripslashes(htmlentities(strip_tags($var)));
 	}
 
 	public function hasData($input)
 	{
-		if($input == null || empty($input) || $input == "")
+		if($input == null || empty($input) || $input == "" || $input == 'null')
 			return false;
 		return true;
 	}

@@ -16,7 +16,9 @@ class CreateRoomTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('name',50);
+			$table->string('category',100)->nullable();
 			$table->string('description',100)->nullable();
+			$table->string('status',100)->nullable();
 			$table->softDeletes();
 		});
 	}

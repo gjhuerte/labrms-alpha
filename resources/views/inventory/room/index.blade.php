@@ -3,6 +3,7 @@
 Room Inventory
 @stop
 @section('navbar')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @include('layouts.navbar')
 @stop
 @section('style')
@@ -17,6 +18,16 @@ Room Inventory
 @section('content')
 <div class="container-fluid" id="page-body">
 	<div class="" style="background-color: white;padding: 20px;">
+		<legend><h3 class="text-muted">Room Inventory</h3></legend>
+		<div id="notif-board">
+		@if(isset($ticket_count))
+			@if( $ticket_count > 0 )
+			<div class="alert alert-warning">
+				<strong>Warning!</strong> Item with the following property number {{ $ticket_link }} has accumulated {{ isset($ticket_count) ? $ticket_count : 0  }} complaint/s as of {{ Carbon\Carbon::now()->toFormattedDateString() }} . 
+			</div>
+			@endif
+		@endif
+		</div>
 		<table class="table table-hover table-condensed table-bordered table-responsive" id="roomTable">
 			<thead>
 				<th>Item Model</th>
@@ -87,8 +98,42 @@ Room Inventory
 
 		$('.room').on('click',function(event)
 		{
-			$('#room-name').text($(this).data('name'))
-			table.ajax.url("{{ url('get/room/inventory/details') }}" + '/' + $(this).data('id')).load();
+			roomname = $(this).data('name')
+			id = $(this).data('id')
+			$('#room-name').text(roomname)
+			table.ajax.url("{{ url('get/room/inventory/details') }}" + '/' + id).load();
+
+			url = "{{ url('inventory/room') }}"
+			$.ajax({
+				headers: {
+				  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				data: {
+					'notif': roomname
+				},
+				type:'get',
+				url: url,
+				dataType: 'json',
+				success: function(callback){
+					link = callback.ticket_link;
+					count = callback.ticket_count;
+					date = moment().format("MMMM DD, YYYY")
+					if(count > 0)
+					{
+
+						$('#notif-board').html(`
+							<div class="alert alert-warning">
+								<strong>Warning!</strong> Item with the following property number `+link+` has accumulated `+count+` complaint/s as of `+date+` . 
+							</div>
+						`)
+					}
+					else
+					{
+						$('#notif-board').html(``)
+					}
+				}
+
+			})
 		})
 
 		@if( Session::has("success-message") )

@@ -16,7 +16,7 @@ class LaboratoryHeadMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->accesslevel != 0 ) return redirect('dashboard');
+        if( Auth::user()->accesslevel != 0 ) return redirect('dashboard');
 
         return $next($request);
     }

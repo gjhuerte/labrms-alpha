@@ -124,7 +124,7 @@ Maintenance Activity
 				{
 			        swal({
 			          title: "Are you sure?",
-			          text: "Account will be removed from database?",
+			          text: "This activity will be removed. Do you want to continue",
 			          type: "warning",
 			          showCancelButton: true,
 			          confirmButtonText: "Yes, delete it!",
@@ -146,7 +146,7 @@ Maintenance Activity
 							dataType: 'json',
 							success: function(response){
 								if(response == 'success'){
-									swal('Operation Successful','Activity removed from database','success')
+									swal('Operation Successful','Activity removed','success')
 					        		table.row('.selected').remove().draw( false );
 					        	}else{
 									swal('Operation Unsuccessful','Error occurred while deleting a record','error')

@@ -29,6 +29,11 @@ class RoomInventory extends \Eloquent{
 		return $this->belongsTo('App\Room','room_id','id');
 	}
 
+	public function itemprofile()
+	{
+		return $this->belongsTo('App\ItemProfile','item_id','id');
+	}
+
 	public function pc()
 	{
 		return $this->belongsTo('App\Pc','item_id','id');

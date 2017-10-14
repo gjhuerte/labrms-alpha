@@ -45,7 +45,10 @@ Item Profile
 		  <li class="active">Create</li>
 		</ol>
 		<div class="col-md-12">
-			<p class="align-right pull-right text-muted">Unprofiled Items:<span id="total"></span></p>
+			<p class="text-muted">
+				<span class="">Last Profiled Item: {{ $lastprofiled }}</span>
+				<span class="pull-right">Unprofiled Items:<span id="total"></span></span>
+			</p>
 		</div>
 		<div class="panel panel-body">
 			<div id="page-one">

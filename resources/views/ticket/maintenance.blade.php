@@ -1,6 +1,6 @@
 @extends('layouts.master-blue')
 @section('title')
-Ticket | Maintenance
+Maintenance Ticket
 @stop
 @section('navbar')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -45,36 +45,67 @@ Ticket | Maintenance
 			  </div>
 			@endif    
 			{{ Form::open(['method'=>'post','route'=>'ticket.maintenance','class'=>'form-horizontal','id'=>'ticketForm']) }}
-				<h4 class="text-muted pull-left">Ticket Number:  {{ $lastticket }}</h4>
-				<h4 class="text-muted pull-right">{{ Carbon\Carbon::now()->toDayDateTimeString() }}</h4>
-				<!-- Item name -->
+				<div class="clearfix"></div>
 				<div class="form-group">
-					<div class="col-sm-12">
-					{{ Form::label('tag','Tag') }}
-					<p class="text-muted text-info">This field is for identifying the equipment, room, or workstation linked to this ticket.</p>
-					{{ Form::text('tag',Input::old('tag'),[
-						'id' => 'tag',
-						'class' => 'form-control',
-						'placeholder' => 'Equipment Property Number, Room Name'
-					]) }}
+					<div class="col-sm-3">
+						{{ Form::label('Ticket Number:') }}
+					</div>
+					<div class="col-sm-9">
+						{{ Form::text('ticketnumber',$lastticket ,[
+							'class' => 'form-control',
+							'readonly',
+							'style' => 'border:none;background-color: white;'
+						]) }}
 					</div>
 				</div>
-				<div id="tickettag"></div>
-				<!-- Category -->
-				<div id="activity-field">
-					<div class="form-group">
-						<div class="col-sm-12">
-						{{ Form::label('activity','Actvitity Done') }}
+				<div class="clearfix"></div>
+				<div class="form-group">
+					<div class="col-sm-3">
+						{{ Form::label('Date') }}
+					</div>
+					<div class="col-sm-9">
+						{{ Form::text('date',Carbon\Carbon::now()->toDayDateTimeString(),[
+							'class' => 'form-control',
+							'readonly',
+							'style' => 'border:none;background-color: white;'
+						]) }}
+					</div>
+				</div>
+				<!-- Item name -->
+				<div class="clearfix"></div>
+				<div class="form-group">
+					<div class="col-sm-3">
+					{{ Form::label('tag','Tag') }}
+					</div>
+					<div class="col-sm-9">
+						{{ Form::text('tag',Input::old('tag'),[
+							'id' => 'tag',
+							'class' => 'form-control',
+							'placeholder' => 'Equipment Property Number, Room Name, Workstation Name'
+						]) }}
+						<p class="text-muted" style="font-size:12px;">This field is for identifying the equipment, room, or workstation linked to this ticket.</p>
+						<div id="tickettag"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-3">
+					{{ Form::label('activity','Activity Done') }}
+					</div>
+					<div class="col-sm-9">
+						<!-- Category -->
+						<div id="activity-field">
 						{{ Form::select('activity',$activity,Input::old('activity'),[
 							'id' => 'activity',
 							'class' => 'form-control'
 						]) }}
+							<div id="activity-description"></div>
 						</div>
-					</div>
-					<div id="activity-description"></div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-12">
+						<div id="details-field" hidden>
+							{{ Form::textarea('description',Input::old('description'),[
+								'class'=>'form-control',
+								'placeholder'=>'Enter ticket details here...'
+							]) }}
+						</div>
 						<div class="checkbox">
 							<label>
 								<input type="checkbox" name="contains" id="contains"> Not in the list?
@@ -82,24 +113,18 @@ Ticket | Maintenance
 						</div>
 					</div>
 				</div>
-				<div class="form-group" id="details-field" hidden>
-					<!-- description -->
+				<div class="form-group">
 					<div class="col-sm-12">
-						{{ Form::label('description','Details') }}
-						<p class="text-muted">This field is required to further explain the details of the ticket</p>
-						{{ Form::textarea('description',Input::old('description'),[
-							'class'=>'form-control',
-							'placeholder'=>'Enter ticket details here...'
-						]) }}
 					</div>
 				</div>
+				{{-- 
 				<div class="form-group" id="undermaintenance-tag">
 					<div class="col-sm-12">
 						<input type="checkbox" name="underrepair" />
 						<label for="">Set as 'Undermaintenance'</label> 
 						<p class="text-muted">Clicking this checkbox will set the item/equipment/pc as 'undermaintenance' </p>
 					</div>
-				</div>
+				</div> --}}
 				<div class="form-group">
 					<div class="col-sm-12">
 					{{ Form::submit('Create',[
@@ -148,9 +173,15 @@ Ticket | Maintenance
 						if(response.systemunit_id != null || response.monitor_id != null)
 						{
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Good News!</strong> This tag belongs to a PC
-								</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Workstation Name:  `+response.name+`</li>
+									  <li class="list-group-item">System Unit:  `+response.systemunit.propertynumber+`</li>
+									  <li class="list-group-item">Monitor:  `+response.monitor.propertynumber+`</li>
+									  <li class="list-group-item">AVR: `+response.avr.propertynumber+`</li>
+									  <li class="list-group-item">Keyboard:  `+response.keyboard.propertynumber+`</li>
+									  <li class="list-group-item">Mouse:  `+response.mouse+`</li>
+									  <li class="list-group-item">Status: `+response.systemunit.status+`</li>
+									</ul>
 							`);
 							$('#undermaintenance-tag').show()
 						}
@@ -158,9 +189,11 @@ Ticket | Maintenance
 						if(response.propertynumber != null)
 						{
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Great!</strong> You can link this tag to an equipment
-								</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Property Number:  `+response.propertynumber+`<span id="transfer-date"></span></li>
+									  <li class="list-group-item">Serial Number: `+response.serialnumber+` <span id="transfer-tag"></span></li>
+									  <li class="list-group-item">Status: `+response.status+`<span id="transfer-title"></span></li>
+									</ul>
 							`);
 							$('#undermaintenance-tag').show()
 						}
@@ -168,10 +201,16 @@ Ticket | Maintenance
 						if(response.name != null)
 						{
 							$('#tickettag').html(`
-								<div class="alert alert-success" role="alert">
-									<strong>Great!</strong> You've inputted a correct room name
-								</div>
+								<ul class="list-group">
+								  <li class="list-group-item">Room Name:  `+response.name+`</li>
+								  <li class="list-group-item">Category:  `+response.description+`</li>
+								</ul>
+
+								<div id="item-list"></div>
 							`);
+
+							addItemsUnderTheRoom()
+
 							$('#undermaintenance-tag').hide()
 						}
 					}
@@ -188,6 +227,59 @@ Ticket | Maintenance
 
 		function setDetailsField()
 		{
+			_url = "{{ url('maintenance/activity') }}"+ '?id=' + $('#tag').val()
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				type: 'get',
+				url: _url,
+				dataType: 'json',
+				success: function(response)
+				{
+					if(response)
+					{
+						$('#activity-description').html(`
+							<div class="alert alert-warning">
+								<strong>Details: </strong> ` + response.details + `
+							</div>
+						`)
+					}
+				}
+			})
+		}
+
+		function addItemsUnderTheRoom()
+		{
+			_url = "{{ url('inventory/room') }}"+ '/' + $('#tag').val()
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				type: 'get',
+				url: _url,
+				dataType: 'json',
+				success: function(response)
+				{
+					html = '';
+					$.each(response,function(index,callback)
+					{
+						html += `
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" value="`+callback.item+`" name="item[]"> ` + callback.type + ` - ` + callback.item + `
+								</label>
+							</div>
+						`
+					})
+
+					$('#item-list').html(html)
+				}
+			})
+		}
+
+		function setDetailsField()
+		{
 			_url = "{{ url('maintenance/activity') }}"+ '/' + $('#activity').val()
 			$.ajax({
 				headers: {
@@ -198,14 +290,22 @@ Ticket | Maintenance
 				dataType: 'json',
 				success: function(response)
 				{
-					$('#activity-description').html(`
-						<div class="alert alert-warning">
-							<strong>Details: </strong> ` + response.details + `
-						</div>
-					`)
+					if(response)
+					{
+						$('#activity-description').html(`
+							<div class="alert alert-warning">
+								<strong>Details: </strong> ` + response.details + `
+							</div>
+						`)
+					}
 				}
 			})
 		}
+
+		$('#include-items').on('change',function(){
+			alert('changed')
+			$('#roominventory-list').toggle()
+		})
 
 		setDetailsField()
 		$('#page-body').show();

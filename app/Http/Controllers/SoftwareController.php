@@ -64,8 +64,8 @@ class SoftwareController extends Controller {
 				'License Type' => $licensetype,
 				'company' => $company,
 				'Minimum System Requirement' => $minrequirement,
-				'Maximum System Requirement' => $maxrequirement,
-			],Software::$rules);
+				'Recommended System Requirement' => $maxrequirement,
+		],Software::$rules);
 
 		if($validator->fails())
 		{
@@ -130,7 +130,7 @@ class SoftwareController extends Controller {
 	 */
 	public function update($id)
 	{
-		$id = $this->sanitizeString(Input::get('id'));
+		$id = $this->sanitizeString($id);
 		$name = $this->sanitizeString(Input::get('name'));
 		$company = $this->sanitizeString(Input::get('company'));
 		$licensetype = $this->sanitizeString(Input::get('licensetype'));
@@ -151,7 +151,7 @@ class SoftwareController extends Controller {
 				'License Type' => $licensetype,
 				'company' => $company,
 				'Minimum System Requirement' => $minrequirement,
-				'Maximum System Requirement' => $maxrequirement,
+				'Recommended System Requirement' => $maxrequirement,
 			],Software::$rules);
 
 		$validator = Validator::make([
@@ -258,5 +258,39 @@ class SoftwareController extends Controller {
 
 		Session::flash('success-message','Software removed from room');
 		return redirect('software');
+	}
+
+	public function getAllSoftwareName()
+	{
+		if(Request::ajax())
+		{
+			$software = Software::select('id','softwarename as name')->get();
+			return json_encode($software);
+		}
+	}
+
+	public function getAllSoftwareTypes()
+	{
+		if(Request::ajax()){
+			return json_encode(Software::$types);
+		}
+	}
+
+	public function getAllLicenseTypes()
+	{
+		if(Request::ajax())
+		{
+			return json_encode([
+				'Proprietary license',
+				'GNU General Public License',
+				'End User License Agreement (EULA)',
+				'Workstation licenses',
+				'Concurrent use license',
+				'Site licenses',
+				'Perpetual licenses',
+				'Non-perpetual licenses',
+				'License with Maintenance'
+			]);
+		}
 	}
 }

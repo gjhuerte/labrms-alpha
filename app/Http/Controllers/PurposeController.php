@@ -20,7 +20,7 @@ class PurposeController extends Controller {
 	{
 		if(Request::ajax()){
 				return json_encode( [
-					'data' => Purpose::select('id','title','description')->get()
+					'data' => Purpose::all()
 				] );
 		}
 
@@ -48,10 +48,12 @@ class PurposeController extends Controller {
 	{
 		$title = $this->sanitizeString(Input::get('title'));
 		$description = $this->sanitizeString(Input::get('description'));
+		$points = $this->sanitizeString(Input::get('points'));
 
 		$validator = Validator::make([
 			'title' => $title,
-			'description' => $description
+			'description' => $description,
+			'points' => $points
 		],Purpose::$rules);
 
 		if($validator->fails()){
@@ -63,6 +65,7 @@ class PurposeController extends Controller {
 		$purpose = new Purpose;
 		$purpose->title = $title;
 		$purpose->description = $description;
+		$purpose->points = $points;
 		$purpose->save();
 
 		Session::flash('success-message','Record has been added to database');
@@ -110,28 +113,26 @@ class PurposeController extends Controller {
 	{
 		$title = $this->sanitizeString(Input::get('title'));
 		$description = $this->sanitizeString(Input::get('description'));
+		$points = $this->sanitizeString(Input::get('points'));
 
 		$validator = Validator::make([
 			'title' => $title,
-			'description' => $description
+			'description' => $description,
+			'points' => $points
 		],Purpose::$rules);
 
-		if($validator->fails())
-		{
-			return redirect("purpose/$id/edit")
-				->withInput
+		if($validator->fails()){
+			return redirect('purpose/create')
+				->withInput()
 				->withErrors($validator);
 		}
 
-		try{
-			$purpose = Purpose::find($id);
-			$purpose->title = $title;
-			$purpose->description = $description;
-			$purpose->save();
-		} catch ( Exception $e ) {
-			Session::flash('error-message','System has encountered an error');
-			return redirect('purpose');
-		}
+		$purpose = Purpose::find($id);
+		$purpose->title = $title;
+		$purpose->description = $description;
+		$purpose->points = $points;
+		$purpose->save();
+
 
 		Session::flash('success-message','Purpose Updated');
 		return redirect('purpose');

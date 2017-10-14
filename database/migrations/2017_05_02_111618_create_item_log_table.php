@@ -15,9 +15,11 @@ class CreateItemLogTable extends Migration {
 		Schema::create('item_log', function(Blueprint $table)
 		{
 			$table->integer('log_id')->unsigned();
-			$table->foreign('log_id')->references('id')->on('log');
+			$table->foreign('log_id')->references('id')->on('log')
+									->onUpdate('cascade');
 			$table->integer('item_id')->unsigned();
-			$table->foreign('item_id')->references('id')->on('pc');
+			$table->foreign('item_id')->references('id')->on('pc')
+									->onUpdate('cascade');
 			$table->string('facultyincharge',100)->nullable();
 			$table->string('remark',200)->nullable();
 			$table->timestamps();

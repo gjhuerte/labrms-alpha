@@ -17,6 +17,7 @@ class CreatePurposeTable extends Migration {
 			$table->increments('id');
 			$table->string('title',50)->unique();
 			$table->string('description')->nullable();
+			$table->integer('points')->nullable();
 			$table->timestamps();
 		});
 	}

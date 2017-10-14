@@ -20,6 +20,12 @@ class AccountsController extends Controller {
 	 */
 	public function index()
 	{
+		if(Request::ajax())
+		{
+			$user = User::all();
+			return json_encode([ 'data' => $user ]);
+		}
+
 		return view('account.index');
 	}
 
@@ -299,6 +305,47 @@ class AccountsController extends Controller {
 
 			Session::flash('error-message','Error occurred while switching access level');
 			return redirect('account');
+		}
+	}
+
+	/**
+	*
+	*	@return list of username
+	*	return value: 'data' => array(users)
+	*
+	*/
+	public function getAllUsers()
+	{
+		if(Request::ajax())
+		{
+			$user = User::all();
+			return json_encode([ 'data' => $user ]);
+		}
+	}
+
+	/**
+	*
+	*	@return laboratory users
+	*	laboratory users ranges from 0 - 2
+	*	0 - laboratory head
+	*	1 - laboratory assistant
+	*	2 - laboratory staff
+	*
+	*/
+	public function getAllLaboratoryUsers()
+	{
+		if(Request::ajax())
+		{
+			/**
+			*
+			*	Note: Current user is not included
+			*
+			*/
+			$user = User::select('id','username','lastname','firstname','middlename','email','contactnumber','type','accesslevel','status')
+					->whereIn('accesslevel',[0,1,2])
+					->where('id','!=',Auth::user()->id)
+					->get();
+			return json_encode([ 'data' => $user ]);
 		}
 	}
 }

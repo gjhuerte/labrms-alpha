@@ -14,7 +14,7 @@ class RoomTicket extends \Eloquent{
 
 	public function ticket()
 	{
-		return $this->belongsTo('Ticket','ticket_id','id');
+		return $this->belongsTo('App\Ticket','ticket_id','id');
 	}
 
 	public function room()

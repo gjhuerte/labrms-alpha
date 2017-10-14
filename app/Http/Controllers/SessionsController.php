@@ -7,6 +7,8 @@ use Session;
 use Auth;
 use Validator;
 use App\User;
+use App\Reservation;
+use App\TicketView;
 use Hash;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
@@ -103,8 +105,22 @@ class SessionsController extends Controller {
 	public function show()
 	{
 		$person = Auth::user();
+		$reservation = Reservation::withInfo()->user(Auth::user()->id)->get()->count();
+		$approved = Reservation::withInfo()->approved()->user(Auth::user()->id)->get()->count();
+		$disapproved = Reservation::withInfo()->disapproved()->user(Auth::user()->id)->get()->count();
+		$claimed = Reservation::where('status','=','claimed')->user(Auth::user()->id)->get()->count();
+		$tickets = TicketView::self()->get()->count();
+		$assigned = TicketView::staff(Auth::user()->id)->tickettype('Complaint')->count();
+		$complaints = TicketView::self()->tickettype('Complaint')->count();
 		return view('user.index')
-			->with('person',$person);
+			->with('person',$person)
+			->with('reservation',$reservation)
+			->with('tickets',$tickets)
+			->with('approved',$approved)
+			->with('disapproved',$disapproved)
+			->with('complaints',$complaints)
+			->with('assigned',$assigned)
+			->with('claimed',$claimed);
 	}
 
 

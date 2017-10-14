@@ -1,21 +1,19 @@
 <div class="modal fade" id="transferTicketModal" tabindex="-1" role="dialog" aria-labelledby="transferTicketModal">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="modal-body">
+			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h3 class="text-muted" style="margin-bottom:0px;">Ticket Assignment</h3>
+			</div>
+			<div class="modal-body">
 				{{ Form::open(['method'=>'post','route'=>array('ticket.transfer',csrf_token()),'class'=>'form-horizontal']) }}
-				<div class="form-group">
-					<div class="col-md-12">
-					{{ Form::label('Ticket ID') }}
-					{{ Form::text('id',null,[
+					{{ Form::hidden('id',null,[
 						'class' => 'form-control',
 						'id' => 'transfer-id',
 						'readonly',
 						'style' => 'background-color: white;'
 					]) }}
-					</div>
-				</div>
-				<div class="panel panel-success">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
 						Ticket Details
 					</div>
@@ -30,7 +28,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-12">
-					{{ Form::label('Transfer to') }}
+					{{ Form::label('Assign to') }}
 					{{ Form::select('transferto',['Loading all users ...'],null,[
 						'class' => 'form-control',
 						'id' => 'transfer-to'
@@ -39,7 +37,17 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-12">
-						<button type="submit" class="btn btn-success btn-lg btn-block">Transfer</button>
+					{{ Form::label('Comments') }}
+					{{ Form::text('comment',null,[
+						'class' => 'form-control',
+						'id' => 'comment'
+					]) }}
+					</div>
+				</div>
+				<input type="hidden" id="transfer-staffid" />
+				<div class="form-group">
+					<div class="col-md-12">
+						<button type="submit" class="btn btn-success btn-lg btn-block">Assign</button>
 					</div>
 				</div>
 				{{ Form::close() }}
@@ -62,7 +70,11 @@
 
 					for(ctr = 0; ctr < response.data.length; ctr++ )
 					{
-						options += `<option value="`+response.data[ctr].id+`">`+response.data[ctr].firstname + " " + response.data[ctr].lastname +`</option>"`
+						name = response.data[ctr].firstname + " " + response.data[ctr].lastname;
+						if( response.data[ctr].id != $('#transfer-staffid').val() )
+						{
+							options += `<option value="`+response.data[ctr].id+`">`+name  +`</option>"`
+						}
 					}
 
 					if(response.data.length == 0)
