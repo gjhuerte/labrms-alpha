@@ -1,7 +1,12 @@
 <?php
 
 use Illuminate\Database\Seeder;
+<<<<<<< HEAD
 use Illuminate\Database\Eloquent\Model;
+=======
+use Illuminate\Support\Facades\DB;
+
+>>>>>>> origin/0.3
 class LanguageTableSeeder extends Seeder
 {
     /**

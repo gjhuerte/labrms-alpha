@@ -61,6 +61,7 @@ class User extends \Eloquent implements Authenticatable {
 	// {
 	// 	return ucwords($value);
 	// }
+<<<<<<< HEAD
 
 	// public function getMiddleNameAttribute($value)
 	// {
@@ -72,6 +73,19 @@ class User extends \Eloquent implements Authenticatable {
 	// 	return ucwords($value);
 	// }
 
+=======
+
+	// public function getMiddleNameAttribute($value)
+	// {
+	// 	return ucwords($value);
+	// }
+
+	// public function getLastNameAttribute($value)
+	// {
+	// 	return ucwords($value);
+	// }
+
+>>>>>>> origin/0.3
 	// public function setFirstNameAttribute($value)
 	// {
 	// 	$this->attribute['firstname'] = ucwords($value);

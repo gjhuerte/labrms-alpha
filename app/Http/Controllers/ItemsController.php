@@ -610,6 +610,94 @@ class ItemsController extends Controller {
 
 	/**
 	*
+<<<<<<< HEAD
+=======
+	*	get receipt based on inventory
+	*	uses ajax request
+	*	@param inventory id
+	*	@return receipt
+	*
+	*/
+	public function getAllReceipt(){
+
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Checks if request is made through ajax
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		if(Request::ajax())
+		{
+			$id = $this->sanitizeString(Input::get('id'));
+
+			/*
+			|--------------------------------------------------------------------------
+			|
+			| 	if id is not valid
+			|
+			|--------------------------------------------------------------------------
+			|
+			*/
+			if($id == -1)
+			{
+				return json_encode('error');
+			}
+			else
+			{
+				$receipt = Receipt::where('inventory_id','=',$id)->select('number','id')->get();
+				return $receipt;
+			}
+		}
+	}
+
+	/**
+	*
+	*	get item brand
+	*	uses ajax request
+	*	@param itemtype
+	*	@return item brand
+	*
+	*/
+	public function getItemBrands(){
+
+		/*
+		|--------------------------------------------------------------------------
+		|
+		| 	Checks if request is made through ajax
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		if(Request::ajax())
+		{
+			$itemtype = $this->sanitizeString(Input::get('itemtype'));
+			if(count($itemtype) > 0)
+			{
+				$brands = Inventory::where('itemtype_id',$itemtype)->select('brand')->get();
+			}
+			else
+			{
+				$brands = Inventory::select('brand')->get();
+			}
+
+
+			/*
+			|--------------------------------------------------------------------------
+			|
+			| 	return all brand
+			|
+			|--------------------------------------------------------------------------
+			|
+			*/
+			return json_encode($brands);
+		}
+	}
+
+	/**
+	*
+>>>>>>> origin/0.3
 	*	get item model
 	*	uses ajax request
 	*	@param brand

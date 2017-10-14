@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Inventory;
 use App\Receipt;
 use App\ItemType;
+<<<<<<< HEAD
 use App;
+=======
+>>>>>>> origin/0.3
 use Session;
 use Validator;
 use Illuminate\Support\Facades\Request;

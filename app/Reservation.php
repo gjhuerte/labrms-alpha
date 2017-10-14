@@ -67,6 +67,7 @@ class Reservation extends \Eloquent{
 		return $this->belongsToMany('App\ItemProfile','item_reservation','reservation_id','item_id'); 
 	}
 
+<<<<<<< HEAD
 	public function scopeUnclaimed($query)
 	{
 		return $query->where(function($query){
@@ -75,6 +76,8 @@ class Reservation extends \Eloquent{
 		});
 	}
 
+=======
+>>>>>>> origin/0.3
 	public function scopeApproved($query)
 	{
 		return $query->where('approval','=',1);
@@ -98,11 +101,19 @@ class Reservation extends \Eloquent{
 		{
 			$query = $query->where('user_id','=',Auth::user()->id);
 		}
+<<<<<<< HEAD
 
 		return $query;
 					
 	}
 
+=======
+
+		return $query;
+					
+	}
+
+>>>>>>> origin/0.3
 	public function scopeUser($query,$id)
 	{
 		return $query->where('user_id','=',$id);
@@ -171,6 +182,7 @@ class Reservation extends \Eloquent{
 				|
 				*/
 				if( Carbon::parse($start)->between( $timein , $timeout ) )
+<<<<<<< HEAD
 				{
 					return $reservation;
 				}
@@ -267,6 +279,56 @@ class Reservation extends \Eloquent{
 		|
 		*/
 		return $reservation;
+=======
+				{
+					return $reservation;
+				}
+
+				/*
+				|--------------------------------------------------------------------------
+				|
+				| 	current ending time of reservation is between existing reservation
+				|
+				|--------------------------------------------------------------------------
+				|
+				*/
+				if( Carbon::parse($end)->between( $timein , $timeout ) )
+				{
+					return $reservation;
+				}
+
+				/*
+				|--------------------------------------------------------------------------
+				|
+				| 	existing reservation start is between current start and end of current reservation
+				|
+				|--------------------------------------------------------------------------
+				|
+				*/
+				if( Carbon::parse($timein)->between( $start , $end ) )
+				{
+					return $reservation;
+				}
+
+				/*
+				|--------------------------------------------------------------------------
+				|
+				| 	existing reservation end is between current start and end of current reservation 
+				|
+				|--------------------------------------------------------------------------
+				|
+				*/
+				if( Carbon::parse($timeout)->between( $start , $end ) )
+				{
+					return $reservation;
+				}
+
+
+			}
+		}
+
+		return false;
+>>>>>>> origin/0.3
 	}
 
 	/**
@@ -279,8 +341,13 @@ class Reservation extends \Eloquent{
 	public static function thirdWorkingDay($date)
 	{
 
+<<<<<<< HEAD
 		$curdate = Carbon::parse($date);
 		$date = Carbon::parse($date);
+=======
+		$date = Carbon::parse($date);
+
+>>>>>>> origin/0.3
 		$work_days = 0;
 
 		/*
@@ -307,7 +374,11 @@ class Reservation extends \Eloquent{
 			|--------------------------------------------------------------------------
 			|
 			*/
+<<<<<<< HEAD
 			$_date = $date->addDays($date_counter);
+=======
+			$date = $date->addDays($date_counter);
+>>>>>>> origin/0.3
 			/*
 			|--------------------------------------------------------------------------
 			|
@@ -316,7 +387,11 @@ class Reservation extends \Eloquent{
 			|--------------------------------------------------------------------------
 			|
 			*/
+<<<<<<< HEAD
 			if(SpecialEvent::isAvailable($_date))
+=======
+			if(SpecialEvent::isAvailable($date))
+>>>>>>> origin/0.3
 			{
 
 				/*
@@ -335,8 +410,14 @@ class Reservation extends \Eloquent{
 
 			$date_counter++;
 
+<<<<<<< HEAD
 		} while ( $three_day_rule < 3 );
 
 		return $curdate->addDays($work_days);
+=======
+		} while ( $three_day_rule <= 3 );
+
+		return $date->addDays($work_days);
+>>>>>>> origin/0.3
 	}
 }

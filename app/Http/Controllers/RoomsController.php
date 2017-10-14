@@ -89,6 +89,7 @@ class RoomsController extends Controller {
 	 */
 	public function show($id)
 	{
+<<<<<<< HEAD
 		$id = $this->sanitizeString($id);
 
 		$room = Room::find($id);
@@ -104,6 +105,11 @@ class RoomsController extends Controller {
 		return view('room.show')
 				->with('room',$room)
 				->with('roominventory',$roominventory);
+=======
+		$room = Room::find($id);
+		return view('room.show')
+				->with('room',$room);
+>>>>>>> origin/0.3
 	}
 
 

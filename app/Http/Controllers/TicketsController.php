@@ -16,7 +16,10 @@ use App\Room;
 use App\ItemProfile;
 use App\MaintenanceActivity;
 use App\Pc;
+<<<<<<< HEAD
 use DB;
+=======
+>>>>>>> origin/0.3
 use App\User;
 use App\TicketType;
 use Illuminate\Support\Facades\Request;
@@ -42,6 +45,12 @@ class TicketsController extends Controller {
 		*/
 		if(Request::ajax())
 		{
+			if( Auth::user()->accesslevel == 3 || Auth::user()->accesslevel == 4  )
+			{
+				return json_encode([ 
+					'data' => TicketView::self()->tickettype('Complaint')->get()
+			 	]);
+			}
 
 			$staff_id = null;
 			$type = "";
@@ -101,6 +110,7 @@ class TicketsController extends Controller {
 		{
 			$ticket = $ticket->id + 1;
 		}
+<<<<<<< HEAD
 
 		$total_tickets = App\Ticket::count();
 		$complaints = App\Ticket::tickettype('complaint')
@@ -112,15 +122,21 @@ class TicketsController extends Controller {
 		$open_tickets = App\Ticket::tickettype('complaint')
 						->open()
 						->count();
+=======
+>>>>>>> origin/0.3
 		
 		return view('ticket.index')
 				->with('tickettype',TicketType::all())
 				->with('ticketstatus',['Open','Closed'])
+<<<<<<< HEAD
 				->with('lastticket',$ticket)
 				->with('total_tickets',$total_tickets)
 				->with('complaints',$complaints)
 				->with('authored_tickets',$authored_tickets)
 				->with('open_tickets',$open_tickets);
+=======
+				->with('lastticket',$ticket);
+>>>>>>> origin/0.3
 	}
 
 
@@ -231,6 +247,7 @@ class TicketsController extends Controller {
 		|
 		*/
 		$user = User::where('accesslevel','=',0)->first();
+<<<<<<< HEAD
 		$staffassigned = null;
 
 		if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
@@ -243,6 +260,13 @@ class TicketsController extends Controller {
 			{
 				$staffassigned = Auth::user()->id;
 			}
+=======
+		$staffassigned = $user->id;
+
+		if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
+		{
+			$staffassigned = Auth::user()->id;
+>>>>>>> origin/0.3
 		}
 
 		$status = 'Open';
@@ -331,7 +355,11 @@ class TicketsController extends Controller {
 				$pc = Pc::isPc($tag);
 				if(count($pc) > 0)
 				{
+<<<<<<< HEAD
 					Ticket::generatePcTicket($pc->id,$tickettype,$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+=======
+					Ticket::generatePcTicket($pc->id,'complaint',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+>>>>>>> origin/0.3
 				} 
 				else
 				{
@@ -344,7 +372,11 @@ class TicketsController extends Controller {
 					|--------------------------------------------------------------------------
 					|
 					*/
+<<<<<<< HEAD
 					Ticket::generateTicket($tickettype,$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+=======
+					Ticket::generateTicket('complaint',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+>>>>>>> origin/0.3
 				}
 
 			}
@@ -725,11 +757,14 @@ class TicketsController extends Controller {
 				$lastticket = $lastticket->id + 1;
 			}
 
+<<<<<<< HEAD
 			if(!isset($ticket) || count($ticket) <= 0)
 			{
 				return redirect('ticket');
 			}
 
+=======
+>>>>>>> origin/0.3
 			return view('ticket.history')
 				->with('ticket',$ticket)
 				->with('id',$id)
@@ -753,6 +788,10 @@ class TicketsController extends Controller {
 	*/
 	public function resolve()
 	{
+<<<<<<< HEAD
+=======
+		
+>>>>>>> origin/0.3
 		/*
 		|--------------------------------------------------------------------------
 		|
@@ -994,6 +1033,57 @@ class TicketsController extends Controller {
 					->pluck('ticket_id');
 			})->get()
 		]);
+	}
+
+	/**
+	*
+	*	@param $id requires pc id
+	*	@return list of room ticket
+	*
+	*/
+	public function getRoomTicket($id)
+	{
+		if(Request::ajax())
+		{
+
+			/*
+			|--------------------------------------------------------------------------
+			|
+			| 	get room id
+			|
+			|--------------------------------------------------------------------------
+			|
+			*/
+			$pc = RoomTicket::where('room_id','=',$id)->pluck('id');
+
+			/*
+			|--------------------------------------------------------------------------
+			|
+			| 	return ticket with room information
+			|
+			|--------------------------------------------------------------------------
+			|
+			*/
+			return json_encode(
+			[
+				'data' => Ticket::whereIn('id',function($query) use ($id)
+				{
+
+					/*
+					|--------------------------------------------------------------------------
+					|
+					| 	checks if room is in ticket
+					|
+					|--------------------------------------------------------------------------
+					|
+					*/
+					$query->where('room_id','=',$id)
+						->from('room_ticket')
+						->select('ticket_id')
+						->pluck('ticket_id');
+				})->get()
+			]);
+		}
 	}
 
 	/**
@@ -1310,6 +1400,19 @@ class TicketsController extends Controller {
 		/*
 		|--------------------------------------------------------------------------
 		|
+		| 	check if workstation under the room is included
+		|
+		|--------------------------------------------------------------------------
+		|
+		*/
+		if(Input::has('include-workstation'))
+		{
+			$workstation = true;
+		} 
+
+		/*
+		|--------------------------------------------------------------------------
+		|
 		| 	validates
 		|
 		|--------------------------------------------------------------------------
@@ -1326,6 +1429,7 @@ class TicketsController extends Controller {
 				->withErrors($validator);
 		}
 
+<<<<<<< HEAD
 		DB::beginTransaction();
 
 		$tickettype = 'Maintenance';
@@ -1386,6 +1490,9 @@ class TicketsController extends Controller {
 		}
 
 		DB::commit();
+=======
+		Ticket::generateMaintenanceTicket($tag,$ticketname,$details,$underrepair,$workstation);
+>>>>>>> origin/0.3
 
 		Session::flash('success-message','Ticket Generated');
 		return redirect('ticket');

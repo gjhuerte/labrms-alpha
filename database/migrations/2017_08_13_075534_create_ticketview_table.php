@@ -14,16 +14,24 @@ class CreateTicketviewTable extends Migration {
 	{
 		DB::statement("
             CREATE VIEW ticket_v
+<<<<<<< HEAD
             AS 
+=======
+            AS
+>>>>>>> origin/0.3
             SELECT 
                 ticket.id,
                 ticket.created_at AS 'date',
                 ticket.ticketname AS 'title',
                 ticket.details,
                 ticket.tickettype,
+<<<<<<< HEAD
                 CONCAT( 'Item: ' , itemprofile.propertynumber ) AS 'tag' , 
                 itemprofile.propertynumber AS 'link', 
                 itemprofile.id AS 'link_id',    
+=======
+                CONCAT( 'Item: ' , itemprofile.propertynumber ) AS 'tag' ,                      
+>>>>>>> origin/0.3
                 CONCAT( user.firstname , ' ' , user.lastname ) AS 'staffassigned',
                 ticket.staffassigned AS staff_id,
                 ticket.author,
@@ -47,9 +55,13 @@ class CreateTicketviewTable extends Migration {
                 ticket.ticketname AS 'title',
                 ticket.details,
                 ticket.tickettype,
+<<<<<<< HEAD
                 CONCAT( 'PC: ' , itemprofile.propertynumber ) AS 'tag' ,  
                 itemprofile.propertynumber AS 'link', 
                 itemprofile.id AS 'link_id',                       
+=======
+                CONCAT( 'PC: ' , itemprofile.propertynumber ) AS 'tag' ,                      
+>>>>>>> origin/0.3
                 CONCAT( user.firstname , ' ' , user.lastname ) AS 'staffassigned',
                 ticket.staffassigned AS staff_id,
                 ticket.author,
@@ -70,9 +82,13 @@ class CreateTicketviewTable extends Migration {
                 ticket.ticketname AS 'title',
                 ticket.details,
                 ticket.tickettype,
+<<<<<<< HEAD
                 CONCAT( 'Room: ' , room.name ) AS 'tag' ,                   
                 room.name AS 'link',   
                 room.id AS 'link_id',    
+=======
+                CONCAT( 'Room: ' , room.name ) AS 'tag' ,                      
+>>>>>>> origin/0.3
                 CONCAT( user.firstname , ' ' , user.lastname ) AS 'staffassigned',
                 ticket.staffassigned AS staff_id,
                 ticket.author,
@@ -91,9 +107,13 @@ class CreateTicketviewTable extends Migration {
                 ticket.ticketname AS 'title',
                 ticket.details,
                 ticket.tickettype,
+<<<<<<< HEAD
                 'None' AS 'tag' ,   
                 'None' AS 'link',      
                 'None' AS 'link_id',                   
+=======
+                'None' AS 'tag' ,                      
+>>>>>>> origin/0.3
                 CONCAT( user.firstname , ' ' , user.lastname ) AS 'staffassigned',
                 ticket.staffassigned AS staff_id,
                 ticket.author,
@@ -110,7 +130,12 @@ class CreateTicketviewTable extends Migration {
                 union
                 select ticket_id 
                 from pc_ticket
+<<<<<<< HEAD
              ) 
+=======
+             )
+             ;
+>>>>>>> origin/0.3
 
         ");
 	}

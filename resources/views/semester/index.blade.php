@@ -28,7 +28,10 @@ Semester
 			<table class="table table-hover table-condensed table-bordered table-striped" id="semesterTable">
 				<thead>
 					<th>ID</th>
+<<<<<<< HEAD
 					<th>Academic Year</th>
+=======
+>>>>>>> origin/0.3
 					<th>Semester</th>
 					<th>Date Start</th>
 					<th>Date End</th>
@@ -60,7 +63,10 @@ Semester
 	        ajax: "{{ url('semester') }}",
 	        columns: [
 	            { data: "id" },
+<<<<<<< HEAD
 	            { data: "academicyear" },
+=======
+>>>>>>> origin/0.3
 	            { data: "semester" },
 	            { data: function(callback){
 	            	return moment(callback.datestart).format('MMMM DD, YYYY')

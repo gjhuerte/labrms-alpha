@@ -25,7 +25,11 @@ Reservation List
 				<thead>
 					<th>ID</th>
 					<th>Reserved Items</th>
+<<<<<<< HEAD
 					<th>Reserved By</th>
+=======
+					<th>Reservee</th>
+>>>>>>> origin/0.3
 					<th>Faculty in-charge</th>
 					<th>Date and Time</th>
 					<th>Purpose</th>
@@ -40,7 +44,11 @@ Reservation List
 </div>
 @stop
 @section('script')
+<<<<<<< HEAD
 {{ HTML::script(asset('js/moment.min.js')) }}
+=======
+	{{ HTML::script(asset('js/moment.min.js')) }}
+>>>>>>> origin/0.3
 {{ HTML::script(asset('js/dataTables.select.min.js')) }}
 <script type="text/javascript">
 	$(document).ready(function() {

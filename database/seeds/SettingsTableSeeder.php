@@ -1,7 +1,15 @@
 <?php
 
+<<<<<<< HEAD
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+=======
+namespace Backpack\Settings\database\seeds;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+>>>>>>> origin/0.3
 class SettingsTableSeeder extends Seeder
 {
     /**

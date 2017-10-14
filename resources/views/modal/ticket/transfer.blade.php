@@ -44,10 +44,16 @@
 					]) }}
 					</div>
 				</div>
+<<<<<<< HEAD
 				<input type="hidden" id="transfer-staffid" />
 				<div class="form-group">
 					<div class="col-md-12">
 						<button type="submit" class="btn btn-success btn-lg btn-block">Assign</button>
+=======
+				<div class="form-group">
+					<div class="col-md-12">
+						<button type="submit" class="btn btn-success btn-lg btn-block">Transfer</button>
+>>>>>>> origin/0.3
 					</div>
 				</div>
 				{{ Form::close() }}

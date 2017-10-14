@@ -376,6 +376,7 @@ Tickets
 			try{
 				if(table.row('.selected').data().id != null && table.row('.selected').data().id  && table.row('.selected').data().id >= 0)
 				{
+<<<<<<< HEAD
 			        // do other things for a valid form
 			        swal({
 			          title: "Are you sure?",
@@ -408,6 +409,23 @@ Tickets
 								}
 							},
 							error: function(){
+=======
+					$.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+						type: 'post',
+						url: '{{ url("ticket") }}' + "/" + table.row('.selected').data().id + '/reopen',
+						data: {
+							'id': table.row('.selected').data().id
+						},
+						dataType: 'json',
+						success: function(response){
+							if(response.length > 0){
+								swal('Operation Successful','Ticket has been reopened','success')
+				        		table.ajax.reload().order([ 0, "desc" ]);
+							}else{
+>>>>>>> origin/0.3
 								swal('Operation Unsuccessful','Error occurred while reopening a ticket','error')
 							}
 						});
@@ -423,12 +441,15 @@ Tickets
 			}
 	    } );
 	    @endif
+<<<<<<< HEAD
 
 	    // Counter 
         jQuery('.statistic-counter_two').counterUp({
             delay: 10,
             time: 2000
         });
+=======
+>>>>>>> origin/0.3
 
 		$('#page-body').show();
     });

@@ -18,6 +18,7 @@
 				<h3 style="color:#337ab7;">Action Taken</h3>
 			</legend>
 			{{ Form::open(['method'=>'post','route'=>'ticket.resolve','class'=>'form-horizontal','id'=>'ticketForm']) }}
+<<<<<<< HEAD
 				<div class="clearfix"></div>
 				<div class="form-group">
 					<div class="col-sm-3">
@@ -44,6 +45,10 @@
 						]) }}
 					</div>
 				</div>
+=======
+				<h4 class="text-muted pull-left">Ticket Number:  {{ $lastticket }}</h4>
+				<h4 class="text-muted pull-right">{{ Carbon\Carbon::now()->toDayDateTimeString() }}</h4>
+>>>>>>> origin/0.3
 				<input type="hidden" value="" name="id" id="resolve-id" />
 				<div class="clearfix"></div>
 				<div class="form-group">
@@ -62,6 +67,7 @@
 					{{ Form::label('Item Information') }}
 					<div id="resolve-item-information"></div>
 				</div>
+<<<<<<< HEAD
 				<div class="form-group">
 					<div class="col-sm-3">
 					{{ Form::label('Activity Done') }}
@@ -85,9 +91,41 @@
 							<label>
 								<input type="checkbox" name="contains" id="contains"> Not in the list?
 							</label>
+=======
+				{{ Form::label('Activity Done') }}
+				<!-- Category -->
+				<div id="activity-field">
+					<div class="form-group">
+						<div class="col-sm-12">
+						{{ Form::select('activity',[ null => null ],Input::old('activity'),[
+							'id' => 'resolve-activity',
+							'class' => 'form-control'
+						]) }}
+>>>>>>> origin/0.3
+						</div>
+					</div>
+					<div id="activity-description"></div>
+				</div>
+<<<<<<< HEAD
+=======
+				<div class="form-group">
+					<div class="col-sm-12">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="contains" id="contains"> Not in the list?
+							</label>
 						</div>
 					</div>
 				</div>
+				<div id="details-field" class="form-group" hidden>
+					<div class="col-sm-12">
+						{{ Form::textarea('details',Input::old('details'),[
+							'class' => 'form-control',
+							'placeholder' => 'Include here the activity done to resolve the issue'
+						]) }}
+					</div>
+				</div>
+>>>>>>> origin/0.3
 				<input type="hidden" id="item-tag" value="" />
 				<div id="resolve-equipment">
 					<div class="form-group" id="undermaintenance-form" hidden>
@@ -154,11 +192,14 @@ $('#resolveTicketModal').on('show.bs.modal',function(){
         		options += ` <option value='` + index + `'>` + callback + `</option> `
         	} )
 
+<<<<<<< HEAD
         	if(response.length == 0)
         	{
         		options = ` <option>No suggestions</option> `
         	}
 
+=======
+>>>>>>> origin/0.3
         	$('#resolve-activity').html(``)
         	$('#resolve-activity').append(options)
 			setDetailsField()

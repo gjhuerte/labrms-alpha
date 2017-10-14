@@ -321,6 +321,7 @@ class ReservationController extends Controller {
 		|--------------------------------------------------------------------------
 		|
 		*/
+<<<<<<< HEAD
 		$_items = [];	
 
 		foreach(explode(",",$items) as $item)
@@ -333,6 +334,11 @@ class ReservationController extends Controller {
 						->withErrors(["You need to chose a valid item for reservation"]);
 			}
 
+=======
+		$_items = [];
+		foreach(explode(",",$items) as $item)
+		{
+>>>>>>> origin/0.3
 			$_temp = ReservationItemsView::unreserved(
 						$dateofuse,
 						$time_start->format('h:i A'),
@@ -349,11 +355,19 @@ class ReservationController extends Controller {
 			*/
 			if( count($_temp) == 0 || $_temp == null ||$_temp == '')
 			{
+<<<<<<< HEAD
+=======
+
+				Session::flash('error-message',"No more $item available for reservation");
+>>>>>>> origin/0.3
 				return redirect('reservation/create')
 						->withInput()
 						->withErrors(["No more $item available for reservation"]);
 			}	
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/0.3
 			array_push($_items,$_temp);
 		}
 		
@@ -398,11 +412,14 @@ class ReservationController extends Controller {
 
 		$reservation = Reservation::find($id);
 
+<<<<<<< HEAD
 		if(count($reservation) <= 0)
 		{
 			return redirect('dashboard');
 		}
 
+=======
+>>>>>>> origin/0.3
 		return view('reservation.show')
 				->with('reservation',$reservation);
 	}
@@ -469,6 +486,7 @@ class ReservationController extends Controller {
 			{
 				return json_encode($reservation);
 			}
+<<<<<<< HEAD
 
 			return json_encode('error');
 		}
@@ -496,6 +514,35 @@ class ReservationController extends Controller {
 			*/
 			$reservation = Reservation::approve($id);
 
+=======
+
+			return json_encode('error');
+		}
+	}
+
+	/**
+	*
+	*	@param id
+	*	@return 'success','error'
+	*
+	*/
+	public function approve($id)
+	{
+		if(Request::ajax())
+		{
+			$id = $this->sanitizeString($id);
+
+			/*
+			|--------------------------------------------------------------------------
+			|
+			| 	calls approve method in reservation
+			|
+			|--------------------------------------------------------------------------
+			|
+			*/
+			$reservation = Reservation::approve($id);
+
+>>>>>>> origin/0.3
 			/*
 			|--------------------------------------------------------------------------
 			|
@@ -588,6 +635,7 @@ class ReservationController extends Controller {
 		}
 	}
 
+<<<<<<< HEAD
 	public function claim()
 	{
 
@@ -633,6 +681,8 @@ class ReservationController extends Controller {
 		return redirect("lend/create?reservation=$id");
 	}
 
+=======
+>>>>>>> origin/0.3
 	/**
 	*
 	*	returns available equipment

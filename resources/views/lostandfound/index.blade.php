@@ -31,7 +31,10 @@ Lost And Found
 					<th>Identifier</th>
 					<th>Description</th>
 					<th>Date Found</th>
+<<<<<<< HEAD
 					<th>Days Left</th>
+=======
+>>>>>>> origin/0.3
 					<th>Claimant</th>
 					<th>Date Claimed</th>
 					<th>Status</th>
@@ -69,9 +72,12 @@ Lost And Found
 	            { data: function(callback){
 	            	return moment(callback.datefound).format('MMMM DD, YYYY')
 	            } },
+<<<<<<< HEAD
 	            { data: function(callback){
 	            	return moment(moment(callback.datefound).add(31,'days')).diff(moment(),'days')
 	            } },
+=======
+>>>>>>> origin/0.3
 	            { data: "claimant" },
 	            { data: function(callback){
 	            	if(callback.dateclaimed)
@@ -153,11 +159,16 @@ Lost And Found
             // var rowData = table.rows( indexes ).data().toArray();
             // events.prepend( '<div><b>'+type+' selection</b> - '+JSON.stringify( rowData )+'</div>' );
  			@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1)
+<<<<<<< HEAD
  			if(table.row('.selected').data().status == 'unclaimed')
  			{
 	            $('#edit').show()
 	            $('#delete').show()	
  			}
+=======
+            $('#edit').show()
+            $('#delete').show()
+>>>>>>> origin/0.3
  			@endif
         } )
         .on( 'deselect', function ( e, dt, type, indexes ) {

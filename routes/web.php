@@ -166,12 +166,15 @@ Route::middleware(['auth','laboratorystaff'])->group(function(){
 	Route::resource('lend','LentItemsController');
 
 	Route::prefix('reservation')->group(function(){
+<<<<<<< HEAD
 
 		Route::post('claim',[
 			'as' => 'reservation.claim',
 			'uses' => 'ReservationController@claim'
 		]);
 
+=======
+>>>>>>> origin/0.3
 		Route::get('/',[
 			'as' => 'reservation.index',
 			'uses' => 'ReservationController@index'
@@ -231,6 +234,7 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 
 	/*
 	|--------------------------------------------------------------------------
+<<<<<<< HEAD
 	| Reports
 	|--------------------------------------------------------------------------
 	|
@@ -250,6 +254,8 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 
 	/*
 	|--------------------------------------------------------------------------
+=======
+>>>>>>> origin/0.3
 	| Room Category
 	|--------------------------------------------------------------------------
 	|
@@ -1206,10 +1212,25 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 	Route::get('get/{itemtype}/{brand}/{model}',[
 		'as' => 'item.profile.checkifexisting',
 		'uses' => 'ItemsController@checkifexisting'
+<<<<<<< HEAD
+=======
 	]);
 
 	/*
 	|--------------------------------------------------------------------------
+	| get all maintenance activities
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get('get/maintenance/activity/all',[
+		'as' => 'maintenance.activity.all',
+		'uses' => 'MaintenanceActivityController@getAllEquipmentSupport'
+>>>>>>> origin/0.3
+	]);
+
+	/*
+	|--------------------------------------------------------------------------
+<<<<<<< HEAD
 	| get all maintenance activities
 	|--------------------------------------------------------------------------
 	|
@@ -1230,6 +1251,17 @@ Route::middleware(['auth','laboratorystaff'])->group(function () {
 		'uses' => 'MaintenanceActivityController@getMaintenanceActivity'
 	]);
 
+=======
+	| get maintenance activities
+	|--------------------------------------------------------------------------
+	|
+	*/
+	Route::get('get/maintenance/activity',[
+		'as' => 'maintenance.activity',
+		'uses' => 'MaintenanceActivityController@getMaintenanceActivity'
+	]);
+
+>>>>>>> origin/0.3
 	/*
 	|--------------------------------------------------------------------------
 	| get all ticket types

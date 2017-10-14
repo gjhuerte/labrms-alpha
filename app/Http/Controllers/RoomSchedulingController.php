@@ -51,6 +51,10 @@ class RoomSchedulingController extends Controller
 
         $roomschedule = RoomScheduleView::current()->where('room_id','=','1')->get();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/0.3
         return view('schedule.room.index')
                 ->with('roomschedule',$roomschedule)
                 ->with('rooms',Room::all());

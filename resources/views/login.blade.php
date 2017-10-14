@@ -40,8 +40,13 @@ Login
     <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
       <div class="panel panel-body panel-shadow">
         <div class="col-sm-12" id="loginPanel" style="padding: 20px 20px 0px 20px" >
+<<<<<<< HEAD
           <legend class=hidden-xs>
             <div class="row center-block" style="margin-bottom: 10px;">
+=======
+          <legend>
+            <div class="hidden-xs row center-block" style="margin-bottom: 10px;">
+>>>>>>> origin/0.3
               <div class="col-xs-4" style="padding-right:5px;">
                 <img class=" img img-responsive pull-right" src="{{ asset('images/logo/ccis/ccis-logo-64.png') }}" style="width:64px;height: auto;"/>
               </div>

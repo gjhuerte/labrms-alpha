@@ -106,6 +106,7 @@ class SessionsController extends Controller {
 	{
 		$person = Auth::user();
 		$reservation = Reservation::withInfo()->user(Auth::user()->id)->get()->count();
+<<<<<<< HEAD
 		$approved = Reservation::withInfo()->approved()->user(Auth::user()->id)->get()->count();
 		$disapproved = Reservation::withInfo()->disapproved()->user(Auth::user()->id)->get()->count();
 		$claimed = Reservation::where('status','=','claimed')->user(Auth::user()->id)->get()->count();
@@ -121,6 +122,13 @@ class SessionsController extends Controller {
 			->with('complaints',$complaints)
 			->with('assigned',$assigned)
 			->with('claimed',$claimed);
+=======
+		$tickets = TicketView::self()->get()->count();
+		return view('user.index')
+			->with('person',$person)
+			->with('reservation',$reservation)
+			->with('tickets',$tickets);
+>>>>>>> origin/0.3
 	}
 
 

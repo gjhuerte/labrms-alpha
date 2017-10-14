@@ -83,10 +83,15 @@ Create
         @endif
         {{ Form::open(array('method'=>'post','route'=>'schedule.store','class' => 'form-horizontal')) }}
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('academicyear','Academic Year') }}
           </div>
           <div class="col-sm-9">
+=======
+          <div class="col-sm-12">
+          {{ Form::label('academicyear','Semester') }}
+>>>>>>> origin/0.3
           {{ Form::select('academicyear',['Loading nearest Academic Year ..'],Input::old('academicyear'),[
             'id' => 'academicyear',
             'class' => 'form-control'
@@ -94,10 +99,15 @@ Create
           </div>
         </div>
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('semester','Semester') }}
           </div>
           <div class="col-sm-9">
+=======
+          <div class="col-sm-12">
+          {{ Form::label('semester','Semester') }}
+>>>>>>> origin/0.3
           {{ Form::select('semester',['Loading all Semester ..'],Input::old('semester'),[
             'id' => 'semester',
             'class' => 'form-control'
@@ -105,10 +115,15 @@ Create
           </div>
         </div>
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('room','Room') }}
           </div>
           <div class="col-sm-9">
+=======
+          <div class="col-sm-12">
+          {{ Form::label('room','Room') }}
+>>>>>>> origin/0.3
           {{ Form::select('room',['Loading all Laboratory Rooms ..'],Input::old('room'),[
             'id' => 'room',
             'class' => 'form-control'
@@ -117,7 +132,11 @@ Create
         </div>
 
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-md-3">
+=======
+          <div class="col-md-12">
+>>>>>>> origin/0.3
             {{ Form::label('subject','Subject') }}
           </div>
           <div class="col-sm-9">
@@ -130,8 +149,18 @@ Create
         </div>
         <!-- creator name -->
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('faculty','Faculty-in-charge') }}
+=======
+          <div class="col-sm-12">
+          {{ Form::label('faculty','Faculty-in-charge') }}
+          {{
+            Form::select('faculty',[],Input::old('faculty'),[
+            'id'=>'faculty',
+            'class'=>'form-control'
+          ]) }}
+>>>>>>> origin/0.3
           </div>
           <div class="col-sm-9">
           {{ Form::select('faculty',[],Input::old('faculty'),[
@@ -140,6 +169,7 @@ Create
           ]) }}
           </div>
         </div>
+<<<<<<< HEAD
         <div class="form-group">
           <div class="col-md-3">
             {{ Form::label('section','Course, Year & Section') }}
@@ -150,6 +180,24 @@ Create
               'placeholder'=>'Course Year-Section'
             ]) }}
           </div>
+=======
+        <h4 class="line-either-side">Days of Week</h4>
+        <div class="weekDays-selector">
+          <input type="checkbox" name="day[]" value="Monday" id="weekday-mon" class="weekday" />
+          <label for="weekday-mon">M</label>
+          <input type="checkbox" name="day[]" value="Tuesday" id="weekday-tue" class="weekday" />
+          <label for="weekday-tue">T</label>
+          <input type="checkbox" name="day[]" value="Wednesday" id="weekday-wed" class="weekday" />
+          <label for="weekday-wed">W</label>
+          <input type="checkbox" name="day[]" value="Thursday" id="weekday-thu" class="weekday" />
+          <label for="weekday-thu">T</label>
+          <input type="checkbox" name="day[]" value="Friday" id="weekday-fri" class="weekday" />
+          <label for="weekday-fri">F</label>
+          <input type="checkbox" name="day[]" value="Saturday" id="weekday-sat" class="weekday" />
+          <label for="weekday-sat">S</label>
+          <input type="checkbox" name="day[]" value="Sunday" id="weekday-sun" class="weekday" />
+          <label for="weekday-sun">S</label>
+>>>>>>> origin/0.3
         </div>
         <h4 class="line-either-side">Days of Week</h4>
         <div class="weekDays-selector">
@@ -334,15 +382,24 @@ Create
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
       type : "get",
+<<<<<<< HEAD
       url : "{{ url('academicyear') }}",
+=======
+      url : "{{ url('semester') }}",
+>>>>>>> origin/0.3
       data: {
         'academicyear': 'nearest'
       },
       dataType : "json",
       success : function(response){
         options = "";
+<<<<<<< HEAD
         $.each(response.data,function(id,callback){
           options += `<option value='`+callback.name+`'>`+callback.name+`</option>'`;
+=======
+        $.each(response.data,function(id,academicyear){
+          options += `<option value='`+academicyear+`'>`+academicyear+`</option>'`;
+>>>>>>> origin/0.3
         })
 
         $('#academicyear').html("");

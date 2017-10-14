@@ -149,7 +149,11 @@ class AcademicYearController extends Controller
             Session::flash('error-message','Invalid Information Received');
             return redirect('academicyear');
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> origin/0.3
         $academicyear = AcademicYear::find($id);
         $academicyear->name = $start->year . "-" . $end->year;
         $academicyear->start = $start;

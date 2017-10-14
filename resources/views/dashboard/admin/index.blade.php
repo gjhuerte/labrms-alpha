@@ -54,6 +54,31 @@ Dashboard
 		      	</h4>
 				<div id="reservation-list">
 				</div>
+<<<<<<< HEAD
+=======
+			</div>
+        </div> <!-- end of notification tab -->
+	</div>
+	<div class=" col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-body">
+			    <h4 class="line-either-side text-muted">
+		      		Activity
+		      	</h4>
+				<div id="ticket-list">
+				</div>
+			</div>
+        </div> <!-- end of notification tab -->
+	</div>
+	<div class="col-md-3" id="accordion" role="tablist" aria-multiselectable="true">
+	</div>
+</div>
+<!-- <div class="container-fluid">
+	<div class="col-md-3">
+		<ul class="list-group panel panel-default">
+			<div class="panel-heading">
+			    Notification  <span class="label label-primary" id="notification-count" val=0>0</span> <p class="text-success pull-right">Active</p>
+>>>>>>> origin/0.3
 			</div>
         </div> <!-- end of notification tab -->
 	</div>
@@ -111,6 +136,7 @@ Dashboard
 	            	ret_val += `
 				    <a class="list-group-item ticket" style="border:none;" href="{{ url('ticket/history') }}/` + callback.id + `">`
 
+<<<<<<< HEAD
 				    ret_val += `<div class="col-sm-2">
 				    	<img class="img-circle pull-left" style="width: 64px;" src="{{ asset('images/profile/blank-profile-picture-logo.png') }}" />
 				    </div>`
@@ -146,6 +172,12 @@ Dashboard
 					if(callback.tag != 'None')
 					{
 						ret_val += `<span> for </span>`
+=======
+					ret_val += `<h4 class="text-muted"><strong> ` + callback.title + '</strong>'
+
+					if(callback.tag != 'None')
+					{
+>>>>>>> origin/0.3
 						if(callback.tag.indexOf('PC') !== -1 || callback.tag.indexOf('Item') !== -1)
 						{
 							if(callback.tag.indexOf('PC') !== -1)
@@ -164,6 +196,7 @@ Dashboard
 						}
 					}
 
+<<<<<<< HEAD
 					ret_val += `<span>. The details of the ticket are as follows: <br /></span>`
 
 					ret_val += `<span>" ` + callback.details + ` ". </span>`
@@ -176,6 +209,17 @@ Dashboard
 					ret_val += `</p>`
 
 					ret_val += `<div class=clearfix></div>`
+=======
+					ret_val += `</h4>`
+
+					ret_val += `<p style="font-size:11px;" class="text-muted">
+						<span class="pull-left">`+ 
+						moment(callback.created_at).format('MMMM DD, YYYY hh:mm a') + `</span>`
+
+					ret_val += `<span class="pull-right">` + callback.author + `</span></p><div class=clearfix></div>`
+
+					ret_val += `<p class="text-muted text-justify" style="font-size: 20px;margin-top:10px;">` + callback.details + `</p>`
+>>>>>>> origin/0.3
 
 					// ret_val += `
 					// 	<div class="form-group clearfix">
@@ -247,6 +291,7 @@ Dashboard
 				    <a href="{{ url('reservation') }}` + '/' +callback.id + `" class="list-group-item" style="border:none;">
 				      <h4 class="list-group-item-heading">`
 
+<<<<<<< HEAD
 					ret_val += `{{ Form::open([ 'method' => 'post', 'route' => 'reservation.claim','class' => 'form-inline' ]) }}`	
 
 				    ret_val += `
@@ -284,6 +329,27 @@ Dashboard
 
 					ret_val += `{{ Form::close() }}`
 
+=======
+				    ret_val += `
+				    		<span class="text-muted">` + callback.user.firstname + ' ' + callback.user.lastname + `</span>
+				    `
+
+			      	if(callback.approval == 0) 
+						ret_val += `
+								<span class="label label-info">Undecided</span>
+						`
+					if(callback.approval == 1) 
+						ret_val += `
+					  		<span class="label label-success">Approved</span>
+						`
+					if(callback.approval == 2) 
+						ret_val += `
+					  		<span class="label label-danger">Disapproved</span>
+						`
+						
+					ret_val += `</h4>`
+
+>>>>>>> origin/0.3
 					ret_val += `<p class="text-muted" style="font-size: 11px;">` + 
 						moment(callback.timein).format('MMMM DD, YYYY') 
 
@@ -302,11 +368,16 @@ Dashboard
 						}
 					}
 
+<<<<<<< HEAD
 					ret_val += ``;
 
 					ret_val += `
 						</a>
 						<hr />
+=======
+					ret_val += `
+						</a><hr />
+>>>>>>> origin/0.3
 					`
 
             	})
@@ -320,6 +391,7 @@ Dashboard
 			}
 		})
 
+<<<<<<< HEAD
 		$.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -408,12 +480,31 @@ Dashboard
 			}
 		})
 
+=======
+>>>>>>> origin/0.3
 		@if( Session::has("success-message") )
 		  swal("Success!","{{ Session::pull('success-message') }}","success");
 		@endif
 		@if( Session::has("error-message") )
 		  swal("Oops...","{{ Session::pull('error-message') }}","error");
 		@endif
+<<<<<<< HEAD
+=======
+
+		// setInterval(function(){
+		// 	var count = $('#notification-count').val();
+		// 	count++;
+		// 	$('#notification-count').val(count);
+		// 	$('#notification-count').html(count);
+		// },1000);
+
+		// var timetable = new Timetable();
+		// timetable.setScope(7, 21); // optional, only whole hours between 0 and 23
+		// timetable.addLocations(['Monday', 'Tuesday', 'Wednesday', 'Thursday','Friday','Saturday','Sunday']);
+		// // timetable.addEvent('Frankadelic', 'Nile', new Date(2015,7,17,10,45), new Date(2015,7,17,12,30));
+		// var renderer = new Timetable.Renderer(timetable);
+		// renderer.draw('.timetable'); // any css selector
+>>>>>>> origin/0.3
 	});
 </script>
 @stop

@@ -166,14 +166,22 @@ Laboratory Schedule
         } );
 
 		$('#new').on('click',function(){
+<<<<<<< HEAD
 			window.location.href = "{{ url('room/scheduling/create') }}"
+=======
+			window.location.href = "{{ url('schedule/create') }}"
+>>>>>>> origin/0.3
 		});
 
 		$('#edit').on('click',function(){
 			try{
 				if(table.row('.selected').data().id != null && table.row('.selected').data().id  && table.row('.selected').data().id >= 0)
 				{
+<<<<<<< HEAD
 					window.location.href = "{{ url("room/scheduling") }}" + '/' + table.row('.selected').data().id + '/edit'
+=======
+					window.location.href = "{{ url('schedule') }}" + '/' + table.row('.selected').data().id + '/edit'
+>>>>>>> origin/0.3
 				}
 			}catch( error ){
 				swal('Oops..','You must choose atleast 1 row','error');
@@ -201,7 +209,11 @@ Laboratory Schedule
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
 							type: 'delete',
+<<<<<<< HEAD
 							url: '{{ url("room/scheduling/") }}' + "/" + table.row('.selected').data().id,
+=======
+							url: '{{ url("schedule") }}' + "/" + table.row('.selected').data().id,
+>>>>>>> origin/0.3
 							data: {
 								'id': table.row('.selected').data().id
 							},

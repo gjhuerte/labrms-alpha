@@ -220,8 +220,11 @@ class Inventory extends \Eloquent
     $receipt->inventory_id = $inventory->id;
     $receipt->save();
 
+<<<<<<< HEAD
     return $inventory;
 
+=======
+>>>>>>> origin/0.3
   }
 
   /**

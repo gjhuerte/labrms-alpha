@@ -76,16 +76,24 @@ Workstation Profile
 <div class="container-fluid" id="page-body">
 @include('modal.workstation.software.install')
 	@include('modal.workstation.software.edit')
+<<<<<<< HEAD
 	<div class="panel panel-default" style="padding:0px 20px">
 		<div class="panel-body">
 			<div class="col-sm-12">
 				<legend><h3 class="text-muted">Workstation {{ $workstation->name }}</h3></legend>
 			</div>
 			<div class="col-sm-12">	
+=======
+	<div class="col-sm-12">
+		<div class="panel panel-default" style="padding:0px 20px">
+			<div class="panel-body">
+				<legend><h3 class="text-muted">Workstation {{ $workstation->name }}</h3></legend>
+>>>>>>> origin/0.3
 				<ul class="breadcrumb">
 					<li><a href="{{ url('workstation') }}">Workstation</a></li>
 					<li class="active">{{ $workstation->id }}</li>
 				</ul>
+<<<<<<< HEAD
 			</div>
 			<div class="col-sm-12">
 				  <!-- Default panel contents -->
@@ -127,6 +135,63 @@ Workstation Profile
 				    	<span>{{ $workstation->systemunit->location }}</span>
 				    </li>
 				  </ul>
+=======
+				<table class="table table-bordered" style="width:100%;">
+					<thead>
+						<th>Name</th>
+						<th>OS License Key</th>
+						<th>System Unit</th>
+						<th>Monitor</th>
+						<th>Keyboard</th>
+						<th>Mouse</th>
+						<th>Location</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ $workstation->name }}</td>
+							<td>{{ $workstation->oskey }}</td>
+							<td>{{ ($workstation->systemunit) ? $workstation->systemunit->propertynumber : "" }}</td>
+							<td>{{ ($workstation->monitor) ? $workstation->monitor->propertynumber : "" }}</td>
+							<td>{{ ($workstation->keyboard) ? $workstation->keyboard->propertynumber : "" }}</td>
+							<td>{{ $workstation->mouse }}</td>
+							<td>{{ $workstation->systemunit->location }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+				  <!-- Nav tabs -->
+				  <ul class="nav nav-tabs" role="tablist">
+				    <li role="presentation"><a href="#history" aria-controls="history" role="tab" data-toggle="tab">History</a></li>
+				    <li role="presentation" class="active"><a href="#software" aria-controls="software" role="tab" data-toggle="tab">Software</a></li>
+				  </ul>
+
+				  <!-- Tab panes -->
+				  <div class="tab-content">
+				    <div role="tabpanel" class="tab-pane" id="history">
+				    	<div class="panel panel-body" style="padding: 10px;">
+							<table class="table table-bordered" id="historyTable" style="width:100%;">
+								<thead>
+						            <th>ID</th>
+						            <th>Name</th>
+						            <th>Details</th>
+						            <th>Author</th>
+						            <th>Status</th>
+						        </thead>
+							</table>
+						</div>
+				    </div>
+				    <div role="tabpanel" class="tab-pane active" id="software">
+				    	<div class="panel panel-body" style="padding: 10px;">
+							<table class="table table-bordered" id="softwareTable">
+								<thead>
+									<th>Software</th>
+									<th>Status</th>
+								</thead>
+							</table>
+						</div>
+				    </div>
+				  </div>
+>>>>>>> origin/0.3
 				</div>
 			</div>
 			<div class="col-sm-2">

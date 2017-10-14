@@ -13,9 +13,15 @@ class AddStatusItemprofile extends Migration
      */
     public function up()
     {
+<<<<<<< HEAD
         Schema::table('itemprofile', function (Blueprint $table) {
             $table->dateTime('lent')->nullable();
             $table->dateTime('deployment')->nullable();
+=======
+        Schema::table('reservation', function (Blueprint $table) {
+            $table->string('lent_status')->nullable();
+            $table->string('deployment_status')->nullable()->setDefault('undeployed');
+>>>>>>> origin/0.3
         });
     }
 
@@ -26,9 +32,15 @@ class AddStatusItemprofile extends Migration
      */
     public function down()
     {
+<<<<<<< HEAD
         Schema::table('itemprofile', function (Blueprint $table) {
             $table->dropColumn('lent');
             $table->dropColumn('deployment');
+=======
+        Schema::table('reservation', function (Blueprint $table) {
+            $table->dropColumn('lent_status');
+            $table->dropColumn('deployment_status');
+>>>>>>> origin/0.3
         });
     }
 }

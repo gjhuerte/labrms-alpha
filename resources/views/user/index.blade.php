@@ -135,7 +135,11 @@ Profile
 @stop
 @section('content')
 <div class="container-fluid">
+<<<<<<< HEAD
 	<div class="col-sm-offset-3 col-sm-6">
+=======
+	<div class="col-sm-offset-4 col-sm-4">
+>>>>>>> origin/0.3
 	    <div class="panel panel-body">
 	        <h4 class="line-either-side text-muted" id="myModalLabel">More About {{ Auth::user()->firstname }}</h4>
 	        <center>
@@ -182,6 +186,7 @@ Profile
 	        <center>
 			<div class="twPc-divStats">
 				<ul class="twPc-Arrange">
+<<<<<<< HEAD
 						<li class="twPc-ArrangeSizeFit">
 							<a href="https://twitter.com/mertskaplan/following" title="885 Following">
 								<span class="twPc-StatLabel twPc-block">Approved Reservation</span>
@@ -200,6 +205,20 @@ Profile
 								<span class="twPc-StatValue">{{ $complaints }}</span>
 							</a>
 						</li>
+=======
+					<li class="twPc-ArrangeSizeFit">
+						<a href="https://twitter.com/mertskaplan" title="9.840 Tweet">
+							<span class="twPc-StatLabel twPc-block">Reservation</span>
+							<span class="twPc-StatValue">{{ $reservation }}</span>
+						</a>
+					</li>
+					<li class="twPc-ArrangeSizeFit">
+						<a href="https://twitter.com/mertskaplan/following" title="885 Following">
+							<span class="twPc-StatLabel twPc-block">Tickets Generated</span>
+							<span class="twPc-StatValue">{{ $tickets }}</span>
+						</a>
+					</li>
+>>>>>>> origin/0.3
 				</ul>
 			</div>
 	        <p class="text-left text-muted"><strong>Bio: </strong><br>

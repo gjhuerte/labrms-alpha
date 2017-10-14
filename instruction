@@ -41,7 +41,11 @@ INSTALLING ADDITIONAL FILES
   set https_proxy:proxy_name:port_number for https, 
   for example: set https_proxy:10.20.2.263:8080
   
+<<<<<<< HEAD
   ** setting up the system **
+=======
+  setting up the system
+>>>>>>> origin/0.3
  
   run the following code
   - composer dump-autoload
@@ -64,6 +68,7 @@ initial accounts:
   - labstaff => 12345678
   - faculty => 12345678
   - student => 12345678
+<<<<<<< HEAD
 
   ** Updating System **
 
@@ -78,3 +83,5 @@ initial accounts:
   > php artisan migrate:refresh --seed
 
 
+=======
+>>>>>>> origin/0.3

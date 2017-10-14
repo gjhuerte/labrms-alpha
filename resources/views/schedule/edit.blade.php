@@ -39,10 +39,15 @@ Update
         @endif
         {{ Form::open(array('method'=>'put','route'=>array('schedule.update',$schedule->id),'class' => 'form-horizontal')) }}
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('academicyear','Semester') }}
           </div>
           <div class="col-sm-9">
+=======
+          <div class="col-sm-12">
+          {{ Form::label('academicyear','Semester') }}
+>>>>>>> origin/0.3
           {{ Form::select('academicyear',['Loading nearest Academic Year ..'],Input::old('academicyear'),[
             'id' => 'academicyear',
             'class' => 'form-control'
@@ -50,10 +55,15 @@ Update
           </div>
         </div>
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('semester','Semester') }}
           </div>
           <div class="col-sm-9">
+=======
+          <div class="col-sm-12">
+          {{ Form::label('semester','Semester') }}
+>>>>>>> origin/0.3
           {{ Form::select('semester',['Loading all Semester ..'],Input::old('semester'),[
             'id' => 'semester',
             'class' => 'form-control'
@@ -61,10 +71,15 @@ Update
           </div>
         </div>
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('room','Room') }}
           </div>
           <div class="col-sm-9">
+=======
+          <div class="col-sm-12">
+          {{ Form::label('room','Room') }}
+>>>>>>> origin/0.3
           {{ Form::select('room',['Loading all Laboratory Rooms ..'],Input::old('room'),[
             'id' => 'room',
             'class' => 'form-control'
@@ -73,10 +88,15 @@ Update
         </div>
 
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-md-3">
             {{ Form::label('subject','Subject') }}
             </div>
           <div class="col-sm-9">
+=======
+          <div class="col-md-12">
+            {{ Form::label('subject','Subject') }}
+>>>>>>> origin/0.3
             {{ Form::text('subject',$schedule->subject,[
               'required',
               'class'=>'form-control',
@@ -86,21 +106,33 @@ Update
         </div>
         <!-- creator name -->
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-sm-3">
           {{ Form::label('faculty','Faculty-in-charge') }}
           </div>
           <div class="col-sm-9">
           {{ Form::select('faculty',[],Input::old('faculty'),[
+=======
+          <div class="col-sm-12">
+          {{ Form::label('faculty','Faculty-in-charge') }}
+          {{
+            Form::select('faculty',[],Input::old('faculty'),[
+>>>>>>> origin/0.3
             'id'=>'faculty',
             'class'=>'form-control'
           ]) }}
           </div>
         </div>
         <div class="form-group">
+<<<<<<< HEAD
           <div class="col-md-3">
             {{ Form::label('section','Course, Year & Section') }}
             </div>
           <div class="col-sm-9">
+=======
+          <div class="col-md-12">
+            {{ Form::label('section','Course, Year & Section') }}
+>>>>>>> origin/0.3
             {{ Form::text('section',$schedule->section,[
               'class'=>'form-control',
               'placeholder'=>'Course Year-Section'

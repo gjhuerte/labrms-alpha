@@ -19,6 +19,7 @@ Room Inventory
 <div class="container-fluid" id="page-body">
 	<div class="" style="background-color: white;padding: 20px;">
 		<legend><h3 class="text-muted">Room Inventory</h3></legend>
+<<<<<<< HEAD
 		<div id="notif-board">
 		@if(isset($ticket_count))
 			@if( $ticket_count > 0 )
@@ -28,6 +29,8 @@ Room Inventory
 			@endif
 		@endif
 		</div>
+=======
+>>>>>>> origin/0.3
 		<table class="table table-hover table-condensed table-bordered table-responsive" id="roomTable">
 			<thead>
 				<th>Item Model</th>

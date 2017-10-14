@@ -65,7 +65,11 @@ Room
 	            { data: "description" },
 	            { data: function(callback){
 	            	return `
+<<<<<<< HEAD
 	            		<a href="` + '{{ url('room') }}' + '/' + callback.id +`" class="btn btn-default btn-sm btn-block">View</a>
+=======
+	            		<a href="` + '{{ url('room') }}' + '/' + callback.id +`" class="btn btn-default btn-md">View</a>
+>>>>>>> origin/0.3
 	            	`;
 	            } }
 	        ],

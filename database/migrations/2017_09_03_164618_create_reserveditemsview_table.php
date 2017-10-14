@@ -27,7 +27,10 @@ class CreateReserveditemsviewTable extends Migration
                 reservation.timein AS timein,
                 reservation.timeout AS timeout,
                 reservation.purpose AS purpose,
+<<<<<<< HEAD
                 reservation.created_at AS created_at,
+=======
+>>>>>>> origin/0.3
                 reservation.location AS location,
                 reservation.approval AS approval,
                 reservation.facultyincharge AS facultyincharge,

@@ -40,6 +40,7 @@ Semester
         {{ Form::open(array('method'=>'post','route'=>'semester.store','class' => 'form-horizontal','id'=>'semesterForm')) }}
         <div class="form-group">
           <div class="col-md-12">
+<<<<<<< HEAD
             {{ Form::label('academicyear','Academic Year') }}
             {{ Form::select('academicyear',[],null,[
               'id' => 'academicyear',
@@ -49,6 +50,8 @@ Semester
         </div>
         <div class="form-group">
           <div class="col-md-12">
+=======
+>>>>>>> origin/0.3
             {{ Form::label('name','Semester') }}
             {{ Form::text('name',Input::old('name'),[
               'required',
@@ -107,6 +110,10 @@ Semester
       language: 'en',
       showOtherYears: false,
       todayButton: true,
+<<<<<<< HEAD
+=======
+      minDate: new Date(),
+>>>>>>> origin/0.3
       autoClose: true,
       onSelect: function(){
         $('#start').val(moment($('#start').val(),'MM/DD/YYYY').format('MMMM DD, YYYY'))
@@ -117,12 +124,17 @@ Semester
       language: 'en',
       showOtherYears: false,
       todayButton: true,
+<<<<<<< HEAD
+=======
+      minDate: new Date(),
+>>>>>>> origin/0.3
       autoClose: true,
       onSelect: function(){
         $('#end').val(moment($('#end').val(),'MM/DD/YYYY').format('MMMM DD, YYYY'))
       }
     });
 
+<<<<<<< HEAD
     $.ajax({
       headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -144,6 +156,8 @@ Semester
       }
     })
 
+=======
+>>>>>>> origin/0.3
     $("#start").val(moment('{{ Carbon\Carbon::now() }}').format('MMMM DD, YYYY'));
     $("#end").val(moment('{{ Carbon\Carbon::now()->addMonths(4) }}').format('MMMM DD, YYYY'));
 

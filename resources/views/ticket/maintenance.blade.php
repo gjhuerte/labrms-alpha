@@ -87,6 +87,7 @@ Maintenance Ticket
 						<div id="tickettag"></div>
 					</div>
 				</div>
+<<<<<<< HEAD
 				<div class="form-group">
 					<div class="col-sm-3">
 					{{ Form::label('activity','Activity Done') }}
@@ -94,6 +95,14 @@ Maintenance Ticket
 					<div class="col-sm-9">
 						<!-- Category -->
 						<div id="activity-field">
+=======
+				<div id="tickettag"></div>
+				<!-- Category -->
+				<div id="activity-field">
+					<div class="form-group">
+						<div class="col-sm-12">
+						{{ Form::label('activity','Activity Done') }}
+>>>>>>> origin/0.3
 						{{ Form::select('activity',$activity,Input::old('activity'),[
 							'id' => 'activity',
 							'class' => 'form-control'
@@ -173,6 +182,13 @@ Maintenance Ticket
 						if(response.systemunit_id != null || response.monitor_id != null)
 						{
 							$('#tickettag').html(`
+<<<<<<< HEAD
+=======
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Workstation Information
+									</div>
+>>>>>>> origin/0.3
 									<ul class="list-group">
 									  <li class="list-group-item">Workstation Name:  `+response.name+`</li>
 									  <li class="list-group-item">System Unit:  `+response.systemunit.propertynumber+`</li>
@@ -182,6 +198,10 @@ Maintenance Ticket
 									  <li class="list-group-item">Mouse:  `+response.mouse+`</li>
 									  <li class="list-group-item">Status: `+response.systemunit.status+`</li>
 									</ul>
+<<<<<<< HEAD
+=======
+								</div>
+>>>>>>> origin/0.3
 							`);
 							$('#undermaintenance-tag').show()
 						}
@@ -189,11 +209,22 @@ Maintenance Ticket
 						if(response.propertynumber != null)
 						{
 							$('#tickettag').html(`
+<<<<<<< HEAD
+=======
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Item Profile
+									</div>
+>>>>>>> origin/0.3
 									<ul class="list-group">
 									  <li class="list-group-item">Property Number:  `+response.propertynumber+`<span id="transfer-date"></span></li>
 									  <li class="list-group-item">Serial Number: `+response.serialnumber+` <span id="transfer-tag"></span></li>
 									  <li class="list-group-item">Status: `+response.status+`<span id="transfer-title"></span></li>
 									</ul>
+<<<<<<< HEAD
+=======
+								</div>
+>>>>>>> origin/0.3
 							`);
 							$('#undermaintenance-tag').show()
 						}
@@ -201,12 +232,31 @@ Maintenance Ticket
 						if(response.name != null)
 						{
 							$('#tickettag').html(`
+<<<<<<< HEAD
 								<ul class="list-group">
 								  <li class="list-group-item">Room Name:  `+response.name+`</li>
 								  <li class="list-group-item">Category:  `+response.description+`</li>
 								</ul>
 
 								<div id="item-list"></div>
+=======
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Room Information
+									</div>
+									<ul class="list-group">
+									  <li class="list-group-item">Room Name:  `+response.name+`</li>
+									  <li class="list-group-item">Category:  `+response.description+`</li>
+									</ul>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<input type="checkbox" name="include-workstation" />
+										Include workstations assigned to this room? 
+										<p class="text-muted"></p>
+									</div>
+								</div>
+>>>>>>> origin/0.3
 							`);
 
 							addItemsUnderTheRoom()

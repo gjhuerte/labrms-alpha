@@ -147,7 +147,10 @@ class SemesterController extends Controller
     public function update(Request $request, $id)
     {
         $sem = $this->sanitizeString(Input::get('name'));
+<<<<<<< HEAD
         $academicyear = $this->sanitizeString(Input::get('academicyear'));
+=======
+>>>>>>> origin/0.3
         $start = $this->sanitizeString(Input::get('start'));
         $end = $this->sanitizeString(Input::get('end'));
 
@@ -169,7 +172,10 @@ class SemesterController extends Controller
 
         $semester = Semester::find($id);
         $semester->semester = $sem;
+<<<<<<< HEAD
         $semester->academicyear = $academicyear;
+=======
+>>>>>>> origin/0.3
         $semester->datestart = $start->format('Y-m-d');
         $semester->dateend = $end->format('Y-m-d');
         $semester->save();

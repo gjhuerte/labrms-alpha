@@ -54,6 +54,7 @@ Room Information
 						</div>
 						<div class="col-sm-6">
 							<li><h5 class="text-muted"><label>Inventory List</label></h5></li>
+<<<<<<< HEAD
 							<ul>
 
 							@if(count($roominventory) > 0)
@@ -68,6 +69,8 @@ Room Information
 							@endif
 
 							</ul>
+=======
+>>>>>>> origin/0.3
 						</div>
 					</div>
 				</ul>
@@ -87,6 +90,10 @@ Room Information
 						            <th>Name</th>
 						            <th>Details</th>
 						            <th>Author</th>
+<<<<<<< HEAD
+=======
+						            <th>Staff Assigned</th>
+>>>>>>> origin/0.3
 						            <th>Status</th>
 						        </thead>
 							</table>
@@ -116,6 +123,10 @@ $(document).ready(function(){
         	{ data: 'ticketname' },
         	{ data: 'details' },
         	{ data: 'author' },
+<<<<<<< HEAD
+=======
+        	{ data: 'staffassigned' },
+>>>>>>> origin/0.3
         	{ data: 'status' }
         ],
     } );

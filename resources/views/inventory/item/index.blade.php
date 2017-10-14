@@ -80,7 +80,11 @@ Inventory
 			language: {
 					searchPlaceholder: "Search..."
 			},
+<<<<<<< HEAD
 			"dom": "<'row'<'col-sm-3'l><'col-sm-6'<'toolbar'>><'col-sm-3'f><'search-bar'>>" +
+=======
+			"dom": "<'row'<'col-sm-3'l><'col-sm-6'<'toolbar'>><'col-sm-3'f>>" +
+>>>>>>> origin/0.3
 							"<'row'<'col-sm-12'tr>>" +
 							"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 			"processing": true,

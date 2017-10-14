@@ -144,8 +144,12 @@ Create Ticket
 				<div class="form-group">
 					<div class="col-sm-3">
 					{{ Form::label('tag','Tag (Optional)') }}
+<<<<<<< HEAD
 					</div>
 					<div class="col-sm-9">
+=======
+					<p class="text-muted text-info">This field is for identifying the equipment, room, or workstation linked to this ticket. Note: Use the property number for equipments</p>
+>>>>>>> origin/0.3
 					{{ Form::text('tag',Input::old('tag'),[
 						'id' => 'tag',
 						'class' => 'form-control',
@@ -170,14 +174,20 @@ Create Ticket
 
 				@if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2 )
 				<div class="form-group" id="author-form">
+<<<<<<< HEAD
 					<div class="col-sm-3">
 						{{ Form::label('author','Complainant') }}
 					</div>
 					<div class="col-sm-9">
+=======
+					<div class="col-sm-12">
+						{{ Form::label('author','Complainant') }}
+>>>>>>> origin/0.3
 						{{ Form::text('author',Input::old('author'),[
 						'class'=>'form-control',
 						'placeholder' => Auth::user()->firstname.' '.Auth::user()->lastname
 						]) }}
+<<<<<<< HEAD
 						<p class="text-muted text-warning" style="font-size:12px;">Leave this field blank if you're the complainant.</p>
 					</div>
 				</div>
@@ -193,6 +203,9 @@ Create Ticket
 						'class'=>'form-control',
 						'id' => 'staffassigned'
 						]) }}
+=======
+						<p class="text-muted text-warning">Leave this field blank if you're the complainant.</p>
+>>>>>>> origin/0.3
 					</div>
 				</div>
 				@endif

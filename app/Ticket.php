@@ -425,7 +425,7 @@ class Ticket extends \Eloquent{
 	*	@param $details accepts details
 	*
 	*/
-	public static function generateMaintenanceTicket($tag,$ticketname,$details,$underrepair)
+	public static function generateMaintenanceTicket($tag,$ticketname,$details,$underrepair,$workstation = false)
 	{
 
 		/*
@@ -521,6 +521,18 @@ class Ticket extends \Eloquent{
 			if( count($room) > 0 ) 
 			{
 				Ticket::generateRoomTicket($room->id,'maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+
+				if($workstation)
+				{
+					DB::transaction(function() use ( $tag, $ticketname,$details,$author,$staffassigned,$ticket_id,$status ) {
+						foreach(Pc::whereHas('systemunit',function($query) use ($tag) {
+							$query->where('location','=',$tag);
+						})->get() as $pc)
+						{
+							Ticket::generatePcTicket($pc->id,'maintenance',$ticketname,$details,$author,$staffassigned,$ticket_id,$status);
+						}
+					});
+				}
 			}
 			else
 			{

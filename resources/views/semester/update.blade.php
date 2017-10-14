@@ -40,6 +40,7 @@ Semester
         {{ Form::open(array('method'=>'put','route'=>array('semester.update',$semester->id),'class' => 'form-horizontal','id'=>'semesterForm')) }}
         <div class="form-group">
           <div class="col-md-12">
+<<<<<<< HEAD
             {{ Form::label('academicyear','Academic Year') }}
             {{ Form::select('academicyear',[],null,[
               'id' => 'academicyear',
@@ -49,6 +50,8 @@ Semester
         </div>
         <div class="form-group">
           <div class="col-md-12">
+=======
+>>>>>>> origin/0.3
             {{ Form::label('name','Semester') }}
             {{ Form::text('name',$semester->semester,[
               'required',
@@ -107,6 +110,10 @@ Semester
       language: 'en',
       showOtherYears: false,
       todayButton: true,
+<<<<<<< HEAD
+=======
+      minDate: new Date(),
+>>>>>>> origin/0.3
       autoClose: true,
       onSelect: function(){
         $('#start').val(moment($('#start').val(),'MM/DD/YYYY').format('MMMM DD, YYYY'))
@@ -117,6 +124,10 @@ Semester
       language: 'en',
       showOtherYears: false,
       todayButton: true,
+<<<<<<< HEAD
+=======
+      minDate: new Date(),
+>>>>>>> origin/0.3
       autoClose: true,
       onSelect: function(){
         $('#end').val(moment($('#end').val(),'MM/DD/YYYY').format('MMMM DD, YYYY'))
@@ -126,6 +137,7 @@ Semester
     $("#start").val(moment('{{ Carbon\Carbon::parse($semester->datestart) }}').format('MMMM DD, YYYY'));
     $("#end").val(moment('{{ Carbon\Carbon::parse($semester->dateend) }}').format('MMMM DD, YYYY'));
 
+<<<<<<< HEAD
 
     $.ajax({
       headers: {
@@ -148,6 +160,8 @@ Semester
       }
     })
     
+=======
+>>>>>>> origin/0.3
     @if( Session::has("success-message") )
         swal("Success!","{{ Session::pull('success-message') }}","success");
     @endif

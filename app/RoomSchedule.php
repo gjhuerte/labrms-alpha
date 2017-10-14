@@ -25,16 +25,26 @@ class RoomSchedule extends \Eloquent{
 		'Subject' => 'required|min:2|max:50',
 		'Day' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
 		'Room' => 'exists:room,id',
+<<<<<<< HEAD
 		'Semester' => 'exists:semester,semester',
 		'Academic Year' => 'exists:academic_years,name',
+=======
+		'Semester' => 'exists:systemtime,semester',
+		'Academic Year' => 'exists:systemtime,academicyear',
+>>>>>>> origin/0.3
 		'Faculty' => 'exists:user,id'
 	);
 
 	public static $updateRules = array(
 		'Subject' => 'min:2|max:50',
 		'Room' => 'exists:room,id',
+<<<<<<< HEAD
 		'Semester' => 'exists:semester,semester',
 		'Academic Year' => 'exists:academic_years,name',
+=======
+		'Semester' => 'exists:systemtime,semester',
+		'Academic Year' => 'exists:systemtime,academicyear',
+>>>>>>> origin/0.3
 		'Faculty' => 'exists:user,id'
 	);
 

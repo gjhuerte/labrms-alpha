@@ -26,7 +26,10 @@ Lend Log
 		overflow: hidden;
 		text-align: center;
 	}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> origin/0.3
 	.line-either-side:before,
 	.line-either-side:after {
 		background-color: #e5e5e5;
@@ -37,12 +40,18 @@ Lend Log
 		vertical-align: middle;
 		width: 50%;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/0.3
 	.line-either-side:before {
 		right: 0.5em;
 		margin-left: -50%;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/0.3
 	.line-either-side:after {
 		left: 0.5em;
 		margin-right: -50%;
@@ -116,7 +125,10 @@ Lend Log
 		            ]) }}
 				</div>
 			</div>
+<<<<<<< HEAD
 			@if((isset($reservation->user) && $reservation->user->type != 'faculty') || (count($reservation) < 1 ) || $reservation == '' || empty($reservation))
+=======
+>>>>>>> origin/0.3
 			<!-- Course Year and Section -->
 			<div class="form-group">
 				<div class="col-xs-3">
@@ -305,6 +317,7 @@ Lend Log
 	            `+response.data[ctr].name+`
 	            </option>`;
 	          }
+<<<<<<< HEAD
 
 	          if(response.length == 0){
 	              items += `<option>There are no available room</option>`
@@ -328,6 +341,31 @@ Lend Log
 					}
 	      });
 
+=======
+
+	          if(response.length == 0){
+	              items += `<option>There are no available room</option>`
+	          }
+
+	          $('#location').html("");
+	          $('#location').append(items);
+	        },
+					complete: function(){
+
+						$('#location').selectize({
+								create: true,
+								sortField: {
+										field: 'text',
+										direction: 'asc'
+								},
+								dropdownParent: 'body'
+						})
+
+						$('#location').val({{ Input::old('location') }})
+					}
+	      });
+
+>>>>>>> origin/0.3
 	      $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -388,6 +426,7 @@ Lend Log
 			$('#temp-item').val("")
 			addForm(row,item)
 		})
+<<<<<<< HEAD
 
 		function addForm(row,_item = "")
 		{
@@ -400,6 +439,20 @@ Lend Log
 			`)
 		}
 
+=======
+
+		function addForm(row,_item = "")
+		{
+			$('#lendTable > tbody').append(`
+				<tr>
+					<td>` + row	 + `</td>
+					<td><input type="text" class="form-control text-center" readonly value="` + _item + `" name="item[` + _item + `]" style="border:none;background-color:white;" /></td>
+					<td><button type="button" class="remove btn btn-sm btn-block btn-danger text-center"><span class="glyphicon glyphicon-remove"></span></button></td>
+				</tr>
+			`)
+		}
+
+>>>>>>> origin/0.3
 		$('#lendTable').on('click','.remove',function(){
 			$(this).parents('tr').remove()
 		})
@@ -409,6 +462,7 @@ Lend Log
 				var date = moment(object_val).format('MMM DD, YYYY');
 				$(object).val(date);
 		}
+<<<<<<< HEAD
 
 		@if(count($reservation) > 0)
 
@@ -429,6 +483,8 @@ Lend Log
 		@endif
 
 		@endif
+=======
+>>>>>>> origin/0.3
 	});
 </script>
 @stop

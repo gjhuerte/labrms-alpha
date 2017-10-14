@@ -10,7 +10,11 @@
 				<div class="form-group">
 		 			<div class="col-sm-12">
 					{{ Form::label('Start') }}
+<<<<<<< HEAD
 			 		{{ Form::text('start',Input::old('modal-start'),[
+=======
+			 		{{ Form::text('modal-start',Input::old('modal-start'),[
+>>>>>>> origin/0.3
 			 			'class' => 'form-control',
 			 			'id' => 'modal-start',
 			 			'style' => 'background-color:white;',
@@ -22,7 +26,11 @@
 		 		<div class="form-group">
 		 			<div class="col-sm-12">
 					{{ Form::label('End') }}
+<<<<<<< HEAD
 			 		{{ Form::text('end',Input::old('modal-end'),[
+=======
+			 		{{ Form::text('modal-end',Input::old('modal-end'),[
+>>>>>>> origin/0.3
 			 			'class' => 'form-control',
 			 			'id' => 'modal-end',
 			 			'style' => 'background-color:white;',

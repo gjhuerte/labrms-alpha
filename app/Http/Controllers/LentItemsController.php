@@ -7,7 +7,10 @@ use Carbon\Carbon;
 use Validator;
 use Session;
 use DB;
+<<<<<<< HEAD
 use App;
+=======
+>>>>>>> origin/0.3
 use App\LendLog;
 use App\ItemProfile;
 use Illuminate\Support\Facades\Request;
@@ -37,6 +40,7 @@ class LentItemsController extends Controller
      */
     public function create()
     {
+<<<<<<< HEAD
         $reservation = '';
 
         if(Input::has('reservation'))
@@ -49,6 +53,10 @@ class LentItemsController extends Controller
         return view('lend.create')
                 ->with('date',Carbon::now()->toFormattedDateString())
                 ->with('reservation',$reservation);
+=======
+        return view('lend.create')
+                ->with('date',Carbon::now()->toFormattedDateString());
+>>>>>>> origin/0.3
     }
 
     /**
@@ -61,6 +69,7 @@ class LentItemsController extends Controller
     {
         $items = Input::get("item");
 
+<<<<<<< HEAD
         $reservation = "";
 
         if(Input::has('reservation'))
@@ -70,13 +79,18 @@ class LentItemsController extends Controller
             $reservation = App\Reservation::with('user')->find($id);
         }
 
+=======
+>>>>>>> origin/0.3
         $validator = Validator::make([
             'Item' => $items
         ],LendLog::$itemRule);
 
         if ($validator->fails()) {
             return redirect('lend/create')
+<<<<<<< HEAD
                     ->with('reservation',$reservation)
+=======
+>>>>>>> origin/0.3
                     ->withInput()
                     ->withErrors($validator);
         }

@@ -216,6 +216,16 @@ Reservation
 			$('#description').toggle(400)
 		})
 
+<<<<<<< HEAD
+=======
+		@if( Session::has("success-message") )
+		  swal("Success!","{{ Session::pull('success-message') }}","success");
+		@endif
+		@if( Session::has("error-message") )
+		  swal("Oops...","{{ Session::pull('error-message') }}","error");
+		@endif
+
+>>>>>>> origin/0.3
 		$('#show').click(function(){
 			$('#reservationCalendarModal').modal('show');
 		});
@@ -231,7 +241,11 @@ Reservation
 			}
 		});
 
+<<<<<<< HEAD
 		$("#dateofuse").val(moment('{{ $date }}').format('MMM DD, YYYY'));
+=======
+		$("#dateofuse").val(moment('{{ $date }}').format('MMMM DD, YYYY'));
+>>>>>>> origin/0.3
 
 		$('#starttime').clockpicker({
 		    placement: 'bottom',
@@ -453,6 +467,7 @@ Reservation
 
 		$('#items').on('rendered.bs.select', function (e) {
 			$('#page-body').show();
+<<<<<<< HEAD
 			
 			@if( Session::has("success-message") )
 			  swal("Success!","{{ Session::pull('success-message') }}","success");
@@ -460,6 +475,8 @@ Reservation
 			@if( Session::has("error-message") )
 			  swal("Oops...","{{ Session::pull('error-message') }}","error");
 			@endif
+=======
+>>>>>>> origin/0.3
 		});
 	});
 </script>

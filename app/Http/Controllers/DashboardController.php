@@ -37,6 +37,7 @@ class DashboardController extends Controller {
         			if(strcmp($reservation , 'All') == 0)
         			{
 
+<<<<<<< HEAD
                         $start = Carbon::now()->startOfDay();
                         $end = Carbon::parse(Reservation::thirdWorkingDay(Carbon::now()))->endOfDay();
 
@@ -52,6 +53,18 @@ class DashboardController extends Controller {
                                                     //     ->orWhere('approval','=',1);
                                                     // })
                                                     ->unclaimed()
+=======
+                        $start = Carbon::now()->startOfDay()->format('Y-m-d H:i');
+                        $end = Carbon::parse(Reservation::thirdWorkingDay(Carbon::now()))->endOfDay()->format('Y-m-d H:i');
+
+    					return json_encode([ 
+    						'data' => Reservation::with('user')
+                                                    ->whereBetween('timein',[ $start , $end ])
+                                                    ->where(function($query){
+                                                        $query->orWhere('approval','=',0)
+                                                        ->orWhere('approval','=',1);
+                                                    })
+>>>>>>> origin/0.3
                                                     ->withInfo()
     												->orderBy('created_at','desc')
     												->get() 
@@ -86,10 +99,14 @@ class DashboardController extends Controller {
 
     					return json_encode(
     						TicketView::whereBetween('date',[ $start , $end ])
+<<<<<<< HEAD
                                         ->orWhere(function($query){
                                             $query->where('status','=','Open')
                                                     ->where('tickettype' ,'=' , 'Complaint');
                                         })
+=======
+                                        ->orWhere('status','=','Open')
+>>>>>>> origin/0.3
                                         ->orderBy('id','desc')
     							         ->get()
     					);
@@ -104,6 +121,7 @@ class DashboardController extends Controller {
     		}
     	}
 
+<<<<<<< HEAD
         if(Input::has('lentitems'))
         {
             $lentitems = $this->sanitizeString(Input::get("lentitems"));
@@ -128,6 +146,8 @@ class DashboardController extends Controller {
             ]);
         }
 
+=======
+>>>>>>> origin/0.3
         if(Auth::user()->accesslevel == 0 || Auth::user()->accesslevel == 1 || Auth::user()->accesslevel == 2)
         {
             return view('dashboard.admin.index');
